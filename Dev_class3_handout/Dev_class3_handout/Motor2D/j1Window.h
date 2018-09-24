@@ -30,6 +30,14 @@ public:
 	// Retrieve window scale
 	uint GetScale() const;
 
+	bool Load(pugi::xml_node&)  {
+		return true;
+	}
+
+	bool Save(pugi::xml_node&) const {
+		return true;
+	}
+
 public:
 	//The window we'll be rendering to
 	SDL_Window* window;

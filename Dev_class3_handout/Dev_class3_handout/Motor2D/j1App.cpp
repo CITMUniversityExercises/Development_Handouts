@@ -274,6 +274,7 @@ const char* j1App::GetOrganization() const
 }
 
 
+
 // TODO 4: Create a simulation of the xml file to read 
 
 // TODO 5: Create a method to actually load an xml file
@@ -281,3 +282,79 @@ const char* j1App::GetOrganization() const
 
 // TODO 7: Create a method to save the current state
 
+
+bool j1App::Loadgame()
+{
+	bool ret = false;
+
+	load_game.create("save_game.xml");
+
+	pugi::xml_document data;
+	pugi::xml_node root;
+
+	pugi::xml_parse_result result = data.load_file(load_game.GetString());
+
+	if (result != NULL)
+	{
+		LOG("Loading new Game State from %s...", load_game.GetString());
+
+		root = data.child("save");
+
+		p2List_item<j1Module*>* item = modules.start;
+		ret = true;
+
+		while (item != NULL && ret == true)
+		{
+			ret = item->data->Load(root.child(item->data->name.GetString()));
+			item = item->next;
+		}
+
+		data.reset();
+		if (ret == true)
+			LOG("...finished loading");
+		else
+			LOG("...loading process interrupted with error on module %s", (item != NULL) ? item->data->name.GetString() : "unknown");
+	}
+	else
+		LOG("Could not parse game state xml file %s. pugi error: %s", load_game.GetString(), result.description());
+
+	must_load = false;
+	return ret;
+}
+
+
+
+bool j1App::Savegame() const
+{
+	bool ret = true;
+
+	save_game.create("save_game.xml");
+
+	LOG("Saving Game State to %s...", save_game.GetString());
+
+	// xml object were we will store all data
+	pugi::xml_document data;
+	pugi::xml_node root;
+
+	root = data.append_child("save");
+
+	p2List_item<j1Module*>* item = modules.start;
+
+	while (item != NULL && ret == true)
+	{
+		ret = item->data->Save(root.append_child(item->data->name.GetString()));
+		item = item->next;
+	}
+
+	if (ret == true)
+	{
+		data.save_file(save_game.GetString());
+		LOG("... finished saving", );
+	}
+	else
+		LOG("Save process halted from an error in module %s", (item != NULL) ? item->data->name.GetString() : "unknown");
+
+	data.reset();
+	must_save = false;
+	return ret;
+}

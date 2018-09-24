@@ -57,6 +57,18 @@ bool j1Scene::Update(float dt)
 	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		App->render->camera.x += 1;
 
+	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_REPEAT)
+		App->Load();
+
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+		App->Save();
+
+	if (App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_REPEAT)
+		App->audio->raiseVolume();
+
+	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_REPEAT)
+		App->audio->reduceVolume();
+
 	App->render->Blit(img, 0, 0);
 	return true;
 }

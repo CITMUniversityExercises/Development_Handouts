@@ -4,6 +4,7 @@
 #include "p2List.h"
 #include "j1Module.h"
 #include "PugiXml\src\pugixml.hpp"
+#include "j1Render.h"
 
 // Modules
 class j1Window;
@@ -59,16 +60,18 @@ public:
 		must_load = true;
 	}
 
+	/*pugi::xml_node LoadXML(const char * nodename);*/
+
 private:
 
 	void j1App::real_save()
 	{
-
+		Savegame();
 	}
 
 	void j1App::real_load()
 	{
-
+		Loadgame();
 	}
 
 	// Load config file
@@ -88,6 +91,12 @@ private:
 
 	// Call modules after each loop iteration
 	bool PostUpdate();
+
+	/*virtual bool SaveState();*/
+
+	// Load / Save
+	bool Loadgame();
+	bool Savegame() const;
 
 public:
 
@@ -110,11 +119,17 @@ private:
 	int					argc;
 	char**				args;
 
+	pugi::xml_document	xml_doc;
+	pugi::xml_node		xml_node;
+
 	p2SString			title;
 	p2SString			organization;
 
-	bool must_save = false;
+	mutable bool must_save = false;
 	bool must_load = false;
+
+	p2SString			load_game;
+	mutable p2SString	save_game;
 
 };
 

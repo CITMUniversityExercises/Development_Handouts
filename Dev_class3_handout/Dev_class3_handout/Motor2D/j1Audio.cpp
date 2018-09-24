@@ -12,6 +12,7 @@ j1Audio::j1Audio() : j1Module()
 {
 	music = NULL;
 	name.create("audio");
+	Volumemodifier_music = MIX_MAX_VOLUME;
 }
 
 // Destructor
@@ -171,4 +172,42 @@ bool j1Audio::PlayFx(unsigned int id, int repeat)
 	}
 
 	return ret;
+}
+
+void j1Audio::raiseVolume()
+{
+	Volumemodifier_music += 10;
+
+	Mix_VolumeMusic( Volumemodifier_music);
+	
+
+
+	
+}
+
+void j1Audio::reduceVolume()
+{
+	Volumemodifier_music -= 10;
+
+	Mix_VolumeMusic(MIX_MAX_VOLUME-10);
+
+
+	
+}
+
+bool j1Audio::Save(pugi::xml_node & config) const
+{
+	config.append_child("Volumemodifier_music").append_attribute("value") = Volumemodifier_music;
+	config.append_child("Volumemodifier_fx").append_attribute("value") = Volumemodifier_fx;
+	return true;
+}
+
+bool j1Audio::Load(pugi::xml_node & config)
+{
+	Volumemodifier_music = config.child("Volumemodifier_music").attribute("value").as_float();
+	Volumemodifier_fx = config.child("Volumemodifier_fx").attribute("value").as_float();
+
+	/*Mix_VolumeMusic(128 * musicVolumeModifier);*/
+
+	return true;
 }

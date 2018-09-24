@@ -28,6 +28,19 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	//pugi::xml_node Load_state();
+
+	//pugi::xml_node renderernode;
+
+	//bool j1Render::Savestate();
+
+
+	bool Load(pugi::xml_node&);
+		
+	bool Save(pugi::xml_node&) const;
+	
+	
+
 	// Blit
 	void SetViewPort(const SDL_Rect& rect);
 	void ResetViewPort();
@@ -40,6 +53,8 @@ public:
 	void SetBackgroundColor(SDL_Color color);
 
 public:
+
+
 
 	SDL_Renderer*	renderer;
 	SDL_Rect		camera;

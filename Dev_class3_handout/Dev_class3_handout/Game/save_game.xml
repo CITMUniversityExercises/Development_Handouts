@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<save>
+	<input />
+	<window />
+	<textures />
+	<audio>
+		<Volumemodifier_music value="128" />
+		<Volumemodifier_fx value="0" />
+	</audio>
+	<scene />
+	<renderer>
+		<camera x="252" y="326" />
+	</renderer>
+</save>

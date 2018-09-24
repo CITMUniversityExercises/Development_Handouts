@@ -32,6 +32,21 @@ public:
 	// Play a previously loaded WAV
 	bool PlayFx(unsigned int fx, int repeat = 0);
 
+
+	bool Load(pugi::xml_node&);
+	
+	
+
+	bool Save(pugi::xml_node&) const;
+		
+	
+
+	void raiseVolume();
+	void reduceVolume();
+
+	float Volumemodifier_music;
+	float Volumemodifier_fx;
+	
 private:
 
 	_Mix_Music*			music;
