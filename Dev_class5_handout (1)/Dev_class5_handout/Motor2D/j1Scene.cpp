@@ -19,10 +19,18 @@ j1Scene::~j1Scene()
 {}
 
 // Called before render is available
-bool j1Scene::Awake()
+bool j1Scene::Awake(pugi::xml_node& config)
 {
-	LOG("Loading Scene");
 	bool ret = true;
+
+	LOG("Loading Scene");
+
+	map_name = config.child("currentmap").attribute("name").as_string();
+
+	if (map_name == NULL)
+	{
+		ret = false;
+	}
 
 	return ret;
 }
@@ -30,8 +38,12 @@ bool j1Scene::Awake()
 // Called before the first frame
 bool j1Scene::Start()
 {
-	App->map->Load("hello2.tmx");
-	return true;
+	bool ret = true;
+
+	ret= App->map->Load(map_name.GetString());
+	
+
+	return ret;
 }
 
 // Called each loop iteration

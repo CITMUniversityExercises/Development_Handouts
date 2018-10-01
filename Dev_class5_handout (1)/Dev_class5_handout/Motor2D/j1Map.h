@@ -8,9 +8,6 @@
 
 // TODO 1: Create a struct for the map layer
 // ----------------------------------------------------
-struct tile {
-	unsigned int gid;
-};
 
 struct layer {
 
@@ -20,24 +17,16 @@ struct layer {
 
 	//p2List <tile*> *tiles;
 
-	unsigned int * data;
+	unsigned int * data = nullptr;
 
 	~layer() {
 		if (data != nullptr)
 			delete[] data;
+	}
 
-		/*p2List_item <tile*>* aux;
-		if (tiles->start != nullptr)
-		{
-			aux = tiles->start;
-
-			while (aux != NULL)
-			{
-				RELEASE(aux->data);
-				aux = aux->next;
-			}
-			tiles->clear();
-		}*/
+	inline uint Get(uint x, uint y) const
+	{
+		return x + y*width;
 	}
 
 };
@@ -85,7 +74,7 @@ struct MapData
 	MapTypes			type;
 	p2List<TileSet*>	tilesets;
 	// TODO 2: Add a list/array of layers to the map!
-	p2List <layer*> *layerlist;
+	p2List <layer*> layerlist;
 };
 
 // ----------------------------------------------------
@@ -120,11 +109,8 @@ private:
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
 	// TODO 3: Create a method that loads a single laye
 
-	layer* LoadLayerdata(pugi::xml_node layer);
-	tile* LoadTile(pugi::xml_node currenttile);
-
-	// bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
-
+	bool LoadLayer(pugi::xml_node& node, layer* layer);
+	
 public:
 
 	MapData data;
