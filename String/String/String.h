@@ -1,7 +1,7 @@
 #ifndef STRING_H
 #define STRING_H
 
-#include <cstring>
+#include <string.h>
 
 class String
 {
@@ -59,6 +59,9 @@ public:
 
 	void operator=(const String &string)
 	{
+		// si string cap al objecte en el que estic treballant, no cal fer new
+		//sinó sobreescriure
+
 		delete[] str;
 		num_chars = string.num_chars;
 		str = new char[num_chars + 1];
@@ -97,8 +100,8 @@ public:
 
 private:
 
-	unsigned int num_chars = 0;
-	char *str = nullptr;
+	unsigned int num_chars;
+	char *str;
 };
 
 #endif // STRING_H
