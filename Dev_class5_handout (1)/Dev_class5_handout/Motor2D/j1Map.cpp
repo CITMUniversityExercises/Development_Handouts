@@ -33,13 +33,17 @@ void j1Map::Draw()
 
 	// TODO 5: Prepare the loop to draw all tilesets + Blit
 
+
 	for (int x = 0; x < data.tilesets.count(); x++)
 	{
 		for (uint i = 0; i < data.height; i++)
 		{
 			for (uint j = 0; j < data.width; j++)
 			{
-				App->render->Blit(data.tilesets[x]->texture, j*data.tile_width, i*data.tile_height, &data.tilesets[x]->GetTileRect(data.layerlist[x]->data[data.layerlist[x]->Get(j, i)]));
+				App->render->Blit(data.tilesets[x]->texture,    //texture 
+					j*data.tile_width,                          //position.x of tile
+					i*data.tile_height,                         //position.y of tile
+					&data.tilesets[x]->GetTileRect(data.layerlist[x]->data[data.layerlist[x]->Get(j, i)])); //rectangle
 			}
 		}
 	}
@@ -162,6 +166,8 @@ bool j1Map::Load(const char* file_name)
 		{
 			ret = LoadLayer(layernode, lay);
 		}
+
+		//control case false
 
 		data.layerlist.add(lay);
 	}
@@ -332,7 +338,7 @@ bool j1Map::LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set)
 // TODO 3: Create the definition for a function that loads a single layer
 bool j1Map::LoadLayer(pugi::xml_node& node, layer* layer)
 {
-
+	//assert
 	bool ret = true;
 
 	layer->layername = node.attribute("name").as_string();

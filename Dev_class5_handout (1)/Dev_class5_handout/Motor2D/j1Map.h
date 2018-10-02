@@ -15,7 +15,6 @@ struct layer {
 	unsigned int width;
 	unsigned int height;
 
-	//p2List <tile*> *tiles;
 
 	unsigned int * data = nullptr;
 
@@ -26,6 +25,7 @@ struct layer {
 
 	inline uint Get(uint x, uint y) const
 	{
+		uint a = width;
 		return x + y*width;
 	}
 
@@ -114,7 +114,6 @@ private:
 public:
 
 	MapData data;
-	
 
 private:
 
