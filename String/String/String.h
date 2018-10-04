@@ -60,7 +60,7 @@ public:
 	void operator=(const String &string)
 	{
 		// si string cap al objecte en el que estic treballant, no cal fer new
-		//sinó sobreescriure
+		//sinó sobreescriure Check this everywhere
 
 		delete[] str;
 		num_chars = string.num_chars;
@@ -68,7 +68,7 @@ public:
 		strcpy_s(str, num_chars + 1, string.str);
 	}
 
-	void operator+=(const String &string)
+	String operator+=(const String &string)
 	{
 		unsigned int new_num_chars = num_chars + string.num_chars;
 		char *new_str = new char[new_num_chars + 1];
@@ -79,6 +79,8 @@ public:
 		delete[] str;
 		num_chars = new_num_chars;
 		str = new_str;
+
+		return *this;
 	}
 
 	String operator+(const String &string) const
@@ -97,6 +99,8 @@ public:
 	{
 		return strcmp(str, string.str) != 0;
 	}
+
+	//create method prefix (if we have world and we put world as prefix we get helloworld)
 
 private:
 
