@@ -38,6 +38,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 
 	// render last to swap buffer
 	AddModule(render);
+
 }
 
 // Destructor
@@ -300,6 +301,8 @@ bool j1App::LoadGameNow()
 {
 	bool ret = false;
 
+	load_game.create("save_game.xml");
+
 	pugi::xml_document data;
 	pugi::xml_node root;
 
@@ -337,6 +340,8 @@ bool j1App::SavegameNow() const
 {
 	bool ret = true;
 
+	save_game.create("save_game.xml");
+
 	LOG("Saving Game State to %s...", save_game.GetString());
 
 	// xml object were we will store all data
@@ -355,11 +360,13 @@ bool j1App::SavegameNow() const
 
 	if(ret == true)
 	{
-		std::stringstream stream;
-		data.save(stream);
+		//std::stringstream stream;
+		//data.save(stream);
 
-		// we are done, so write data to disk
-//		fs->Save(save_game.GetString(), stream.str().c_str(), stream.str().length());
+		//// we are done, so write data to disk
+  //	    Save(save_game.GetString(), stream.str().c_str(), stream.str().length());
+
+		data.save_file(save_game.GetString());
 		LOG("... finished saving", save_game.GetString());
 	}
 	else

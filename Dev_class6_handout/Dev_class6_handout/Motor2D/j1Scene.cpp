@@ -19,10 +19,17 @@ j1Scene::~j1Scene()
 {}
 
 // Called before render is available
-bool j1Scene::Awake()
+bool j1Scene::Awake(pugi::xml_node& config)
 {
 	LOG("Loading Scene");
 	bool ret = true;
+
+	map_name = config.child("currentmap").attribute("name").as_string();
+
+	if (map_name == NULL)
+	{
+		ret = false;
+	}
 
 	return ret;
 }
@@ -30,10 +37,22 @@ bool j1Scene::Awake()
 // Called before the first frame
 bool j1Scene::Start()
 {
-	/*App->map->Load("hello2.tmx");*/
-	App->map->Load("iso.tmx");
+	bool ret = true;
+
+	//Loading map
+	ret = App->map->Load(map_name.GetString());
+
+	p2SString sadpiano("%s%s", App->audio->musicfolder.GetString(), "music_sadpiano.ogg");
+
+	//Loading music sample
+	App->audio->PlayMusic(sadpiano.GetString());
+
+	if (!ret)
+	{
+		ret = false;
+	}
 	
-	return true;
+	return ret;
 }
 
 // Called each loop iteration
@@ -45,6 +64,19 @@ bool j1Scene::PreUpdate()
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
+	if (App->input->GetKey(SDL_SCANCODE_U) == KEY_DOWN)
+	{
+		App->audio->ChangeVolume_music(10);
+		LOG("volume up");
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
+	{
+		App->audio->ChangeVolume_music(-10);
+		LOG("volume down");
+	}
+
+
 	if(App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 		App->LoadGame("save_game.xml");
 

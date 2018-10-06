@@ -26,4 +26,19 @@
     <folder>maps/</folder>
   </map>
 
+  <scene>
+    <currentmap name="hello2.tmx"></currentmap>
+  </scene>
+
+  <audio>
+    <music>
+      <folder>audio/music/</folder>
+      <VolumeChanger_music value="1"/>
+    </music>
+    <fx>
+      <folder>audio/fx/</folder>
+      <VolumeChanger_fx value="1"/>
+    </fx>
+  </audio>
+
 </config>

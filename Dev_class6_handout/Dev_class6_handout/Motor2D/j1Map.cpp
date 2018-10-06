@@ -37,17 +37,24 @@ void j1Map::Draw()
 
 	for (int x = 0; x < data.tilesets.count(); x++)
 	{
-		for (uint i = 0; i < data.height; i++)
+		for (uint l = 0; l < data.layers.count(); l++)
 		{
-			for (uint j = 0; j < data.width; j++)
+			for (uint row = 0; row < data.height; row++)
 			{
-				App->render->Blit(data.tilesets[x]->texture,    //texture 
-					j*data.tile_width,                          //position.x of tile
-					i*data.tile_height,                         //position.y of tile
-					&data.tilesets[x]->GetTileRect(data.layers[x]->data[data.layers[x]->Get(j, i)])); //rectangle
+				for (uint column = 0; column < data.width; column++)
+				{
+					iPoint pos = MapToWorld(column, row);
+
+					App->render->Blit(data.tilesets[x]->texture,    //texture 
+						pos.x,                     //position.x of tile
+						pos.y,                         //position.y of tile
+						&data.tilesets[x]->GetTileRect(data.layers[l]->data[data.layers[l]->Get(column, row)])); //rectangle
+				}
 			}
 		}
 	}
+	
+
 
 	// TODO 10(old): Complete the draw function
 }
@@ -65,8 +72,8 @@ iPoint j1Map::MapToWorld(int x, int y) const
 
 	else if (data.type == MapTypes::MAPTYPE_ISOMETRIC)
 	{
-		ret.x = (x - y) * (data.tile_width * 0.5f);
-		ret.y = (x + y) * (data.tile_height * 0.5f);
+		ret.x = (x - y) * (data.tile_width  /2);
+		ret.y = (x + y) * (data.tile_height /2);
 	}
 
 
@@ -88,8 +95,10 @@ iPoint j1Map::WorldToMap(int x, int y) const
 
 	else if (data.type == MapTypes::MAPTYPE_ISOMETRIC)
 	{
-		/*ret.x = int (x / (data.tile_width / 2) + y / (data.tile_height / 2)) - x;
-		ret.y = int (y / (data.tile_height / 2) - (x / (data.tile_width / 2)) + x);*/
+		
+		y -= 16;
+		ret.x =  ((x / (data.tile_width / 2) + (y / (data.tile_height / 2))) /2);
+		ret.y =  ((y / (data.tile_height / 2) - (x / (data.tile_width / 2))) /2);
 
 	}
 
