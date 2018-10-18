@@ -65,7 +65,7 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 		App->map->ResetBFS();
 
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && App->map->found==false)
 		App->map->PropagateBFS();
 
 	if (App->input->GetKey(SDL_SCANCODE_M) == KEY_REPEAT)

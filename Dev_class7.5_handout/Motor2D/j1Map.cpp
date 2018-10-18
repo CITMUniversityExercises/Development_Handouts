@@ -40,50 +40,125 @@ void j1Map::PropagateBFS()
 	// TODO 1: If frontier queue contains elements
 	// pop the first one and calculate its 4 neighbors
 
-	iPoint item;  // first ipoint in frontier list
-	iPoint item1;
-	iPoint item2;
-	iPoint item3;
-	iPoint item4;
 
-	frontier.Pop(item);
-
-	item1.x = item.x + 1;
-	item1.y = item.y;
-
-	item2.x = item.x - 1;
-	item2.y = item.y;
-
-	item3.x = item.x;
-	item3.y = item.y + 1;
-
-	item4.x = item.x;
-	item4.y = item.y - 1;
-
-	if (visited.find(item1)== -1 && IsWalkable(item1.x,item1.y))
+	if (frontier.Count() > 0 )
 	{
-		visited.add(item1);
-		frontier.Push(item1);
+		iPoint item;  // first ipoint in frontier list
+		iPoint item1;
+		iPoint item2;
+		iPoint item3;
+		iPoint item4;
+
+
+		frontier.Pop(item);
+
+		item1.x = item.x + 1;
+		item1.y = item.y;
+
+		item2.x = item.x - 1;
+		item2.y = item.y;
+
+		item3.x = item.x;
+		item3.y = item.y + 1;
+
+		item4.x = item.x;
+		item4.y = item.y - 1;
+
+		prevdata tmp;
+		tmp.prev = &item;
+
+		if (visited.find(item1) == -1 && IsWalkable(item1.x, item1.y))
+		{
+			tmp.data = item1;
+
+			prevnode.add(tmp);
+
+			visited.add(item1);
+			frontier.Push(item1);
+		}
+
+		if (visited.find(item2) == -1 && IsWalkable(item2.x, item2.y))
+		{
+			tmp.data = item2;
+
+			prevnode.add(tmp);
+
+			visited.add(item2);
+			frontier.Push(item2);
+		}
+
+		if (visited.find(item3) == -1 && IsWalkable(item3.x, item3.y))
+		{
+			tmp.data = item3;
+
+			prevnode.add(tmp);
+
+			visited.add(item3);
+			frontier.Push(item3);
+		}
+
+		if (visited.find(item4) == -1 && IsWalkable(item4.x, item4.y))
+		{
+			tmp.data = item4;
+
+			prevnode.add(tmp);
+
+			visited.add(item4);
+			frontier.Push(item4);
+		}
+
+
+		if (item1 == destination)
+		{
+			found = true;
+			destine.data = item1;
+			destine.prev = &item;
+		}
+		else if (item2 == destination)
+		{
+			found = true;
+			destine.data = item2;
+			destine.prev = &item;
+		}
+		else if (item3 == destination)
+		{
+			found = true;
+			destine.data = item3;
+			destine.prev = &item;
+		}
+		else if (item4 == destination)
+		{
+			found = true;
+			destine.data = item4;
+			destine.prev = &item;
+		}
+
+
+		if(found==true)
+		{
+			int index = 0;
+			index = prevnode.find(destine);
+
+			iPoint point;
+			iPoint start = { 19,4 };
+
+			for (point = destination;destine.data==start;destine = destine.prev)
+			{
+				
+				TileSet* tileset = GetTilesetFromTileId(26);
+
+				SDL_Rect r = tileset->GetTileRect(26);
+				iPoint pos = MapToWorld(point.x, point.y);
+
+				App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+
+			}
+			
+		}
+
 	}
 
-	if (visited.find(item2) == -1 && IsWalkable(item2.x, item2.y))
-	{
-		visited.add(item2);
-		frontier.Push(item2);
-	}
-
-	if (visited.find(item3) == -1 && IsWalkable(item3.x, item3.y))
-	{
-		visited.add(item3);
-		frontier.Push(item3);
-	}
-
-	if (visited.find(item4) == -1 && IsWalkable(item4.x, item4.y))
-	{
-		visited.add(item4);
-		frontier.Push(item4);
-	}
-
+	
 
 
 	// TODO 2: For each neighbor, if not visited, add it
@@ -96,6 +171,14 @@ void j1Map::DrawBFS()
 
 	// Draw visited
 	p2List_item<iPoint>* item = visited.start;
+
+	point = destination;
+	TileSet* tileset = GetTilesetFromTileId(26);
+
+	SDL_Rect r = tileset->GetTileRect(26);
+	iPoint pos = MapToWorld(point.x, point.y);
+
+	App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 
 	while(item)
 	{

@@ -7,6 +7,13 @@
 #include "p2Point.h"
 #include "j1Module.h"
 
+struct prevdata
+{
+	iPoint data;
+	iPoint * prev;
+
+};
+
 // ----------------------------------------------------
 struct Properties
 {
@@ -142,6 +149,7 @@ private:
 public:
 
 	MapData data;
+	bool found = false;
 
 private:
 
@@ -152,6 +160,11 @@ private:
 	/// BFS
 	p2Queue<iPoint>		frontier;
 	p2List<iPoint>		visited;
+	p2List<prevdata>     prevnode;
+
+	iPoint destination = { 0,20 };
+	prevdata destine;
 };
+
 
 #endif // __j1MAP_H__
