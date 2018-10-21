@@ -30,12 +30,28 @@ public:
 	unsigned int LoadFx(const char* path);
 
 	// Play a previously loaded WAV
-	bool PlayFx(unsigned int fx, int repeat = 0);
+	bool PlayFx(unsigned int fx, int repeat = 0, uint volume = 128);
+
+	//Modify Volume
+
+	void ChangeVolume_music(float value);
+	void ChangeVolume_fx(float value);
+
+	//Load & Save audio data
+
+	bool Save(pugi::xml_node&) const;
+	bool Load(pugi::xml_node&);
+
+	p2SString musicfolder;
+	p2SString fxfolder;
 
 private:
 
 	_Mix_Music*			music = NULL;
 	p2List<Mix_Chunk*>	fx;
+
+	float VolumeChanger_music;
+	float VolumeChanger_fx;
 };
 
 #endif // __j1AUDIO_H__

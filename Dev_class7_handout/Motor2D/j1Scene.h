@@ -4,6 +4,7 @@
 #include "j1Module.h"
 
 struct SDL_Texture;
+class Collider;
 
 class j1Scene : public j1Module
 {
@@ -15,7 +16,7 @@ public:
 	virtual ~j1Scene();
 
 	// Called before render is available
-	bool Awake();
+	bool Awake(pugi::xml_node& config);
 
 	// Called before the first frame
 	bool Start();
@@ -32,7 +33,12 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+public:
+	Collider* colliderfloor;
+	Collider* colliderbox;
+
 private:
+	p2SString map_name;
 };
 
 #endif // __j1SCENE_H__

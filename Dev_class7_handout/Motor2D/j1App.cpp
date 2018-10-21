@@ -13,6 +13,9 @@
 #include "j1Map.h"
 #include "j1App.h"
 
+//#include "j1Collision.h"
+#include "j1Player.h"
+
 // Constructor
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 {
@@ -26,6 +29,8 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	audio = new j1Audio();
 	scene = new j1Scene();
 	map = new j1Map();
+	/*coll = new j1Collision();*/
+	player = new j1Player();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -35,6 +40,8 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(audio);
 	AddModule(map);
 	AddModule(scene);
+	//AddModule(coll);
+	AddModule(player);
 
 	// render last to swap buffer
 	AddModule(render);
@@ -287,7 +294,7 @@ void j1App::SaveGame(const char* file) const
 	// from the "GetSaveGames" list ... should we overwrite ?
 
 	want_to_save = true;
-	//save_game.create(file);
+	save_game.create(file);
 }
 
 // ---------------------------------------
@@ -299,6 +306,8 @@ void j1App::GetSaveGames(p2List<p2SString>& list_to_fill) const
 bool j1App::LoadGameNow()
 {
 	bool ret = false;
+
+	load_game.create("save_game.xml");
 
 	pugi::xml_document data;
 	pugi::xml_node root;
@@ -337,6 +346,8 @@ bool j1App::SavegameNow() const
 {
 	bool ret = true;
 
+	save_game.create("save_game.xml");
+
 	LOG("Saving Game State to %s...", save_game.GetString());
 
 	// xml object were we will store all data
@@ -355,11 +366,7 @@ bool j1App::SavegameNow() const
 
 	if(ret == true)
 	{
-		std::stringstream stream;
-		data.save(stream);
-
-		// we are done, so write data to disk
-		//fs->Save(save_game.GetString(), stream.str().c_str(), stream.str().length());
+		data.save_file(save_game.GetString());
 		LOG("... finished saving", save_game.GetString());
 	}
 	else

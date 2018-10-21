@@ -9,6 +9,8 @@
 #include "j1Map.h"
 #include "j1Scene.h"
 
+//#include "j1Collision.h"
+
 j1Scene::j1Scene() : j1Module()
 {
 	name.create("scene");
@@ -19,10 +21,18 @@ j1Scene::~j1Scene()
 {}
 
 // Called before render is available
-bool j1Scene::Awake()
+bool j1Scene::Awake(pugi::xml_node& config)
 {
 	LOG("Loading Scene");
-	bool ret = true;
+
+    bool ret = true;
+
+	map_name = config.child("currentmap").attribute("name").as_string();
+
+	if (map_name == NULL)
+	{
+		ret = false;
+	}
 
 	return ret;
 }
@@ -30,9 +40,40 @@ bool j1Scene::Awake()
 // Called before the first frame
 bool j1Scene::Start()
 {
-	App->map->Load("iso_walk.tmx");
-	
-	return true;
+	bool ret = true;
+
+	//Loading map
+	ret = App->map->Load(map_name.GetString());
+
+	if (map_name == "stage1_TiledV017.tmx")
+	{
+
+		p2SString stageMusic("%s%s", App->audio->musicfolder.GetString(), "stage1.ogg");
+		//Loading music sample
+		App->audio->PlayMusic(stageMusic.GetString());
+	}
+	else
+	{
+		p2SString stageMusic("%s%s", App->audio->musicfolder.GetString(), "stage2.ogg");
+		App->audio->PlayMusic(stageMusic.GetString());
+	}
+
+	//if (colliderfloor == nullptr)
+	//	colliderfloor = App->coll->AddCollider({ 0, 150, 1024, 100 }, COLLIDER_FLOOR, this);
+	///*else
+	//	colliderfloor->SetPos(0, 0);*/
+
+	//if (colliderbox == nullptr)
+	//	colliderbox = App->coll->AddCollider({ 100, 120, 50, 30 }, COLLIDER_FLOOR, this);
+	////else
+	////	colliderbox->SetPos(0, 0);
+
+	if (!ret)
+	{
+		ret = false;
+	}
+
+	return ret;
 }
 
 // Called each loop iteration
@@ -44,6 +85,21 @@ bool j1Scene::PreUpdate()
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
+
+	if (App->input->GetKey(SDL_SCANCODE_U) == KEY_DOWN)
+	{
+		App->audio->ChangeVolume_music(10);
+		App->audio->ChangeVolume_fx(10);
+		LOG("volume up");
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
+	{
+		App->audio->ChangeVolume_music(-10);
+		App->audio->ChangeVolume_fx(-10);
+		LOG("volume down");
+	}
+	
 	if(App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 		App->LoadGame("save_game.xml");
 
@@ -74,6 +130,9 @@ bool j1Scene::Update(float dt)
 					map_coordinates.x, map_coordinates.y);
 
 	App->win->SetTitle(title.GetString());
+
+	/*App->render->DrawQuad(colliderfloor->rect, 0, 0, 255);
+	App->render->DrawQuad(colliderbox->rect, 0, 255, 0);*/
 	return true;
 }
 
@@ -92,6 +151,12 @@ bool j1Scene::PostUpdate()
 bool j1Scene::CleanUp()
 {
 	LOG("Freeing scene");
+
+	/*if (colliderbox != nullptr)
+		colliderbox = nullptr;
+
+	if (colliderfloor != nullptr)
+		colliderfloor = nullptr;*/
 
 	return true;
 }

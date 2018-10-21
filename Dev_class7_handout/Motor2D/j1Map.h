@@ -12,9 +12,34 @@
 // ----------------------------------------------------
 struct Properties
 {
+	p2List <p2SString> name;
+
+	p2List <p2SString> value;
+
+	bool LoadProperties(pugi::xml_node& node);
+
+	int numproperties;
+
+	p2SString GetProperties(const char * request);
+
 };
 
 // ----------------------------------------------------
+struct ImageLayer
+{
+	SDL_Rect GetParalaxRect() const;
+
+	p2SString	name;
+	int			width;
+	int			height;
+	SDL_Texture* texture;
+
+	ImageLayer() {}
+
+	~ImageLayer() {}
+
+};
+
 struct MapLayer
 {
 	p2SString	name;
@@ -75,6 +100,7 @@ struct MapData
 	MapTypes			type;
 	p2List<TileSet*>	tilesets;
 	p2List<MapLayer*>	layers;
+	p2List<ImageLayer*> paralaxlist;
 };
 
 // ----------------------------------------------------
@@ -108,7 +134,8 @@ private:
 	bool LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
-	bool LoadProperties(pugi::xml_node& node, Properties& properties);
+	/*bool LoadProperties(pugi::xml_node& node, Properties& properties);*/
+	bool LoadParalax(pugi::xml_node& node, ImageLayer* image);
 
 	TileSet* GetTilesetFromTileId(int id) const;
 

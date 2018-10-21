@@ -32,14 +32,25 @@ void j1Map::Draw()
 		return;
 
 
+	for (int x = 0; x < data.paralaxlist.count(); ++x)
+	{
+		App->render->Blit(data.paralaxlist[x]->texture,
+			0,
+			0,
+			&data.paralaxlist[x]->GetParalaxRect());
+	}
+
+
 	// TODO 4: Make sure we draw all the layers and not just the first one
-	MapLayer* layer = this->data.layers.start->data;
+	MapLayer* layer /*this->data.layers.start->data*/;
 
 
 	for (uint l = 0; l < data.layers.count(); l++)
 	{
-
 		layer = data.layers.At(l)->data;
+
+		if (layer->properties.GetProperties("Nodraw").operator==("1"))
+			continue;
 
 		for (int y = 0; y < data.height; ++y)
 		{
@@ -60,6 +71,7 @@ void j1Map::Draw()
 			}
 		}
 	}
+
 }
 
 TileSet* j1Map::GetTilesetFromTileId(int id) const
@@ -67,22 +79,27 @@ TileSet* j1Map::GetTilesetFromTileId(int id) const
 	// TODO 3: Complete this method so we pick the right
 	// Tileset based on a tile id
 
-	TileSet* tileset = data.tilesets.start->data;
+	TileSet* tileset;
 
 	int j = data.tilesets.count();
 
 	for (int i = 0; i < j ; ++i)
 	{
-		/*tileset = data.tilesets.At(i)->data;*/
+		tileset = data.tilesets.At(i)->data;
 
-		if (id > tileset->firstgid)
+		if (id >= tileset->firstgid)
 		{
+			if (data.tilesets.At(i+1)!=NULL)
+			{
+				if (id <= -tileset->firstgid + data.tilesets.At(i + 1)->data->firstgid)
+					return tileset;
+				else
+					continue;
+			}
 			return tileset;
-		}
-			
+		}	
 	}
 
-	/*return data.tilesets.end->data;*/
 }
 
 iPoint j1Map::MapToWorld(int x, int y) const
@@ -137,11 +154,28 @@ iPoint j1Map::WorldToMap(int x, int y) const
 SDL_Rect TileSet::GetTileRect(int id) const
 {
 	int relative_id = id - firstgid;
+
 	SDL_Rect rect;
+
 	rect.w = tile_width;
 	rect.h = tile_height;
+
 	rect.x = margin + ((rect.w + spacing) * (relative_id % num_tiles_width));
 	rect.y = margin + ((rect.h + spacing) * (relative_id / num_tiles_width));
+	return rect;
+}
+
+SDL_Rect ImageLayer::GetParalaxRect() const
+{
+	SDL_Rect rect;
+
+	rect.w = width;
+	rect.h = height;
+
+	rect.x = 0;
+	rect.y = 0;
+
+
 	return rect;
 }
 
@@ -172,6 +206,18 @@ bool j1Map::CleanUp()
 	}
 	data.layers.clear();
 
+	// Remove all Pralax image
+	p2List_item<ImageLayer*>* item3;
+	item3 = data.paralaxlist.start;
+
+	while (item3 != NULL)
+	{
+		RELEASE(item3->data);
+		item3 = item3->next;
+	}
+	data.paralaxlist.clear();
+
+
 	// Clean up the pugui tree
 	map_file.reset();
 
@@ -182,9 +228,9 @@ bool j1Map::CleanUp()
 bool j1Map::Load(const char* file_name)
 {
 	bool ret = true;
-	p2SString tmp("maps\\%s", folder.GetString(), file_name);
+	p2SString tmp("%s%s", folder.GetString(), file_name);
 
-	pugi::xml_parse_result result = map_file.load_file("maps/iso_walk.tmx");
+	pugi::xml_parse_result result = map_file.load_file(tmp.GetString());
 
 	if(result == NULL)
 	{
@@ -229,6 +275,19 @@ bool j1Map::Load(const char* file_name)
 			data.layers.add(lay);
 	}
 
+	//Load Image info ----------------------------
+	pugi::xml_node paralaxNode;
+	for (paralaxNode = map_file.child("map").child("imagelayer"); paralaxNode && ret; paralaxNode = paralaxNode.next_sibling("imagelayer"))
+	{
+		ImageLayer* imageList = new ImageLayer();
+
+		ret = LoadParalax(paralaxNode, imageList);
+
+		if (ret == true)
+			data.paralaxlist.add(imageList);
+	}
+
+
 	if(ret == true)
 	{
 		LOG("Successfully parsed map XML file: %s", file_name);
@@ -253,7 +312,23 @@ bool j1Map::Load(const char* file_name)
 			LOG("Layer ----");
 			LOG("name: %s", l->name.GetString());
 			LOG("tile width: %d tile height: %d", l->width, l->height);
+			LOG("layer has %i properties", l->properties.numproperties);
+			for (int i = 0; i < l->properties.numproperties; ++i)
+			{
+				LOG("property name is %s", l->properties.name.At(i)->data.GetString());
+				LOG("property value is %s", l->properties.value.At(i)->data.GetString());
+			}
 			item_layer = item_layer->next;
+		}
+
+		p2List_item<ImageLayer*>* item_imageParalax = data.paralaxlist.start;
+		while (item_imageParalax != NULL)
+		{
+			ImageLayer* i = item_imageParalax->data;
+			LOG("Paralax image ----");
+			LOG("name: %s", i->name.GetString());
+			LOG("tile width: %d tile height: %d", i->width, i->height);
+			item_imageParalax = item_imageParalax->next;
 		}
 	}
 
@@ -396,7 +471,8 @@ bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	layer->name = node.attribute("name").as_string();
 	layer->width = node.attribute("width").as_int();
 	layer->height = node.attribute("height").as_int();
-	LoadProperties(node, layer->properties);
+	layer->properties.LoadProperties(node);
+
 	pugi::xml_node layer_data = node.child("data");
 
 	if(layer_data == NULL)
@@ -421,12 +497,73 @@ bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 }
 
 // Load a group of properties from a node and fill a list with it
-bool j1Map::LoadProperties(pugi::xml_node& node, Properties& properties)
+bool Properties::LoadProperties(pugi::xml_node& node)
 {
-	bool ret = false;
+	// node has to be layer, map, tileset
+	bool ret = true;
 
+	pugi::xml_node properties = node.child("properties");
+
+	numproperties = properties.first_child().attribute("value").as_int();
+
+	//We get the second property node
+
+	properties = properties.first_child().next_sibling();
+	
+	p2SString tmp;
+
+	for (int i = 0; i < numproperties; ++i)
+	{
+		tmp.operator=(properties.attribute("name").as_string());
+		this->name.add(tmp);
+		tmp.operator=(properties.attribute("value").as_string());
+		this->value.add(tmp);
+
+		if(i!= numproperties-1)
+		properties = properties.next_sibling();
+	}
 	// TODO 6: Fill in the method to fill the custom properties from 
 	// an xml_node
+
+	return ret;
+}
+
+p2SString Properties::GetProperties(const char * request)
+{
+	p2SString tmp;
+	bool requestfound = false;
+	pugi::xml_parse_result result;
+
+	
+		for (int i = 0; i < name.count(); ++i)
+		{
+			tmp.operator= (name.At(i)->data.GetString());
+			if (tmp.operator==(request) == true)
+			{
+				requestfound = true;
+				tmp = value.At(i)->data.GetString();
+				break;
+			}
+			
+		}
+
+		if (requestfound == false)
+			tmp = result.description();
+
+
+	return tmp;
+}
+
+
+
+bool j1Map::LoadParalax(pugi::xml_node& node, ImageLayer* image)
+{
+	bool ret = true;
+
+	image->name = node.attribute("name").as_string();
+	image->width = node.child("image").attribute("width").as_int();
+	image->height = node.child("image").attribute("height").as_int();
+	image->texture = App->tex->Load(PATH(folder.GetString(), node.child("image").attribute("source").as_string()));
 
 	return ret;
 }
