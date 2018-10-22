@@ -10,8 +10,7 @@
 struct prevdata
 {
 	iPoint data;
-	iPoint * prev;
-
+	prevdata * prev;
 };
 
 // ----------------------------------------------------
@@ -160,10 +159,12 @@ private:
 	/// BFS
 	p2Queue<iPoint>		frontier;
 	p2List<iPoint>		visited;
-	p2List<prevdata>     prevnode;
+	p2List<prevdata*>   prevnode;
+	p2List<prevdata*>   listtoprint;
 
 	iPoint destination = { 0,20 };
 	prevdata destine;
+
 };
 
 

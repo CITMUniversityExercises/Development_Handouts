@@ -64,14 +64,29 @@ void j1Map::PropagateBFS()
 		item4.x = item.x;
 		item4.y = item.y - 1;
 
-		prevdata tmp;
-		tmp.prev = &item;
+
+		prevdata *tmp = new prevdata;
+		prevdata *tmp2 = new prevdata;
+
+		//If first tile
+		if (item.x == 19 && item.y == 4)
+		{
+			tmp->data = item;
+			tmp->prev = nullptr;
+			prevnode.add(tmp);
+		}
+
+		int itemindex = visited.find(item);
+
+		tmp2->data = item;
+		tmp2->prev = prevnode.At(itemindex)->data;
+		
 
 		if (visited.find(item1) == -1 && IsWalkable(item1.x, item1.y))
 		{
-			tmp.data = item1;
-
-			prevnode.add(tmp);
+			tmp2->data = item1;
+			/*tmp2->prev = prevnode.At(itemindex)->data;*/
+			prevnode.add(tmp2);
 
 			visited.add(item1);
 			frontier.Push(item1);
@@ -79,9 +94,11 @@ void j1Map::PropagateBFS()
 
 		if (visited.find(item2) == -1 && IsWalkable(item2.x, item2.y))
 		{
-			tmp.data = item2;
+			prevdata *tmp3 = new prevdata;
+			tmp3->prev = prevnode.At(itemindex)->data;
+			tmp3->data = item2;
 
-			prevnode.add(tmp);
+			prevnode.add(tmp3);
 
 			visited.add(item2);
 			frontier.Push(item2);
@@ -89,9 +106,12 @@ void j1Map::PropagateBFS()
 
 		if (visited.find(item3) == -1 && IsWalkable(item3.x, item3.y))
 		{
-			tmp.data = item3;
+			prevdata *tmp4 = new prevdata;
 
-			prevnode.add(tmp);
+			tmp4->prev = prevnode.At(itemindex)->data;
+			tmp4->data = item3;
+
+			prevnode.add(tmp4);
 
 			visited.add(item3);
 			frontier.Push(item3);
@@ -99,9 +119,12 @@ void j1Map::PropagateBFS()
 
 		if (visited.find(item4) == -1 && IsWalkable(item4.x, item4.y))
 		{
-			tmp.data = item4;
+			prevdata *tmp5 = new prevdata;
 
-			prevnode.add(tmp);
+			tmp5->prev = prevnode.At(itemindex)->data;
+			tmp5->data = item4;
+
+			prevnode.add(tmp5);
 
 			visited.add(item4);
 			frontier.Push(item4);
@@ -112,53 +135,51 @@ void j1Map::PropagateBFS()
 		{
 			found = true;
 			destine.data = item1;
-			destine.prev = &item;
+			destine.prev = tmp2->prev;
 		}
 		else if (item2 == destination)
 		{
 			found = true;
 			destine.data = item2;
-			destine.prev = &item;
+			destine.prev = tmp2->prev;
 		}
 		else if (item3 == destination)
 		{
 			found = true;
 			destine.data = item3;
-			destine.prev = &item;
+			destine.prev = tmp2->prev;
 		}
 		else if (item4 == destination)
 		{
 			found = true;
 			destine.data = item4;
-			destine.prev = &item;
+			destine.prev = tmp2->prev;
 		}
 
 
-		if(found==true)
+		if(visited.find(destination)!=-1 && found==true)   //found==true
 		{
-			int index = 0;
-			index = prevnode.find(destine);
 
-			iPoint point;
+			int index = 0;
+			index = visited.find(item2);
+
+			p2List_item <prevdata*> *auxitem;
+
 			iPoint start = { 19,4 };
 
-			for (point = destination;destine.data==start;destine = destine.prev)
+			TileSet* tileset = GetTilesetFromTileId(25);
+
+			SDL_Rect r = tileset->GetTileRect(25);
+
+			for (auxitem=prevnode.At(index) ;auxitem->data->data!=start && auxitem->data->prev!=NULL; *auxitem = auxitem->data->prev)
 			{
-				
-				TileSet* tileset = GetTilesetFromTileId(26);
-
-				SDL_Rect r = tileset->GetTileRect(26);
-				iPoint pos = MapToWorld(point.x, point.y);
-
-				App->render->Blit(tileset->texture, pos.x, pos.y, &r);
-
+					prevdata *to_print = new prevdata;
+					to_print->data = auxitem->data->data;
+					listtoprint.add(to_print);
 			}
 			
 		}
-
 	}
-
-	
 
 
 	// TODO 2: For each neighbor, if not visited, add it
@@ -169,20 +190,11 @@ void j1Map::DrawBFS()
 {
 	iPoint point;
 
-	// Draw visited
-	p2List_item<iPoint>* item = visited.start;
+	
+		// Draw visited
+		p2List_item<iPoint>* item = visited.start;
 
-	point = destination;
-	TileSet* tileset = GetTilesetFromTileId(26);
-
-	SDL_Rect r = tileset->GetTileRect(26);
-	iPoint pos = MapToWorld(point.x, point.y);
-
-	App->render->Blit(tileset->texture, pos.x, pos.y, &r);
-
-	while(item)
-	{
-		point = item->data;
+		point = destination;
 		TileSet* tileset = GetTilesetFromTileId(26);
 
 		SDL_Rect r = tileset->GetTileRect(26);
@@ -190,20 +202,32 @@ void j1Map::DrawBFS()
 
 		App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 
-		item = item->next;
-	}
+		while (item)
+		{
+			point = item->data;
+			TileSet* tileset = GetTilesetFromTileId(26);
 
-	// Draw frontier
-	for (uint i = 0; i < frontier.Count(); ++i)
-	{
-		point = *(frontier.Peek(i));
-		TileSet* tileset = GetTilesetFromTileId(25);
+			SDL_Rect r = tileset->GetTileRect(26);
+			iPoint pos = MapToWorld(point.x, point.y);
 
-		SDL_Rect r = tileset->GetTileRect(25);
-		iPoint pos = MapToWorld(point.x, point.y);
+			App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 
-		App->render->Blit(tileset->texture, pos.x, pos.y, &r);
-	}
+			item = item->next;
+		}
+
+		// Draw frontier
+		for (uint i = 0; i < frontier.Count(); ++i)
+		{
+			point = *(frontier.Peek(i));
+			TileSet* tileset = GetTilesetFromTileId(25);
+
+			SDL_Rect r = tileset->GetTileRect(25);
+			iPoint pos = MapToWorld(point.x, point.y);
+
+			App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+		}
+
+	
 
 }
 
@@ -228,34 +252,59 @@ void j1Map::Draw()
 	if(map_loaded == false)
 		return;
 
-	p2List_item<MapLayer*>* item = data.layers.start;
 
-	for(; item != NULL; item = item->next)
-	{
-		MapLayer* layer = item->data;
+		p2List_item<MapLayer*>* item = data.layers.start;
 
-		if(layer->properties.Get("Nodraw") != 0)
-			continue;
-
-		for(int y = 0; y < data.height; ++y)
+		for (; item != NULL; item = item->next)
 		{
-			for(int x = 0; x < data.width; ++x)
+			MapLayer* layer = item->data;
+
+			if (layer->properties.Get("Nodraw") != 0)
+				continue;
+
+			for (int y = 0; y < data.height; ++y)
 			{
-				int tile_id = layer->Get(x, y);
-				if(tile_id > 0)
+				for (int x = 0; x < data.width; ++x)
 				{
-					TileSet* tileset = GetTilesetFromTileId(tile_id);
+					int tile_id = layer->Get(x, y);
+					if (tile_id > 0)
+					{
+						TileSet* tileset = GetTilesetFromTileId(tile_id);
 
-					SDL_Rect r = tileset->GetTileRect(tile_id);
-					iPoint pos = MapToWorld(x, y);
+						SDL_Rect r = tileset->GetTileRect(tile_id);
+						iPoint pos = MapToWorld(x, y);
 
-					App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+					}
 				}
 			}
 		}
-	}
 
-	DrawBFS();
+
+
+		DrawBFS();
+	
+	
+		if (found == true) 
+		{
+
+			p2List_item <prevdata*> *auxitem;
+
+			TileSet* tileset = GetTilesetFromTileId(25);
+
+			SDL_Rect r = tileset->GetTileRect(25);
+
+			for (auxitem=listtoprint.start;auxitem;auxitem=auxitem->next)
+			{
+
+				iPoint pos = MapToWorld(auxitem->data->data.x, auxitem->data->data.y);
+				App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+
+			}
+
+			LOG("what happens?");
+		}
+		
 }
 
 int Properties::Get(const char* value, int default_value) const
@@ -377,6 +426,27 @@ bool j1Map::CleanUp()
 		item2 = item2->next;
 	}
 	data.layers.clear();
+
+	//Remove prevdata lists
+	p2List_item<prevdata*>* item3;
+	item3 = prevnode.start;
+
+	while (item3 != NULL)
+	{
+		RELEASE(item3->data);
+		item3 = item3->next;
+	}
+	prevnode.clear();
+
+	p2List_item<prevdata*>* item4;
+	item4 = listtoprint.start;
+
+	while (item4 != NULL)
+	{
+		RELEASE(item4->data);
+		item4 = item4->next;
+	}
+	listtoprint.clear();
 
 	// Clean up the pugui tree
 	map_file.reset();
