@@ -22,179 +22,114 @@ bool j1Map::Awake(pugi::xml_node& config)
 	bool ret = true;
 
 	folder.create(config.child("folder").child_value());
-	ResetBFS();
+	ResetPath();
 
 	return ret;
 }
 
-void j1Map::ResetBFS()
+bool j1Map::Start()
+{
+	tile_x = App->tex->Load("maps/x.png");
+	return true;
+}
+
+void j1Map::ResetPath()
 {
 	frontier.Clear();
 	visited.clear();
-	frontier.Push(iPoint(19, 4));
+	breadcrumbs.clear();
+	frontier.Push(iPoint(19, 4), 0);
 	visited.add(iPoint(19, 4));
+	breadcrumbs.add(iPoint(19, 4));
+	memset(cost_so_far, 0, sizeof(uint) * COST_MAP * COST_MAP);
+}
+
+void j1Map::Path(int x, int y)
+{
+	path.Clear();
+	
+
+	iPoint goal = WorldToMap(x, y);
+
+	// TODO 2: Follow the breadcrumps to goal back to the origin
+	// add each step into "path" dyn array (it will then draw automatically)
+
+	iPoint current = goal;
+
+	while (current != breadcrumbs.start->data)
+	{
+		//Add current tile previous to path
+		path.PushBack(breadcrumbs.At(visited.find(current))->data);
+
+		//Update current to its previous
+		current = breadcrumbs.At(visited.find(current))->data;
+	}
+}
+
+void j1Map::PropagateDijkstra()
+{
+	// TODO 3: Taking BFS as a reference, implement the Dijkstra algorithm
+	// use the 2 dimensional array "cost_so_far" to track the accumulated costs
+	// on each cell (is already reset to 0 automatically)
+
+	
+}
+
+int j1Map::MovementCost(int x, int y) const
+{
+	int ret = -1;
+
+	if (x >= 0 && x < data.width && y >= 0 && y < data.height)
+	{
+		int id = data.layers.start->next->data->Get(x, y);
+
+		if (id == 0)
+			ret = 3;
+		else
+			ret = 0;
+	}
+
+	return ret;
 }
 
 void j1Map::PropagateBFS()
 {
-	// TODO 1: If frontier queue contains elements
-	// pop the first one and calculate its 4 neighbors
-
-
-	if (frontier.Count() > 0 )
+	// TODO 1: Record the direction to the previous node 
+	// with the new list "breadcrumps"
+	iPoint curr;
+	if (frontier.Pop(curr))
 	{
-		iPoint item;  // first ipoint in frontier list
-		iPoint item1;
-		iPoint item2;
-		iPoint item3;
-		iPoint item4;
+		iPoint neighbors[4];
+		neighbors[0].create(curr.x + 1, curr.y + 0);
+		neighbors[1].create(curr.x + 0, curr.y + 1);
+		neighbors[2].create(curr.x - 1, curr.y + 0);
+		neighbors[3].create(curr.x + 0, curr.y - 1);
 
-
-		frontier.Pop(item);
-
-		item1.x = item.x + 1;
-		item1.y = item.y;
-
-		item2.x = item.x - 1;
-		item2.y = item.y;
-
-		item3.x = item.x;
-		item3.y = item.y + 1;
-
-		item4.x = item.x;
-		item4.y = item.y - 1;
-
-
-		prevdata *tmp = new prevdata;
-		prevdata *tmp2 = new prevdata;
-
-		//If first tile
-		if (item.x == 19 && item.y == 4)
+		for (uint i = 0; i < 4; ++i)
 		{
-			tmp->data = item;
-			tmp->prev = nullptr;
-			prevnode.add(tmp);
-		}
-
-		int itemindex = visited.find(item);
-
-		tmp2->data = item;
-		tmp2->prev = prevnode.At(itemindex)->data;
-		
-
-		if (visited.find(item1) == -1 && IsWalkable(item1.x, item1.y))
-		{
-			tmp2->data = item1;
-			/*tmp2->prev = prevnode.At(itemindex)->data;*/
-			prevnode.add(tmp2);
-
-			visited.add(item1);
-			frontier.Push(item1);
-		}
-
-		if (visited.find(item2) == -1 && IsWalkable(item2.x, item2.y))
-		{
-			prevdata *tmp3 = new prevdata;
-			tmp3->prev = prevnode.At(itemindex)->data;
-			tmp3->data = item2;
-
-			prevnode.add(tmp3);
-
-			visited.add(item2);
-			frontier.Push(item2);
-		}
-
-		if (visited.find(item3) == -1 && IsWalkable(item3.x, item3.y))
-		{
-			prevdata *tmp4 = new prevdata;
-
-			tmp4->prev = prevnode.At(itemindex)->data;
-			tmp4->data = item3;
-
-			prevnode.add(tmp4);
-
-			visited.add(item3);
-			frontier.Push(item3);
-		}
-
-		if (visited.find(item4) == -1 && IsWalkable(item4.x, item4.y))
-		{
-			prevdata *tmp5 = new prevdata;
-
-			tmp5->prev = prevnode.At(itemindex)->data;
-			tmp5->data = item4;
-
-			prevnode.add(tmp5);
-
-			visited.add(item4);
-			frontier.Push(item4);
-		}
-
-
-		if (item1 == destination)
-		{
-			found = true;
-			destine.data = item1;
-			destine.prev = tmp2->prev;
-		}
-		else if (item2 == destination)
-		{
-			found = true;
-			destine.data = item2;
-			destine.prev = tmp2->prev;
-		}
-		else if (item3 == destination)
-		{
-			found = true;
-			destine.data = item3;
-			destine.prev = tmp2->prev;
-		}
-		else if (item4 == destination)
-		{
-			found = true;
-			destine.data = item4;
-			destine.prev = tmp2->prev;
-		}
-
-
-		if(visited.find(destination)!=-1 && found==true)   //found==true
-		{
-
-			int index = 0;
-			index = visited.find(item2);
-
-			p2List_item <prevdata*> *auxitem;
-
-			iPoint start = { 19,4 };
-
-			TileSet* tileset = GetTilesetFromTileId(25);
-
-			SDL_Rect r = tileset->GetTileRect(25);
-
-			for (auxitem=prevnode.At(index) ;auxitem->data->data!=start && auxitem->data->prev!=NULL; *auxitem = auxitem->data->prev)
+			if (MovementCost(neighbors[i].x, neighbors[i].y) > 0)
 			{
-					prevdata *to_print = new prevdata;
-					to_print->data = auxitem->data->data;
-					listtoprint.add(to_print);
+				if (visited.find(neighbors[i]) == -1)
+				{
+					frontier.Push(neighbors[i], 0);
+					visited.add(neighbors[i]);
+					breadcrumbs.add(curr);
+				}
 			}
-			
 		}
 	}
-
-
-	// TODO 2: For each neighbor, if not visited, add it
-	// to the frontier queue and visited list
 }
 
-void j1Map::DrawBFS()
+void j1Map::DrawPath()
 {
 	iPoint point;
 
-	
-		// Draw visited
-		p2List_item<iPoint>* item = visited.start;
+	// Draw visited
+	p2List_item<iPoint>* item = visited.start;
 
-		point = destination;
+	while(item)
+	{
+		point = item->data;
 		TileSet* tileset = GetTilesetFromTileId(26);
 
 		SDL_Rect r = tileset->GetTileRect(26);
@@ -202,49 +137,27 @@ void j1Map::DrawBFS()
 
 		App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 
-		while (item)
-		{
-			point = item->data;
-			TileSet* tileset = GetTilesetFromTileId(26);
-
-			SDL_Rect r = tileset->GetTileRect(26);
-			iPoint pos = MapToWorld(point.x, point.y);
-
-			App->render->Blit(tileset->texture, pos.x, pos.y, &r);
-
-			item = item->next;
-		}
-
-		// Draw frontier
-		for (uint i = 0; i < frontier.Count(); ++i)
-		{
-			point = *(frontier.Peek(i));
-			TileSet* tileset = GetTilesetFromTileId(25);
-
-			SDL_Rect r = tileset->GetTileRect(25);
-			iPoint pos = MapToWorld(point.x, point.y);
-
-			App->render->Blit(tileset->texture, pos.x, pos.y, &r);
-		}
-
-	
-
-}
-
-bool j1Map::IsWalkable(int x, int y) const
-{
-	// TODO 3: return true only if x and y are within map limits
-	// and the tile is walkable (tile id 0 in the navigation layer)
-
-	if (x < data.width && x >= 0 && y >= 0 && y < data.height)
-	{
-		if (data.layers.start->next->data->Get(x, y) == 0)
-		{
-			return true;
-		}
+		item = item->next;
 	}
 
-	return false;
+	// Draw frontier
+	for (uint i = 0; i < frontier.Count(); ++i)
+	{
+		point = *(frontier.Peek(i));
+		TileSet* tileset = GetTilesetFromTileId(25);
+
+		SDL_Rect r = tileset->GetTileRect(25);
+		iPoint pos = MapToWorld(point.x, point.y);
+
+		App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+	}
+
+	// Draw path
+	for (uint i = 0; i < path.Count(); ++i)
+	{
+		iPoint pos = MapToWorld(path[i].x, path[i].y);
+		App->render->Blit(tile_x, pos.x, pos.y);
+	}
 }
 
 void j1Map::Draw()
@@ -252,59 +165,34 @@ void j1Map::Draw()
 	if(map_loaded == false)
 		return;
 
+	p2List_item<MapLayer*>* item = data.layers.start;
 
-		p2List_item<MapLayer*>* item = data.layers.start;
+	for(; item != NULL; item = item->next)
+	{
+		MapLayer* layer = item->data;
 
-		for (; item != NULL; item = item->next)
+		if(layer->properties.Get("Nodraw") != 0)
+			continue;
+
+		for(int y = 0; y < data.height; ++y)
 		{
-			MapLayer* layer = item->data;
-
-			if (layer->properties.Get("Nodraw") != 0)
-				continue;
-
-			for (int y = 0; y < data.height; ++y)
+			for(int x = 0; x < data.width; ++x)
 			{
-				for (int x = 0; x < data.width; ++x)
+				int tile_id = layer->Get(x, y);
+				if(tile_id > 0)
 				{
-					int tile_id = layer->Get(x, y);
-					if (tile_id > 0)
-					{
-						TileSet* tileset = GetTilesetFromTileId(tile_id);
+					TileSet* tileset = GetTilesetFromTileId(tile_id);
 
-						SDL_Rect r = tileset->GetTileRect(tile_id);
-						iPoint pos = MapToWorld(x, y);
+					SDL_Rect r = tileset->GetTileRect(tile_id);
+					iPoint pos = MapToWorld(x, y);
 
-						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
-					}
+					App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 				}
 			}
 		}
+	}
 
-
-
-		DrawBFS();
-	
-	
-		if (found == true) 
-		{
-
-			p2List_item <prevdata*> *auxitem;
-
-			TileSet* tileset = GetTilesetFromTileId(25);
-
-			SDL_Rect r = tileset->GetTileRect(25);
-
-			for (auxitem=listtoprint.start;auxitem;auxitem=auxitem->next)
-			{
-
-				iPoint pos = MapToWorld(auxitem->data->data.x, auxitem->data->data.y);
-				App->render->Blit(tileset->texture, pos.x, pos.y, &r);
-
-			}
-
-			LOG("what happens?");
-		}
-		
+	DrawPath();
 }
 
 int Properties::Get(const char* value, int default_value) const
@@ -369,7 +257,7 @@ iPoint j1Map::WorldToMap(int x, int y) const
 
 	if(data.type == MAPTYPE_ORTHOGONAL)
 	{
-		ret.x = x / data.tile_width;
+		ret.x = (x / data.tile_width);
 		ret.y = y / data.tile_height;
 	}
 	else if(data.type == MAPTYPE_ISOMETRIC)
@@ -377,7 +265,7 @@ iPoint j1Map::WorldToMap(int x, int y) const
 		
 		float half_width = data.tile_width * 0.5f;
 		float half_height = data.tile_height * 0.5f;
-		ret.x = int( (x / half_width + y / half_height) / 2);
+		ret.x = int( (x / half_width + y / half_height) / 2) - 1;
 		ret.y = int( (y / half_height - (x / half_width)) / 2);
 	}
 	else
@@ -426,27 +314,6 @@ bool j1Map::CleanUp()
 		item2 = item2->next;
 	}
 	data.layers.clear();
-
-	//Remove prevdata lists
-	//p2List_item<prevdata*>* item3;
-	//item3 = prevnode.start;
-
-	//while (item3 != NULL)
-	//{
-	//	RELEASE(item3->data);
-	//	item3 = item3->next;
-	//}
-	//prevnode.clear();
-
-	p2List_item<prevdata*>* item4;
-	item4 = listtoprint.start;
-
-	while (item4 != NULL)
-	{
-		RELEASE(item4->data);
-		item4 = item4->next;
-	}
-	listtoprint.clear();
 
 	// Clean up the pugui tree
 	map_file.reset();
