@@ -30,6 +30,8 @@ bool j1Map::Awake(pugi::xml_node& config)
 bool j1Map::Start()
 {
 	tile_x = App->tex->Load("maps/x.png");
+
+	destine = {5,15};
 	return true;
 }
 
@@ -48,7 +50,6 @@ void j1Map::Path(int x, int y)
 {
 	path.Clear();
 	
-
 	iPoint goal = WorldToMap(x, y);
 
 	// TODO 2: Follow the breadcrumps to goal back to the origin
@@ -72,6 +73,39 @@ void j1Map::PropagateDijkstra()
 	// use the 2 dimensional array "cost_so_far" to track the accumulated costs
 	// on each cell (is already reset to 0 automatically)
 
+	iPoint current;
+
+	//Enter propagation only if we have not found our destine before
+	if (visited.find(destine) == -1)
+	{
+
+		if (frontier.Pop(current))
+		{
+			iPoint neighbors[4];
+			neighbors[0].create(current.x + 1, current.y + 0);
+			neighbors[1].create(current.x + 0, current.y + 1);
+			neighbors[2].create(current.x - 1, current.y + 0);
+			neighbors[3].create(current.x + 0, current.y - 1);
+
+			for (uint i = 0; i < 4; ++i)
+			{
+				if (MovementCost(neighbors[i].x, neighbors[i].y) != -1)
+				{
+
+					if (visited.find(neighbors[i]) == -1)
+					{
+						// new cost is the sum of the father's accumulated cost + actual neighbor tile cost
+						int new_cost = cost_so_far[current.x][current.y] + MovementCost(neighbors[i].x, neighbors[i].y);
+						cost_so_far[neighbors[i].x][neighbors[i].y] = new_cost;
+
+						frontier.Push(neighbors[i], new_cost);
+						visited.add(neighbors[i]);
+						breadcrumbs.add(current);
+					}
+				}
+			}
+		}
+	}
 	
 }
 
