@@ -74,6 +74,50 @@ void j1Map::PropagateDijkstra()
 	// on each cell (is already reset to 0 automatically)
 
 	iPoint current;
+	  
+	//Enter propagation only if we have not found our destine before
+
+
+	//IMPORTANT: we need to eliminate visited and use cost, previous tiles have lower cost, so we don't check them
+	/*if (visited.find(destine) == -1)
+	{*/
+
+		if (frontier.Pop(current))
+		{
+			iPoint neighbors[4];
+			neighbors[0].create(current.x + 1, current.y + 0);
+			neighbors[1].create(current.x + 0, current.y + 1);
+			neighbors[2].create(current.x - 1, current.y + 0);
+			neighbors[3].create(current.x + 0, current.y - 1);
+
+			for (uint i = 0; i < 4; ++i)
+			{
+				if (MovementCost(neighbors[i].x, neighbors[i].y) != -1)
+				{
+					int new_cost = cost_so_far[current.x][current.y] + MovementCost(neighbors[i].x, neighbors[i].y);
+
+					if (cost_so_far[neighbors[i].x][neighbors[i].y] < new_cost)
+					{
+						// new cost is the sum of the father's accumulated cost + actual neighbor tile cost
+						// int new_cost = cost_so_far[current.x][current.y] + MovementCost(neighbors[i].x, neighbors[i].y);
+						cost_so_far[neighbors[i].x][neighbors[i].y] = new_cost;
+
+						//entres si el que esta al nou cost so far de la veina es mes peque
+
+						frontier.Push(neighbors[i], new_cost);
+					/*	visited.add(neighbors[i]);*/
+						breadcrumbs.add(current);
+					}
+				}
+			}
+		}
+	/*}*/
+	
+}
+
+void j1Map::PropagateAstar()
+{
+	iPoint current;
 
 	//Enter propagation only if we have not found our destine before
 	if (visited.find(destine) == -1)
@@ -95,7 +139,7 @@ void j1Map::PropagateDijkstra()
 					if (visited.find(neighbors[i]) == -1)
 					{
 						// new cost is the sum of the father's accumulated cost + actual neighbor tile cost
-						int new_cost = cost_so_far[current.x][current.y] + MovementCost(neighbors[i].x, neighbors[i].y);
+						int new_cost = cost_so_far[current.x][current.y] + MovementCost(neighbors[i].x, neighbors[i].y) + neighbors[i].DistanceNoSqrt(destine);
 						cost_so_far[neighbors[i].x][neighbors[i].y] = new_cost;
 
 						frontier.Push(neighbors[i], new_cost);
@@ -106,7 +150,7 @@ void j1Map::PropagateDijkstra()
 			}
 		}
 	}
-	
+
 }
 
 int j1Map::MovementCost(int x, int y) const

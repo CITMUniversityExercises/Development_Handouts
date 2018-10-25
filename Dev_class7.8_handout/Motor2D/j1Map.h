@@ -136,6 +136,7 @@ public:
 	// Propagation style
 	void PropagateBFS();
 	void PropagateDijkstra();
+	void PropagateAstar();
 
 private:
 
@@ -150,6 +151,9 @@ private:
 public:
 
 	MapData data;
+	iPoint destine;
+
+	p2List<iPoint>		visited;
 
 private:
 
@@ -159,13 +163,11 @@ private:
 
 	/// BFS
 	p2PQueue<iPoint>	frontier;
-	p2List<iPoint>		visited;
 	p2List<iPoint>		breadcrumbs;
 	uint				cost_so_far[COST_MAP][COST_MAP];
 	p2DynArray<iPoint>	path;
 	SDL_Texture*		tile_x = nullptr;
 
-	iPoint destine;
 };
 
 #endif // __j1MAP_H__
