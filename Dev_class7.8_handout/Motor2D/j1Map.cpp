@@ -31,7 +31,7 @@ bool j1Map::Start()
 {
 	tile_x = App->tex->Load("maps/x.png");
 
-	destine = {5,15};
+	destine = {8,15};
 	return true;
 }
 
@@ -48,22 +48,31 @@ void j1Map::ResetPath()
 
 void j1Map::Path(int x, int y)
 {
-	path.Clear();
-	
-	iPoint goal = WorldToMap(x, y);
+	iPoint position = WorldToMap(x, y);
 
-	// TODO 2: Follow the breadcrumps to goal back to the origin
-	// add each step into "path" dyn array (it will then draw automatically)
+	//---- We check if the position passed by click is a walkable tile -----
 
-	iPoint current = goal;
-
-	while (current != breadcrumbs.start->data)
+	if (MovementCost(position.x, position.y) == 3)
 	{
-		//Add current tile previous to path
-		path.PushBack(breadcrumbs.At(visited.find(current))->data);
+		path.Clear();
 
-		//Update current to its previous
-		current = breadcrumbs.At(visited.find(current))->data;
+		destine = WorldToMap(x, y);
+
+		// TODO 2: Follow the breadcrumps to goal back to the origin
+		// add each step into "path" dyn array (it will then draw automatically)
+
+		iPoint current = destine;
+
+	/*	path.PushBack(current);*/
+
+		while (current != breadcrumbs.start->data && visited.find(current) != -1)
+		{
+			//Current = its previous
+			current = breadcrumbs[visited.find(current)];
+
+			//Add current previous to path
+			path.PushBack(current);
+		}
 	}
 }
 
@@ -79,39 +88,39 @@ void j1Map::PropagateDijkstra()
 
 
 	//IMPORTANT: we need to eliminate visited and use cost, previous tiles have lower cost, so we don't check them
-	/*if (visited.find(destine) == -1)
-	{*/
 
 		if (frontier.Pop(current))
 		{
-			iPoint neighbors[4];
-			neighbors[0].create(current.x + 1, current.y + 0);
-			neighbors[1].create(current.x + 0, current.y + 1);
-			neighbors[2].create(current.x - 1, current.y + 0);
-			neighbors[3].create(current.x + 0, current.y - 1);
 
-			for (uint i = 0; i < 4; ++i)
-			{
-				if (MovementCost(neighbors[i].x, neighbors[i].y) != -1)
+				iPoint neighbors[4];
+				neighbors[0].create(current.x + 1, current.y + 0);
+				neighbors[1].create(current.x + 0, current.y + 1);
+				neighbors[2].create(current.x - 1, current.y + 0);
+				neighbors[3].create(current.x + 0, current.y - 1);
+
+				for (uint i = 0; i < 4; ++i)
 				{
-					int new_cost = cost_so_far[current.x][current.y] + MovementCost(neighbors[i].x, neighbors[i].y);
-
-					if (cost_so_far[neighbors[i].x][neighbors[i].y] < new_cost)
+					if (MovementCost(neighbors[i].x, neighbors[i].y) != -1)
 					{
-						// new cost is the sum of the father's accumulated cost + actual neighbor tile cost
-						// int new_cost = cost_so_far[current.x][current.y] + MovementCost(neighbors[i].x, neighbors[i].y);
-						cost_so_far[neighbors[i].x][neighbors[i].y] = new_cost;
+						int new_cost = cost_so_far[current.x][current.y] + MovementCost(neighbors[i].x, neighbors[i].y);
 
-						//entres si el que esta al nou cost so far de la veina es mes peque
+						if (cost_so_far[neighbors[i].x][neighbors[i].y] > new_cost
+							|| cost_so_far[neighbors[i].x][neighbors[i].y] == 0)
+						{
 
-						frontier.Push(neighbors[i], new_cost);
-					/*	visited.add(neighbors[i]);*/
-						breadcrumbs.add(current);
+							cost_so_far[neighbors[i].x][neighbors[i].y] = new_cost;
+							frontier.Push(neighbors[i], new_cost);
+
+
+							visited.add(neighbors[i]);
+							breadcrumbs.add(current);
+						}
+
 					}
 				}
-			}
+			
 		}
-	/*}*/
+
 	
 }
 
@@ -120,10 +129,12 @@ void j1Map::PropagateAstar()
 	iPoint current;
 
 	//Enter propagation only if we have not found our destine before
-	if (visited.find(destine) == -1)
+	if (!goalfound && frontier.Pop(current))
 	{
+		if (current == destine)
+			goalfound = true;
 
-		if (frontier.Pop(current))
+		if (!goalfound)
 		{
 			iPoint neighbors[4];
 			neighbors[0].create(current.x + 1, current.y + 0);
@@ -133,23 +144,28 @@ void j1Map::PropagateAstar()
 
 			for (uint i = 0; i < 4; ++i)
 			{
-				if (MovementCost(neighbors[i].x, neighbors[i].y) != -1)
+
+				if (MovementCost(neighbors[i].x, neighbors[i].y) > 0)
 				{
+					int new_cost = MovementCost(neighbors[i].x, neighbors[i].y);
 
-					if (visited.find(neighbors[i]) == -1)
+					if (cost_so_far[neighbors[i].x][neighbors[i].y] > new_cost
+						|| cost_so_far[neighbors[i].x][neighbors[i].y] == 0)
 					{
-						// new cost is the sum of the father's accumulated cost + actual neighbor tile cost
-						int new_cost = cost_so_far[current.x][current.y] + MovementCost(neighbors[i].x, neighbors[i].y) + neighbors[i].DistanceNoSqrt(destine);
+				
 						cost_so_far[neighbors[i].x][neighbors[i].y] = new_cost;
+						frontier.Push(neighbors[i], new_cost + neighbors[i].DistanceNoSqrt(destine));
 
-						frontier.Push(neighbors[i], new_cost);
+						
 						visited.add(neighbors[i]);
 						breadcrumbs.add(current);
 					}
+
 				}
 			}
 		}
 	}
+
 
 }
 
@@ -202,7 +218,7 @@ void j1Map::DrawPath()
 {
 	iPoint point;
 
-	// Draw visited
+	//// Draw visited
 	p2List_item<iPoint>* item = visited.start;
 
 	while(item)

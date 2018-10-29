@@ -153,6 +153,8 @@ public:
 	MapData data;
 	iPoint destine;
 
+
+	bool goalfound = false;
 	p2List<iPoint>		visited;
 
 private:

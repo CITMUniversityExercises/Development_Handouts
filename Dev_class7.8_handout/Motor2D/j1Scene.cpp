@@ -80,6 +80,9 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT)
 		App->map->PropagateAstar();
 
+	if (App->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN)
+		App->map->PropagateAstar();
+
 	if (App->input->GetMouseButtonDown(1) == KEY_DOWN)
 	{
 		iPoint p;
@@ -90,15 +93,8 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN)
 	{
-		iPoint p;
-		App->input->GetMousePosition(p.x, p.y);
-
-		iPoint goal = { p.x,p.y };
-		goal = App->map->WorldToMap(goal.x - App->render->camera.x, goal.y - App->render->camera.y);
-
-		App->map->destine.x = goal.x;
-		App->map->destine.y = goal.y;
-
+		App->map->ResetPath();
+		App->map->goalfound = false;
 	}
 
 	App->map->Draw();
