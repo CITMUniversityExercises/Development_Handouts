@@ -65,7 +65,7 @@ struct PathNode
 {
 	// Convenient constructors
 	PathNode();
-	PathNode(int g, int h, const iPoint& pos, const PathNode* parent);
+	PathNode(int g, int h, const iPoint& pos, const PathNode* parent, uint diagonal);
 	PathNode(const PathNode& node);
 
 	// Fills a list (PathList) of all valid adjacent pathnodes
@@ -80,6 +80,7 @@ struct PathNode
 	int h;
 	iPoint pos;
 	const PathNode* parent; // needed to reconstruct the path in the end
+	uint diagonal;
 };
 
 // ---------------------------------------------------------------------
@@ -88,7 +89,7 @@ struct PathNode
 struct PathList
 {
 	// Looks for a node in this list and returns it's list node or NULL
-	const p2List_item<PathNode>* Find(const iPoint& point) const;
+	p2List_item<PathNode>* Find(const iPoint& point) const;
 
 	// Returns the Pathnode with lowest score in this list or NULL if empty
 	p2List_item<PathNode>* GetNodeLowestScore() const;
