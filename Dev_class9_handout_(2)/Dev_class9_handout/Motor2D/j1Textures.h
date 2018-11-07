@@ -6,6 +6,9 @@
 
 struct SDL_Texture;
 struct SDL_Surface;
+class j1PerfTimer;
+
+
 
 class j1Textures : public j1Module
 {
@@ -20,7 +23,7 @@ public:
 	bool Awake(pugi::xml_node&);
 
 	// Called before the first frame
-	bool Start();
+	bool Start(j1PerfTimer &dt);
 
 	// Called before quitting
 	bool CleanUp();

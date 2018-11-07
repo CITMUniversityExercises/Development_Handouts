@@ -8,6 +8,9 @@
 //#define LAST_KEYS_PRESSED_BUFFER 50
 
 struct SDL_Rect;
+class j1PerfTimer;
+
+
 
 enum j1EventWindow
 {
@@ -39,7 +42,7 @@ public:
 	bool Awake(pugi::xml_node&);
 
 	// Called before the first frame
-	bool Start();
+	bool Start(j1PerfTimer &dt);
 
 	// Called each loop iteration
 	bool PreUpdate();

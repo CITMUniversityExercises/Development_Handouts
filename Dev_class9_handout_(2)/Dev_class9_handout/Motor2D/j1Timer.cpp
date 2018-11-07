@@ -25,16 +25,11 @@ void j1Timer::Start()
 // ---------------------------------------------
 uint32 j1Timer::Read() const
 {
-	current_time = SDL_GetTicks();
-
-	return 0;
+	return SDL_GetTicks() - started_at;
 }
 
 // ---------------------------------------------
 float j1Timer::ReadSec() const
 {
-
-	LOG("time is: ", current_time-started_at);
-
-	return current_time - started_at;
+	return float(SDL_GetTicks() - started_at) / 1000.0f;
 }

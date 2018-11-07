@@ -5,6 +5,10 @@
 #include "p2Point.h"
 #include "j1Module.h"
 
+class j1PerfTimer;
+
+
+
 class j1Render : public j1Module
 {
 public:
@@ -18,7 +22,7 @@ public:
 	bool Awake(pugi::xml_node&);
 
 	// Called before the first frame
-	bool Start();
+	bool Start(j1PerfTimer &dt);
 
 	// Called each loop iteration
 	bool PreUpdate();

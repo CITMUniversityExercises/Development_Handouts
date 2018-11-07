@@ -30,8 +30,10 @@ bool j1Scene::Awake()
 }
 
 // Called before the first frame
-bool j1Scene::Start()
+bool j1Scene::Start(j1PerfTimer &dt)
 {
+	dt.Start();
+
 	if(App->map->Load("iso_walk.tmx") == true)
 	{
 		int w, h;
@@ -43,6 +45,8 @@ bool j1Scene::Start()
 	}
 
 	debug_tex = App->tex->Load("maps/path2.png");
+
+	LOG("Scene time: %f", dt.ReadMs());
 
 	return true;
 }

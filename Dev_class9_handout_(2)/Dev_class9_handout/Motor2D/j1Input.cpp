@@ -39,9 +39,14 @@ bool j1Input::Awake(pugi::xml_node& config)
 }
 
 // Called before the first frame
-bool j1Input::Start()
+bool j1Input::Start(j1PerfTimer &dt)
 {
+	dt.Start();
+
+
 	SDL_StopTextInput();
+
+	LOG("Input time: %f", dt.ReadMs());
 	return true;
 }
 

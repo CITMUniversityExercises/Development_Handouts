@@ -10,6 +10,7 @@
 #include "PugiXml\src\pugixml.hpp"
 
 class j1App;
+class j1PerfTimer;
 
 class j1Module
 {
@@ -33,7 +34,7 @@ public:
 	}
 
 	// Called before the first frame
-	virtual bool Start()
+	virtual bool Start(j1PerfTimer &dt)
 	{
 		return true;
 	}

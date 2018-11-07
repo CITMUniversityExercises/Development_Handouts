@@ -10,7 +10,7 @@ public:
 	// Constructor
 	j1PerfTimer();
 
-	void Startt();
+	void Start();
 	double ReadMs() const;
 	uint64 ReadTicks() const;
 

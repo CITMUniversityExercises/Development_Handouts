@@ -21,6 +21,8 @@
 
 // Constructor
 
+
+
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 {
 
@@ -70,9 +72,10 @@ void j1App::AddModule(j1Module* module)
 }
 
 // Called before render is available
+
 bool j1App::Awake()
 {
-	
+	/*timer.Start();*/
 
 	pugi::xml_document	config_file;
 	pugi::xml_node		config;
@@ -103,6 +106,7 @@ bool j1App::Awake()
 		}
 	}
 
+	/*LOG("timer in awake: %f ms", timer.ReadMs());*/
 	return ret;
 }
 
@@ -113,11 +117,16 @@ bool j1App::Start()
 	p2List_item<j1Module*>* item;
 	item = modules.start;
 
+	j1PerfTimer dt;
+
 	while(item != NULL && ret == true)
 	{
-		ret = item->data->Start();
+		ret = item->data->Start(dt);
 		item = item->next;
 	}
+
+	start_time.Start();
+
 	return ret;
 }
 
@@ -161,11 +170,21 @@ pugi::xml_node j1App::LoadConfig(pugi::xml_document& config_file) const
 // ---------------------------------------------
 void j1App::PrepareUpdate()
 {
+	frame_count++;
+	fps.Start();
+	if (restart_second_counter == true)
+	{
+		seconds.Start();
+		frames_one_second_start = frame_count;
+		restart_second_counter = false;
+	}
 }
 
 // ---------------------------------------------
 void j1App::FinishUpdate()
 {
+	SDL_Delay(33.32 - fps.ReadMs());
+
 	if(want_to_save == true)
 		SavegameNow();
 
@@ -173,18 +192,28 @@ void j1App::FinishUpdate()
 		LoadGameNow();
 
 	// TODO 4: Now calculate:
-	// Amount of frames since startup
-	// Amount of time since game start (use a low resolution timer)
+
 	// Average FPS for the whole game life
+	float avg_fps = frame_count / start_time.ReadSec();
+
+	float dt = 0.0f;
+
+	// Amount of time since game start (use a low resolution timer)
+	float seconds_since_startup = start_time.ReadSec();
+
 	// Amount of ms took the last update
+	uint32 last_frame_ms = fps.ReadMs();
+
 	// Amount of frames during the last second
 
-	float avg_fps = 0.0f;
-	float seconds_since_startup = 0.0f;
-	float dt = 0.0f;
-	uint32 last_frame_ms = 0;
-	uint32 frames_on_last_update = 0;
-	uint64 frame_count = 0;
+	if (seconds.ReadSec() >= 1.0 && restart_second_counter==false)
+	{
+		frames_on_last_update = frame_count-frames_one_second_start;
+		restart_second_counter = true;
+	}
+
+	// Amount of frames since startup
+	//frame_count
 
 	static char title[256];
 	sprintf_s(title, 256, "Av.FPS: %.2f Last Frame Ms: %02u Last sec frames: %i Last dt: %.3f Time since startup: %.3f Frame Count: %lu ",

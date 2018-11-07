@@ -52,11 +52,14 @@ bool j1Render::Awake(pugi::xml_node& config)
 }
 
 // Called before the first frame
-bool j1Render::Start()
+bool j1Render::Start(j1PerfTimer &dt)
 {
+	dt.Start();
 	LOG("render start");
 	// back background
 	SDL_RenderGetViewport(renderer, &viewport);
+
+	LOG("Render time: %f",dt.ReadMs());
 	return true;
 }
 

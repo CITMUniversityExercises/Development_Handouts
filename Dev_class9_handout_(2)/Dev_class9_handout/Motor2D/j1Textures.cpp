@@ -35,10 +35,14 @@ bool j1Textures::Awake(pugi::xml_node& config)
 }
 
 // Called before the first frame
-bool j1Textures::Start()
+bool j1Textures::Start(j1PerfTimer &dt)
 {
+	dt.Start();
+
 	LOG("start textures");
 	bool ret = true;
+
+	LOG("Textures time: %f", dt.ReadMs());
 	return ret;
 }
 

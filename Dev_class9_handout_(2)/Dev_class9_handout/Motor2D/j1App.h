@@ -102,8 +102,16 @@ private:
 	bool				want_to_load = false;
 	p2SString			load_game;
 	mutable p2SString	save_game;
+	j1PerfTimer fps;
 
-	uint64 start;
+	// timers for window title
+	uint64 frame_count = 0;
+	uint64 frames_one_second_start = 0;
+	uint32 frames_on_last_update = 0.0f;
+	j1Timer start_time;
+	j1Timer seconds;
+
+	bool restart_second_counter = true;
 };
 
 extern j1App* App; // No student is asking me about that ... odd :-S

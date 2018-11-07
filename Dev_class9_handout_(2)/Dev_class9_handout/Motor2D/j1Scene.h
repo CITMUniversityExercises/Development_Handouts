@@ -4,6 +4,9 @@
 #include "j1Module.h"
 
 struct SDL_Texture;
+class j1PerfTimer;
+
+
 
 class j1Scene : public j1Module
 {
@@ -18,7 +21,7 @@ public:
 	bool Awake();
 
 	// Called before the first frame
-	bool Start();
+	bool Start(j1PerfTimer &dt);
 
 	// Called before all Updates
 	bool PreUpdate();
