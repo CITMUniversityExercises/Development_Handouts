@@ -171,6 +171,8 @@ void j1App::PrepareUpdate()
 	frame_count++;
 	last_sec_frame_count++;
 
+	dt = (float)frame_time.Read()/1000.0f;
+
 	// TODO 4: Calculate the dt: differential time since last frame
 
 	
@@ -259,7 +261,7 @@ bool j1App::DoUpdate()
 		// TODO 5: send dt as an argument to all updates
 		// you will need to update module parent class
 		// and all modules that use update
-		ret = item->data->Update();
+		ret = item->data->Update(dt);
 	}
 
 	return ret;

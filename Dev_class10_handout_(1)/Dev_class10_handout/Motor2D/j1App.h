@@ -112,6 +112,8 @@ private:
 	uint32              framerate_cap;
 
 	j1PerfTimer sdldelaytest;
+
+	float dt = 0;
 };
 
 extern j1App* App; // No student is asking me about that ... odd :-S
