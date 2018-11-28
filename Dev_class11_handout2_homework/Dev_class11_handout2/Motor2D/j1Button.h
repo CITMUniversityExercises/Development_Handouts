@@ -11,27 +11,39 @@ enum class Button_Type
 	NONE
 };
 
+enum class Text_Position
+{
+	TOP,
+	BOTTOM,
+	LEFT,
+	RIGHT,
+	MIDDLE
+};
+
 struct Text
 {
 	const char* text;
 	SDL_Color  color;
-	iPoint pos;
+	iPoint position;
+	SDL_Rect font_Rect;
+	SDL_Texture* tex;
+	Text_Position location;
 };
 
 struct ButtonInfo
 {
 	Button_Type type;
-	//SDL_Texture* tex;
 	SDL_Rect rect;
 	Text label;
 	iPoint position;
+	SDL_Texture* tex;
 };
 
 class j1Button
 {
 public:
 
-	j1Button(Button_Type type, Text label, iPoint position, SDL_Rect rect = {0,0,0,0});
+	j1Button(Button_Type type, iPoint position, Text label, SDL_Texture* tex, SDL_Rect rect);
 
 	~j1Button();
 

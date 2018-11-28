@@ -11,6 +11,7 @@
 #include "j1Gui.h"
 #include "j1Scene.h"
 #include "j1Button.h"
+#include "j1Fonts.h"
 
 j1Scene::j1Scene() : j1Module()
 {
@@ -47,17 +48,39 @@ bool j1Scene::Start()
 
 	// TODO 3: Create the banner (rect {485, 829, 328, 103}) and the text "Hello World"
 
+	//Text label = App->gui->CreateLabel("Hello World", { 120,0,120,255 });
 	//SDL_Rect temprect = { 485, 829, 328, 103 };
 
-	Text label;
-	label.color = {255,0,0,255};
-	label.pos = { 0,0 };
-	label.text = "Hello World";
+	//iPoint tempos = { App->render->camera.w / 2, 0 };
+	//App->gui->CreateButton(Button_Type::BUTTON, label, tempos,temprect);
 
-	iPoint tempos = { App->render->camera.w / 2, 0 };
-	App->gui->CreateButton(Button_Type::BUTTON, label, tempos);
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ 0,0 }, App->gui->CreateLabel("", { 0,0,0,255 }), App->gui->background, SDL_Rect{ 0,0,1920,1080 });
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ -50,25 }, App->gui->CreateLabel("", { 0,0,0,255 }), App->gui->wowlogo, SDL_Rect{ 0,0,512,256 });
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{App->render->camera.w/2-64,App->render->camera.h-150}, App->gui->CreateLabel("", { 0,0,0,255 }), App->gui->blizzardlogo, SDL_Rect{ 0,0,128,128 });
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ 25,App->render->camera.h-200}, App->gui->CreateLabel("", { 0,0,0,255 }), App->gui->esrb, SDL_Rect{ 0,0,128,128 });
+
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w/2-64,App->render->camera.h/2 }, App->gui->CreateLabel("Account Name", { 255,219,142,255 }, Text_Position::TOP), App->gui->greyrect, SDL_Rect{ 0,0,128,32 });
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 +100 }, App->gui->CreateLabel("Account Password", { 255,219,142,255 }, Text_Position::TOP), App->gui->greyrect, SDL_Rect{ 0,0,128,32 });
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 +200 }, App->gui->CreateLabel("Login", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
+
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h / 2 + 180 }, App->gui->CreateLabel("Cinematics", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h / 2 + 230 }, App->gui->CreateLabel("Credits", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h / 2 + 280 }, App->gui->CreateLabel("Terms of Use", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h - 75 }, App->gui->CreateLabel("Quit", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
+
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{25,App->render->camera.h / 2 + 275 }, App->gui->CreateLabel("Manage Account", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{25,App->render->camera.h / 2 + 325 }, App->gui->CreateLabel("Community Site", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
+
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{25,App->render->camera.h / 2 + 375 }, App->gui->CreateLabel("Remember Account Name", { 255,219,142,255 },Text_Position::RIGHT), App->gui->tickbox, SDL_Rect{ 2,16,24,24 });
+
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{0,App->render->camera.h / 2 + 475 }, App->gui->CreateLabel("Version 2.0.12 (6546) (Release)", { 255,219,142,255 }, Text_Position::RIGHT), App->gui->redrect, SDL_Rect{ 0,0,0,0 });
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ 0,App->render->camera.h / 2 + 500 }, App->gui->CreateLabel("Mar 30 2007", { 255,219,142,255 }, Text_Position::RIGHT), App->gui->redrect, SDL_Rect{ 0,0,0,0 });
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w/2,App->render->camera.h / 2 + 500 }, App->gui->CreateLabel("Copyright 2004-2007 Blizzard Entertainment. All Rights Reserved.", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,0,0 });
+
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w,App->render->camera.h / 2 + 325 }, App->gui->CreateLabel("WoWps.org TBC", { 0,0,0,255 }, Text_Position::LEFT), App->gui->redrect, SDL_Rect{ 0,0,0,0 });
 
 
+	
 	return true;
 }
 

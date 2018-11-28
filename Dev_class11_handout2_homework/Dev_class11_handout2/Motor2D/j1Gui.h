@@ -14,6 +14,9 @@ class j1Gui : public j1Module
 {
 public:
 
+	friend class j1Button;
+	friend class j1Scene;
+
 	j1Gui();
 
 	// Destructor
@@ -39,17 +42,30 @@ public:
 
 	SDL_Texture* GetAtlas() const;
 
+	SDL_Texture* CreateImage(const char* path);
+
 	// --- Create/Destroy ---
 
-	j1Button* CreateButton(Button_Type type, Text label, iPoint position);
+	j1Button* CreateButton(Button_Type type, iPoint position, Text label, SDL_Texture* tex, SDL_Rect rect);
+
+	Text CreateLabel(const char* text, SDL_Color  color, Text_Position location = Text_Position::MIDDLE);
 
 	j1Button* DestroyButton(Button_Type type);
 
 private:
 
 	p2List <j1Button*> button_list;
+	//p2List <SDL_Texture*> images;
 
-	SDL_Texture* atlas;
+	SDL_Texture* atlas = nullptr;
+	SDL_Texture* background = nullptr;
+	SDL_Texture* wowlogo = nullptr;
+	SDL_Texture* blizzardlogo = nullptr;
+	SDL_Texture* esrb = nullptr;
+	SDL_Texture* tickbox = nullptr;
+	SDL_Texture* greyrect = nullptr;
+	SDL_Texture* redrect = nullptr;
+
 	p2SString atlas_file_name;
 };
 
