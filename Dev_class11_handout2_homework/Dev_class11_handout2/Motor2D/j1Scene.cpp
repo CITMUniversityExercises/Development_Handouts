@@ -197,9 +197,11 @@ void j1Scene::ONhover(j1Button &button)
 	switch(button.Data.type)
 	{
 	case Button_Type::LABEL:
-		const char* temp = button.Data.label.text2;
+		button.Data.label = App->gui->CreateLabel(button.Data.label.text2, { 255,219,142,255 }, Text_Position::TOP, button.Data.label.text);
+
+	/*	const char* temp = button.Data.label.text2;
 		button.Data.label.text2 = button.Data.label.text;
-		button.Data.label.text = temp;
+		button.Data.label.text = temp;*/
 		break;
 	}
 
@@ -212,9 +214,7 @@ void j1Scene::OFFhover(j1Button & button)
 	switch (button.Data.type)
 	{
 	case Button_Type::LABEL:
-		const char* temp = button.Data.label.text2;
-		button.Data.label.text2 = button.Data.label.text;
-		button.Data.label.text = temp;
+		button.Data.label = App->gui->CreateLabel(button.Data.label.text2, { 255,219,142,255 }, Text_Position::TOP, button.Data.label.text);
 		break;
 	}
 }
