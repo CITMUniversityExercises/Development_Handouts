@@ -6,6 +6,7 @@
 #include "j1Fonts.h"
 #include "j1Input.h"
 #include "j1Gui.h"
+#include "j1Scene.h"
 
 j1Gui::j1Gui() : j1Module()
 {
@@ -48,6 +49,30 @@ bool j1Gui::Start()
 // Update all guis
 bool j1Gui::PreUpdate()
 {
+	App->input->GetMousePosition(mouse_pos.x,mouse_pos.y);
+
+	p2List_item <j1Button*> * item = button_list.start;
+
+	while (item)
+	{
+		if (isInbound(item->data->Data.rect))
+		{
+			if (!item->data->Data.hovering)
+			{
+				App->scene->ONhover(*item->data);
+			}
+		}
+		else if (!isInbound(item->data->Data.rect))
+		{
+			if (item->data->Data.hovering)
+			{
+				App->scene->OFFhover(*item->data);
+			}
+
+		}
+		item = item->next;
+	}
+
 	return true;
 }
 
@@ -109,12 +134,13 @@ j1Button * j1Gui::CreateButton(Button_Type type, iPoint position, Text label, SD
 	return button;
 }
 
-Text j1Gui::CreateLabel(const char * text, SDL_Color color, Text_Position location)
+Text j1Gui::CreateLabel(const char * text, SDL_Color color, Text_Position location, const char* text2)
 {
 	Text label;
 	label.color = color;
 	label.position = { 0,0 };
 	label.text = text;
+	label.text2 = text2;
 	label.font_Rect = { 0,0,0,0 };
 	label.location = location;
 	label.tex = App->font->Print(label.text, label.color, App->font->default);
@@ -126,6 +152,14 @@ Text j1Gui::CreateLabel(const char * text, SDL_Color color, Text_Position locati
 j1Button * j1Gui::DestroyButton(Button_Type type)
 {
 	return nullptr;
+}
+
+bool j1Gui::isInbound(SDL_Rect &rect)
+{
+	return (rect.x < mouse_pos.x &&
+		rect.x + rect.w > mouse_pos.x &&
+		rect.y < mouse_pos.y  &&
+		rect.h + rect.y > mouse_pos.y);
 }
 
 // class Gui ---------------------------------------------------

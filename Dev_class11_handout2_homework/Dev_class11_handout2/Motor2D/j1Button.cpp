@@ -18,14 +18,6 @@ j1Button::~j1Button()
 
 }
 
-void j1Button::on_press()
-{
-}
-
-void j1Button::on_hover()
-{
-}
-
 void j1Button::FixedUpdate()
 {
 	//App->render->Blit(App->gui->GetAtlas(), Data.position.x, Data.position.y+25, &Data.rect);

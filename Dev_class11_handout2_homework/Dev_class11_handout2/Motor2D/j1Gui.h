@@ -48,9 +48,11 @@ public:
 
 	j1Button* CreateButton(Button_Type type, iPoint position, Text label, SDL_Texture* tex, SDL_Rect rect);
 
-	Text CreateLabel(const char* text, SDL_Color  color, Text_Position location = Text_Position::MIDDLE);
+	Text CreateLabel(const char* text, SDL_Color  color, Text_Position location = Text_Position::MIDDLE , const char* text2="");
 
 	j1Button* DestroyButton(Button_Type type);
+
+	bool isInbound(SDL_Rect &rect);
 
 private:
 
@@ -67,6 +69,9 @@ private:
 	SDL_Texture* redrect = nullptr;
 
 	p2SString atlas_file_name;
+
+	iPoint mouse_pos = { 0,0 };
+	iPoint click_pos = { 0,0 };
 };
 
 #endif // __j1GUI_H__

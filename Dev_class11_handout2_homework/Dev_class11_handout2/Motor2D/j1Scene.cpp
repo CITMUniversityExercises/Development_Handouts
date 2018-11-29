@@ -59,7 +59,7 @@ bool j1Scene::Start()
 	App->gui->CreateButton(Button_Type::BUTTON, iPoint{App->render->camera.w/2-64,App->render->camera.h-150}, App->gui->CreateLabel("", { 0,0,0,255 }), App->gui->blizzardlogo, SDL_Rect{ 0,0,128,128 });
 	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ 25,App->render->camera.h-200}, App->gui->CreateLabel("", { 0,0,0,255 }), App->gui->esrb, SDL_Rect{ 0,0,128,128 });
 
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w/2-64,App->render->camera.h/2 }, App->gui->CreateLabel("Account Name", { 255,219,142,255 }, Text_Position::TOP), App->gui->greyrect, SDL_Rect{ 0,0,128,32 });
+	App->gui->CreateButton(Button_Type::LABEL, iPoint{ App->render->camera.w/2-64,App->render->camera.h/2 }, App->gui->CreateLabel("Account Name", { 255,219,142,255 }, Text_Position::TOP,"IT WORKS"), App->gui->greyrect, SDL_Rect{ 0,0,128,32 });
 	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 +100 }, App->gui->CreateLabel("Account Password", { 255,219,142,255 }, Text_Position::TOP), App->gui->greyrect, SDL_Rect{ 0,0,128,32 });
 	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 +200 }, App->gui->CreateLabel("Login", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
 
@@ -188,4 +188,33 @@ bool j1Scene::CleanUp()
 	LOG("Freeing scene");
 
 	return true;
+}
+
+void j1Scene::ONhover(j1Button &button)
+{
+	button.Data.hovering = true;
+
+	switch(button.Data.type)
+	{
+	case Button_Type::LABEL:
+		const char* temp = button.Data.label.text2;
+		button.Data.label.text2 = button.Data.label.text;
+		button.Data.label.text = temp;
+		break;
+	}
+
+}
+
+void j1Scene::OFFhover(j1Button & button)
+{
+	button.Data.hovering = false;
+
+	switch (button.Data.type)
+	{
+	case Button_Type::LABEL:
+		const char* temp = button.Data.label.text2;
+		button.Data.label.text2 = button.Data.label.text;
+		button.Data.label.text = temp;
+		break;
+	}
 }

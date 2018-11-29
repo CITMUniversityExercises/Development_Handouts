@@ -6,6 +6,8 @@
 struct SDL_Texture;
 class GuiImage;
 class GuiText;
+class j1Button;
+
 
 class j1Scene : public j1Module
 {
@@ -33,6 +35,10 @@ public:
 
 	// Called before quitting
 	bool CleanUp();
+
+	void ONhover(j1Button &button);
+
+	void OFFhover(j1Button &button);
 
 private:
 	SDL_Texture* debug_tex;

@@ -7,6 +7,7 @@
 enum class Button_Type
 {
 	BUTTON,
+	LABEL,
 
 	NONE
 };
@@ -23,6 +24,7 @@ enum class Text_Position
 struct Text
 {
 	const char* text;
+	const char* text2;
 	SDL_Color  color;
 	iPoint position;
 	SDL_Rect font_Rect;
@@ -37,18 +39,18 @@ struct ButtonInfo
 	Text label;
 	iPoint position;
 	SDL_Texture* tex;
+	bool hovering = false;
 };
 
 class j1Button
 {
 public:
+	friend class j1Scene;
+	friend class j1Gui;
 
 	j1Button(Button_Type type, iPoint position, Text label, SDL_Texture* tex, SDL_Rect rect);
 
 	~j1Button();
-
-	void on_press();
-	void on_hover();
 
 	void FixedUpdate();
 
