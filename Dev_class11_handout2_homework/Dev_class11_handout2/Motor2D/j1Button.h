@@ -26,16 +26,19 @@ struct Text
 	const char* text;
 	const char* text2;
 	SDL_Color  color;
-	iPoint position;
+	//iPoint position;
 	SDL_Rect font_Rect;
+	SDL_Rect logic_rect;
 	SDL_Texture* tex;
 	Text_Position location;
+	bool hovering = false;
 };
 
 struct ButtonInfo
 {
 	Button_Type type;
 	SDL_Rect rect;
+	SDL_Rect logic_rect;
 	Text label;
 	iPoint position;
 	SDL_Texture* tex;

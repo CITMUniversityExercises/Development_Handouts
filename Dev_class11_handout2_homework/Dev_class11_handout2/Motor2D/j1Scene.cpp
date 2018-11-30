@@ -54,30 +54,30 @@ bool j1Scene::Start()
 	//iPoint tempos = { App->render->camera.w / 2, 0 };
 	//App->gui->CreateButton(Button_Type::BUTTON, label, tempos,temprect);
 
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ 0,0 }, App->gui->CreateLabel("", { 0,0,0,255 }), App->gui->background, SDL_Rect{ 0,0,1920,1080 });
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ -50,25 }, App->gui->CreateLabel("", { 0,0,0,255 }), App->gui->wowlogo, SDL_Rect{ 0,0,512,256 });
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{App->render->camera.w/2-64,App->render->camera.h-150}, App->gui->CreateLabel("", { 0,0,0,255 }), App->gui->blizzardlogo, SDL_Rect{ 0,0,128,128 });
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ 25,App->render->camera.h-200}, App->gui->CreateLabel("", { 0,0,0,255 }), App->gui->esrb, SDL_Rect{ 0,0,128,128 });
+	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ 0,0 }, App->gui->CreateLabel("", { 0,0,0,255 }), App->gui->background, SDL_Rect{ 0,0,1920,1080 });
+	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ -50,25 }, App->gui->CreateLabel("", { 0,0,0,255 }), App->gui->wowlogo, SDL_Rect{ 0,0,512,256 });
+	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{App->render->camera.w/2-64,App->render->camera.h-150}, App->gui->CreateLabel("", { 0,0,0,255 }), App->gui->blizzardlogo, SDL_Rect{ 0,0,128,128 });
+	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ 25,App->render->camera.h-200}, App->gui->CreateLabel("", { 0,0,0,255 }), App->gui->esrb, SDL_Rect{ 0,0,128,128 });
 
-	App->gui->CreateButton(Button_Type::LABEL, iPoint{ App->render->camera.w/2-64,App->render->camera.h/2 }, App->gui->CreateLabel("Account Name", { 255,219,142,255 }, Text_Position::TOP,"IT WORKS"), App->gui->greyrect, SDL_Rect{ 0,0,128,32 });
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 +100 }, App->gui->CreateLabel("Account Password", { 255,219,142,255 }, Text_Position::TOP), App->gui->greyrect, SDL_Rect{ 0,0,128,32 });
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 +200 }, App->gui->CreateLabel("Login", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
+	App->gui->CreateButton(Button_Type::LABEL, iPoint{ App->render->camera.w/2-64,App->render->camera.h/2 }, App->gui->CreateLabel("Account Name", { 255,219,142,255 }, Text_Position::TOP,"IT WORKSssssssssss"), App->gui->greyrect, SDL_Rect{ 0,0,0,0 });
+	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 +100 }, App->gui->CreateLabel("Account Password", { 255,219,142,255 }, Text_Position::TOP), App->gui->greyrect, SDL_Rect{ 0,0,128,32 });
+	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 +200 }, App->gui->CreateLabel("Login", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
 
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h / 2 + 180 }, App->gui->CreateLabel("Cinematics", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h / 2 + 230 }, App->gui->CreateLabel("Credits", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h / 2 + 280 }, App->gui->CreateLabel("Terms of Use", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h - 75 }, App->gui->CreateLabel("Quit", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
+	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h / 2 + 180 }, App->gui->CreateLabel("Cinematics", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
+	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h / 2 + 230 }, App->gui->CreateLabel("Credits", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
+	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h / 2 + 280 }, App->gui->CreateLabel("Terms of Use", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
+	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h - 75 }, App->gui->CreateLabel("Quit", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
 
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{25,App->render->camera.h / 2 + 275 }, App->gui->CreateLabel("Manage Account", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{25,App->render->camera.h / 2 + 325 }, App->gui->CreateLabel("Community Site", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
+	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{25,App->render->camera.h / 2 + 275 }, App->gui->CreateLabel("Manage Account", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
+	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{25,App->render->camera.h / 2 + 325 }, App->gui->CreateLabel("Community Site", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
 
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{25,App->render->camera.h / 2 + 375 }, App->gui->CreateLabel("Remember Account Name", { 255,219,142,255 },Text_Position::RIGHT), App->gui->tickbox, SDL_Rect{ 2,16,24,24 });
+	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{25,App->render->camera.h / 2 + 375 }, App->gui->CreateLabel("Remember Account Name", { 255,219,142,255 },Text_Position::RIGHT), App->gui->tickbox, SDL_Rect{ 2,16,24,24 });
 
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{0,App->render->camera.h / 2 + 475 }, App->gui->CreateLabel("Version 2.0.12 (6546) (Release)", { 255,219,142,255 }, Text_Position::RIGHT), App->gui->redrect, SDL_Rect{ 0,0,0,0 });
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ 0,App->render->camera.h / 2 + 500 }, App->gui->CreateLabel("Mar 30 2007", { 255,219,142,255 }, Text_Position::RIGHT), App->gui->redrect, SDL_Rect{ 0,0,0,0 });
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w/2,App->render->camera.h / 2 + 500 }, App->gui->CreateLabel("Copyright 2004-2007 Blizzard Entertainment. All Rights Reserved.", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,0,0 });
+	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{0,App->render->camera.h / 2 + 475 }, App->gui->CreateLabel("Version 2.0.12 (6546) (Release)", { 255,219,142,255 }, Text_Position::RIGHT), App->gui->redrect, SDL_Rect{ 0,0,0,0 });
+	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ 0,App->render->camera.h / 2 + 500 }, App->gui->CreateLabel("Mar 30 2007", { 255,219,142,255 }, Text_Position::RIGHT), App->gui->redrect, SDL_Rect{ 0,0,0,0 });
+	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w/2,App->render->camera.h / 2 + 500 }, App->gui->CreateLabel("Copyright 2004-2007 Blizzard Entertainment. All Rights Reserved.", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,0,0 });
 
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w,App->render->camera.h / 2 + 325 }, App->gui->CreateLabel("WoWps.org TBC", { 0,0,0,255 }, Text_Position::LEFT), App->gui->redrect, SDL_Rect{ 0,0,0,0 });
+	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w,App->render->camera.h / 2 + 325 }, App->gui->CreateLabel("WoWps.org TBC", { 0,0,0,255 }, Text_Position::LEFT), App->gui->redrect, SDL_Rect{ 0,0,0,0 });
 
 
 	
@@ -190,21 +190,50 @@ bool j1Scene::CleanUp()
 	return true;
 }
 
-void j1Scene::ONhover(j1Button &button)
+void j1Scene::ONhover_label(j1Button &button)
 {
-	button.Data.hovering = true;
 
 	switch(button.Data.type)
 	{
 	case Button_Type::LABEL:
-		button.Data.label = App->gui->CreateLabel(button.Data.label.text2, { 255,219,142,255 }, Text_Position::TOP, button.Data.label.text);
-
-	/*	const char* temp = button.Data.label.text2;
-		button.Data.label.text2 = button.Data.label.text;
-		button.Data.label.text = temp;*/
+		button.Data.label = App->gui->CreateLabel(button.Data.label.text2, button.Data.label.color, Text_Position::TOP, button.Data.label.text);
+		button.Data.label.logic_rect.x = button.Data.position.x;
+		button.Data.label.logic_rect.y = button.Data.position.y;
 		break;
 	}
 
+	button.Data.label.hovering = true;
+
+}
+
+void j1Scene::OFFhover_label(j1Button &button)
+{
+
+	switch (button.Data.type)
+	{
+	case Button_Type::LABEL:
+		button.Data.label = App->gui->CreateLabel(button.Data.label.text2, button.Data.label.color, Text_Position::TOP, button.Data.label.text);
+		button.Data.label.logic_rect.x = button.Data.position.x;
+		button.Data.label.logic_rect.y = button.Data.position.y;
+		break;
+	}
+
+	button.Data.label.hovering = false;
+}
+
+void j1Scene::ONhover(j1Button & button)
+{
+	button.Data.hovering = true;
+
+	switch (button.Data.type)
+	{
+	case Button_Type::LABEL:
+		
+		break;
+	case Button_Type::BUTTON:
+
+		break;
+	}
 }
 
 void j1Scene::OFFhover(j1Button & button)
@@ -214,7 +243,10 @@ void j1Scene::OFFhover(j1Button & button)
 	switch (button.Data.type)
 	{
 	case Button_Type::LABEL:
-		button.Data.label = App->gui->CreateLabel(button.Data.label.text2, { 255,219,142,255 }, Text_Position::TOP, button.Data.label.text);
+
+		break;
+	case Button_Type::BUTTON:
+
 		break;
 	}
 }

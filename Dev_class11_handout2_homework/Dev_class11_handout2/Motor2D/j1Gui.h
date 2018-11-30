@@ -54,6 +54,8 @@ public:
 
 	bool isInbound(SDL_Rect &rect);
 
+	void DebugDraw();
+
 private:
 
 	p2List <j1Button*> button_list;
@@ -72,6 +74,8 @@ private:
 
 	iPoint mouse_pos = { 0,0 };
 	iPoint click_pos = { 0,0 };
+
+	bool debug = true;
 };
 
 #endif // __j1GUI_H__

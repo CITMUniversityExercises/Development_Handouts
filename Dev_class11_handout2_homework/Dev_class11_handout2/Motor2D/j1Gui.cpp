@@ -55,21 +55,38 @@ bool j1Gui::PreUpdate()
 
 	while (item)
 	{
-		if (isInbound(item->data->Data.rect))
+		// --- Handling label ---
+		if (isInbound(item->data->Data.label.logic_rect))
 		{
-			if (!item->data->Data.hovering)
+			if (!item->data->Data.label.hovering)
 			{
-				App->scene->ONhover(*item->data);
+				App->scene->ONhover_label(*item->data);
 			}
 		}
-		else if (!isInbound(item->data->Data.rect))
+		else if (!isInbound(item->data->Data.label.logic_rect))
 		{
-			if (item->data->Data.hovering)
+			if (item->data->Data.label.hovering)
 			{
-				App->scene->OFFhover(*item->data);
+				App->scene->OFFhover_label(*item->data);
 			}
+		}
 
-		}
+		//// --- Handling button ---
+		//if (isInbound(item->data->Data.logic_rect))
+		//{
+		//	if (!item->data->Data.hovering)
+		//	{
+		//		App->scene->ONhover(*item->data);
+		//	}
+		//}
+		//else if (!isInbound(item->data->Data.logic_rect))
+		//{
+		//	if (item->data->Data.hovering)
+		//	{
+		//		App->scene->OFFhover(*item->data);
+		//	}
+		//}
+
 		item = item->next;
 	}
 
@@ -86,6 +103,8 @@ bool j1Gui::PostUpdate()
 		item->data->FixedUpdate();
 		item = item->next;
 	}
+
+	DebugDraw();
 
 	return true;
 }
@@ -137,14 +156,16 @@ j1Button * j1Gui::CreateButton(Button_Type type, iPoint position, Text label, SD
 Text j1Gui::CreateLabel(const char * text, SDL_Color color, Text_Position location, const char* text2)
 {
 	Text label;
+
 	label.color = color;
-	label.position = { 0,0 };
 	label.text = text;
 	label.text2 = text2;
-	label.font_Rect = { 0,0,0,0 };
 	label.location = location;
+
+	label.font_Rect = { 0,0,0,0 };
 	label.tex = App->font->Print(label.text, label.color, App->font->default);
 	App->font->CalcSize(label.text, label.font_Rect.w, label.font_Rect.h, App->font->default);
+	label.logic_rect = { 0,0,label.font_Rect.w,label.font_Rect.h };
 
 	return label;
 }
@@ -160,6 +181,38 @@ bool j1Gui::isInbound(SDL_Rect &rect)
 		rect.x + rect.w > mouse_pos.x &&
 		rect.y < mouse_pos.y  &&
 		rect.h + rect.y > mouse_pos.y);
+}
+
+void j1Gui::DebugDraw()
+{
+
+	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) //collider draw
+		debug = !debug;
+
+	if (debug == false)
+		return;
+
+	p2List_item <j1Button*> *item;
+	item = button_list.start;
+
+	Uint8 alpha = 80;
+
+	while (item != NULL)
+	{
+
+		switch (item->data->Data.type)
+		{
+		case Button_Type::LABEL: // white
+			App->render->DrawQuad(item->data->Data.label.logic_rect, 255, 255, 255, alpha);
+			break;
+		case Button_Type::BUTTON: // white
+			App->render->DrawQuad(item->data->Data.logic_rect, 255, 255, 255, alpha);
+			break;
+
+		}
+		item = item->next;
+	}
+
 }
 
 // class Gui ---------------------------------------------------

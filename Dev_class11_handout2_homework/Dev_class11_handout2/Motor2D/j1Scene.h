@@ -36,8 +36,11 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	void ONhover(j1Button &button);
+	// --- UI ---
+	void ONhover_label(j1Button &button);
+	void OFFhover_label(j1Button &button);
 
+	void ONhover(j1Button &button);
 	void OFFhover(j1Button &button);
 
 private:
