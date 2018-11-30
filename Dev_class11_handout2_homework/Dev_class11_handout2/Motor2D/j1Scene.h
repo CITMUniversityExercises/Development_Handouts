@@ -39,9 +39,13 @@ public:
 	// --- UI ---
 	void ONhover_label(j1Button &button);
 	void OFFhover_label(j1Button &button);
+	void ONclick_label(j1Button &button);
+	void OFFclick_label(j1Button &button);
 
 	void ONhover(j1Button &button);
 	void OFFhover(j1Button &button);
+	void ONclick(j1Button &button);
+	void OFFclick(j1Button &button);
 
 private:
 	SDL_Texture* debug_tex;

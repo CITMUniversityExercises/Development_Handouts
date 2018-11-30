@@ -32,17 +32,27 @@ struct Text
 	SDL_Texture* tex;
 	Text_Position location;
 	bool hovering = false;
+	bool clicking = false;
+};
+
+struct Buttonrects
+{
+	SDL_Rect current_rect = { 0,0,0,0 };
+	SDL_Rect rect_hover = { 0,0,0,0 };
+	SDL_Rect rect_click = { 0,0,0,0 };
+	SDL_Rect rect_normal = { 0,0,0,0 };
 };
 
 struct ButtonInfo
 {
 	Button_Type type;
-	SDL_Rect rect;
+	Buttonrects rects;
 	SDL_Rect logic_rect;
 	Text label;
 	iPoint position;
 	SDL_Texture* tex;
 	bool hovering = false;
+	bool clicking = false;
 };
 
 class j1Button
@@ -51,7 +61,7 @@ public:
 	friend class j1Scene;
 	friend class j1Gui;
 
-	j1Button(Button_Type type, iPoint position, Text label, SDL_Texture* tex, SDL_Rect rect);
+	j1Button(Button_Type type, iPoint position, Text label, SDL_Texture* tex, Buttonrects rects);
 
 	~j1Button();
 

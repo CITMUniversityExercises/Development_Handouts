@@ -51,6 +51,11 @@ bool j1Gui::PreUpdate()
 {
 	App->input->GetMousePosition(mouse_pos.x,mouse_pos.y);
 
+	if (App->input->GetMouseButtonDown(1) == KEY_REPEAT)
+		click_pos = mouse_pos;
+	else
+		click_pos = { -1,-1 };
+
 	p2List_item <j1Button*> * item = button_list.start;
 
 	while (item)
@@ -72,20 +77,42 @@ bool j1Gui::PreUpdate()
 		}
 
 		//// --- Handling button ---
-		//if (isInbound(item->data->Data.logic_rect))
-		//{
-		//	if (!item->data->Data.hovering)
-		//	{
-		//		App->scene->ONhover(*item->data);
-		//	}
-		//}
-		//else if (!isInbound(item->data->Data.logic_rect))
-		//{
-		//	if (item->data->Data.hovering)
-		//	{
-		//		App->scene->OFFhover(*item->data);
-		//	}
-		//}
+		if (isInbound(item->data->Data.logic_rect))
+		{
+			if (!item->data->Data.hovering)
+			{
+				App->scene->ONhover(*item->data);
+			}
+
+			if (isClicked(item->data->Data.logic_rect))
+			{
+				if (!item->data->Data.clicking)
+				{
+					App->scene->ONclick(*item->data);
+				}
+			}
+			else
+			{
+				if (item->data->Data.clicking)
+				{
+					App->scene->OFFclick(*item->data);
+				}
+			}
+		}
+		else if (!isInbound(item->data->Data.logic_rect))
+		{
+			if (item->data->Data.hovering)
+			{
+				App->scene->OFFhover(*item->data);
+			}
+			if (isClicked(item->data->Data.logic_rect))
+			{
+				if (item->data->Data.clicking)
+				{
+					App->scene->OFFclick(*item->data);
+				}
+			}
+		}
 
 		item = item->next;
 	}
@@ -144,9 +171,9 @@ SDL_Texture * j1Gui::CreateImage(const char * path)
 	return tex;
 }
 
-j1Button * j1Gui::CreateButton(Button_Type type, iPoint position, Text label, SDL_Texture* tex, SDL_Rect rect)
+j1Button * j1Gui::CreateButton(Button_Type type, iPoint position, Text label, SDL_Texture* tex, Buttonrects rects)
 {
-	j1Button *button = new j1Button(type, position, label,tex,rect);
+	j1Button *button = new j1Button(type, position, label,tex,rects);
 
 	button_list.add(button);
 
@@ -170,6 +197,18 @@ Text j1Gui::CreateLabel(const char * text, SDL_Color color, Text_Position locati
 	return label;
 }
 
+Buttonrects j1Gui::CreateRects(SDL_Rect normal, SDL_Rect hover, SDL_Rect click)
+{
+	Buttonrects rects;
+
+	rects.rect_normal = normal;
+	rects.rect_hover = hover;
+	rects.rect_click = click;
+	rects.current_rect = normal;
+
+	return rects;
+}
+
 j1Button * j1Gui::DestroyButton(Button_Type type)
 {
 	return nullptr;
@@ -181,6 +220,14 @@ bool j1Gui::isInbound(SDL_Rect &rect)
 		rect.x + rect.w > mouse_pos.x &&
 		rect.y < mouse_pos.y  &&
 		rect.h + rect.y > mouse_pos.y);
+}
+
+bool j1Gui::isClicked(SDL_Rect & rect)
+{
+	return (rect.x < click_pos.x &&
+		rect.x + rect.w > click_pos.x &&
+		rect.y < click_pos.y  &&
+		rect.h + rect.y > click_pos.y);
 }
 
 void j1Gui::DebugDraw()

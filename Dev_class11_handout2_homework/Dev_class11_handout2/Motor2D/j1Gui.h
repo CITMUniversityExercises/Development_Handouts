@@ -46,13 +46,16 @@ public:
 
 	// --- Create/Destroy ---
 
-	j1Button* CreateButton(Button_Type type, iPoint position, Text label, SDL_Texture* tex, SDL_Rect rect);
+	j1Button* CreateButton(Button_Type type, iPoint position, Text label, SDL_Texture* tex, Buttonrects rect);
 
 	Text CreateLabel(const char* text, SDL_Color  color, Text_Position location = Text_Position::MIDDLE , const char* text2="");
+
+	Buttonrects CreateRects(SDL_Rect normal, SDL_Rect hover, SDL_Rect click);
 
 	j1Button* DestroyButton(Button_Type type);
 
 	bool isInbound(SDL_Rect &rect);
+	bool isClicked(SDL_Rect &rect);
 
 	void DebugDraw();
 
