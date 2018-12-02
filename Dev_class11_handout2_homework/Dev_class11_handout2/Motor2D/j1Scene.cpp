@@ -223,10 +223,30 @@ void j1Scene::OFFhover_label(j1Button &button)
 
 void j1Scene::ONclick_label(j1Button & button)
 {
+	switch (button.Data.type)
+	{
+	case Button_Type::LABEL:
+		button.Data.label = App->gui->CreateLabel(button.Data.label.text2, button.Data.label.color, Text_Position::TOP, button.Data.label.text);
+		button.Data.label.logic_rect.x = button.Data.position.x;
+		button.Data.label.logic_rect.y = button.Data.position.y;
+		break;
+	}
+
+	button.Data.label.clicking = true;
 }
 
 void j1Scene::OFFclick_label(j1Button & button)
 {
+	switch (button.Data.type)
+	{
+	case Button_Type::LABEL:
+		button.Data.label = App->gui->CreateLabel(button.Data.label.text2, button.Data.label.color, Text_Position::TOP, button.Data.label.text);
+		button.Data.label.logic_rect.x = button.Data.position.x;
+		button.Data.label.logic_rect.y = button.Data.position.y;
+		break;
+	}
+
+	button.Data.label.clicking = false;
 }
 
 void j1Scene::ONhover(j1Button & button)
@@ -249,6 +269,7 @@ void j1Scene::OFFhover(j1Button & button)
 
 		break;
 	case Button_Type::BUTTON:
+		App->gui->DeColorize(*button.Data.tex);
 		button.Data.rects.current_rect = button.Data.rects.rect_normal;
 		break;
 	}
@@ -262,6 +283,7 @@ void j1Scene::ONclick(j1Button & button)
 	{
 	case Button_Type::BUTTON:
 		button.Data.rects.current_rect = button.Data.rects.rect_click;
+		App->gui->Colorize(*button.Data.tex, 255, 120, 120, 150);
 		break;
 	}
 
@@ -274,6 +296,7 @@ void j1Scene::OFFclick(j1Button & button)
 	{
 	case Button_Type::BUTTON:
 		button.Data.rects.current_rect = button.Data.rects.rect_normal;
+		App->gui->DeColorize(*button.Data.tex);
 		break;
 	}
 

@@ -7,6 +7,7 @@
 #include "j1Input.h"
 #include "j1Gui.h"
 #include "j1Scene.h"
+#include "j1Window.h"
 
 j1Gui::j1Gui() : j1Module()
 {
@@ -67,12 +68,33 @@ bool j1Gui::PreUpdate()
 			{
 				App->scene->ONhover_label(*item->data);
 			}
+			if (isClicked(item->data->Data.label.logic_rect))
+			{
+				if (!item->data->Data.label.clicking)
+				{
+					App->scene->ONclick_label(*item->data);
+				}
+			}
+			else
+			{
+				if (item->data->Data.label.clicking)
+				{
+					App->scene->OFFclick_label(*item->data);
+				}
+			}
 		}
 		else if (!isInbound(item->data->Data.label.logic_rect))
 		{
 			if (item->data->Data.label.hovering)
 			{
 				App->scene->OFFhover_label(*item->data);
+			}
+			if (isClicked(item->data->Data.label.logic_rect))
+			{
+				if (item->data->Data.label.clicking)
+				{
+					App->scene->OFFclick_label(*item->data);
+				}
 			}
 		}
 
@@ -233,7 +255,7 @@ bool j1Gui::isClicked(SDL_Rect & rect)
 void j1Gui::DebugDraw()
 {
 
-	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) //collider draw
+	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) 
 		debug = !debug;
 
 	if (debug == false)
@@ -251,15 +273,32 @@ void j1Gui::DebugDraw()
 		{
 		case Button_Type::LABEL: // white
 			App->render->DrawQuad(item->data->Data.label.logic_rect, 255, 255, 255, alpha);
+			/*Colorize(item->data->Data.label.font_Rect, 120, 120, 120, 150);*/
 			break;
 		case Button_Type::BUTTON: // white
 			App->render->DrawQuad(item->data->Data.logic_rect, 255, 255, 255, alpha);
+			/*Colorize(*item->data->Data.tex, 255, 120, 120, 150);*/
 			break;
 
 		}
 		item = item->next;
 	}
 
+}
+
+void j1Gui::DeColorize(SDL_Texture & tex) const
+{
+	SDL_SetTextureColorMod(&tex, 255, 255, 255);
+}
+
+bool j1Gui::Colorize(SDL_Texture& tex, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const
+{
+	bool ret = true;
+
+	SDL_SetTextureBlendMode(&tex, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureColorMod(&tex, r, g, b);
+
+	return ret;
 }
 
 // class Gui ---------------------------------------------------

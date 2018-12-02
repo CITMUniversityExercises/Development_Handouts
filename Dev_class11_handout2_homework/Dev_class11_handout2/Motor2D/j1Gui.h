@@ -59,6 +59,10 @@ public:
 
 	void DebugDraw();
 
+	bool Colorize(SDL_Texture& tex, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const;
+	void DeColorize(SDL_Texture& tex) const;
+
+
 private:
 
 	p2List <j1Button*> button_list;

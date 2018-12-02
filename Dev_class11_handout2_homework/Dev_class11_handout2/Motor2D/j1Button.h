@@ -26,7 +26,6 @@ struct Text
 	const char* text;
 	const char* text2;
 	SDL_Color  color;
-	//iPoint position;
 	SDL_Rect font_Rect;
 	SDL_Rect logic_rect;
 	SDL_Texture* tex;
@@ -66,6 +65,13 @@ public:
 	~j1Button();
 
 	void FixedUpdate();
+
+	//--- Label placing functions ---
+	inline void PlaceAtTop(ButtonInfo &Data);
+	inline void PlaceAtBottom(ButtonInfo  &Data);
+	inline void PlaceAtLeft(ButtonInfo &Data);
+	inline void PlaceAtRight(ButtonInfo &Data);
+	inline void PlaceAtMiddle(ButtonInfo &Data);
 
 private:
 	ButtonInfo Data;
