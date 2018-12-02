@@ -61,12 +61,17 @@ bool j1Scene::Start()
 
 	App->gui->CreateButton(Button_Type::LABEL, iPoint{ App->render->camera.w/2-64,App->render->camera.h/2 }, App->gui->CreateLabel("Account Name", { 255,219,142,255 }, Text_Position::TOP,"IT WORKSssssssssss"), App->gui->greyrect, App->gui->CreateRects(SDL_Rect{ 0,0,0,0 }, SDL_Rect{ 0,0,0,0 }, SDL_Rect{ 0,0,0,0 }));
 	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 +100 }, App->gui->CreateLabel("Account Password", { 255,219,142,255 }, Text_Position::TOP), App->gui->atlas, App->gui->CreateRects(SDL_Rect{ 642,169,229,69 }, SDL_Rect{ 0,113,229,69 }, SDL_Rect{ 411,169,229,69 }));
-	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 +200 }, App->gui->CreateLabel("Login", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
 
-	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h / 2 + 180 }, App->gui->CreateLabel("Cinematics", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
-	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h / 2 + 230 }, App->gui->CreateLabel("Credits", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
-	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h / 2 + 280 }, App->gui->CreateLabel("Terms of Use", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
-	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h - 75 }, App->gui->CreateLabel("Quit", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 + 200 }, App->gui->CreateLabel("Account Password", { 255,219,142,255 }, Text_Position::TOP), App->gui->atlas2, App->gui->CreateRects(SDL_Rect{ 642,169,229,69 }, SDL_Rect{ 0,113,229,69 }, SDL_Rect{ 411,169,229,69 }));
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 + 300 }, App->gui->CreateLabel("Account Password", { 255,219,142,255 }, Text_Position::TOP), App->gui->atlas3, App->gui->CreateRects(SDL_Rect{ 642,169,229,69 }, SDL_Rect{ 0,113,229,69 }, SDL_Rect{ 411,169,229,69 }));
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 - 100 }, App->gui->CreateLabel("Account Password", { 255,219,142,255 }, Text_Position::TOP), App->gui->atlas4, App->gui->CreateRects(SDL_Rect{ 642,169,229,69 }, SDL_Rect{ 0,113,229,69 }, SDL_Rect{ 411,169,229,69 }));
+	
+	/*App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 +200 }, App->gui->CreateLabel("Login", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
+
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h / 2 + 180 }, App->gui->CreateLabel("Cinematics", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h / 2 + 230 }, App->gui->CreateLabel("Credits", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h / 2 + 280 }, App->gui->CreateLabel("Terms of Use", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
+	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h - 75 }, App->gui->CreateLabel("Quit", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });*/
 
 	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{25,App->render->camera.h / 2 + 275 }, App->gui->CreateLabel("Manage Account", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
 	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{25,App->render->camera.h / 2 + 325 }, App->gui->CreateLabel("Community Site", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });

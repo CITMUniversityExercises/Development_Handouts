@@ -67,15 +67,22 @@ private:
 
 	p2List <j1Button*> button_list;
 	//p2List <SDL_Texture*> images;
+	j1Button* focus = nullptr;
+	int focus_index = 0;
 
 	SDL_Texture* atlas = nullptr;
+	SDL_Texture* atlas2 = nullptr;
+	SDL_Texture* atlas3 = nullptr;
+	SDL_Texture* atlas4 = nullptr;
 	SDL_Texture* background = nullptr;
 	SDL_Texture* wowlogo = nullptr;
 	SDL_Texture* blizzardlogo = nullptr;
 	SDL_Texture* esrb = nullptr;
 	SDL_Texture* tickbox = nullptr;
-	SDL_Texture* greyrect = nullptr;
 	SDL_Texture* redrect = nullptr;
+	SDL_Texture* greyrect = nullptr;
+
+	
 
 	p2SString atlas_file_name;
 
