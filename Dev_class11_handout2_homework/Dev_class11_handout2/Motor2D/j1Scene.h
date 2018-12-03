@@ -47,6 +47,8 @@ public:
 	void ONclick(j1Button &button);
 	void OFFclick(j1Button &button);
 
+	void ONFocus();
+
 private:
 	SDL_Texture* debug_tex;
 	GuiImage* banner;

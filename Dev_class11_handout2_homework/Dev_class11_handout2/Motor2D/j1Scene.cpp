@@ -307,3 +307,20 @@ void j1Scene::OFFclick(j1Button & button)
 
 	button.Data.clicking = false;
 }
+
+void j1Scene::ONFocus()
+{
+	if (App->gui->focus_index < App->gui->button_list.count())
+	{
+		App->gui->focus = App->gui->button_list.At(App->gui->focus_index)->data;
+		App->gui->Colorize(*App->gui->focus->Data.tex, 255, 120, 120, 120);
+		if (App->gui->focus_index != 0)
+		App->gui->DeColorize(*App->gui->button_list.At(App->gui->focus_index)->prev->data->Data.tex);
+		App->gui->focus_index++;
+	}
+	else
+	{
+		App->gui->DeColorize(*App->gui->button_list.At(App->gui->focus_index - 1)->data->Data.tex);
+		App->gui->focus_index = 0;
+	}
+}

@@ -66,19 +66,7 @@ bool j1Gui::PreUpdate()
 
 	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN)
 	{
-		if (focus_index < button_list.count())
-		{
-			focus = button_list.At(focus_index)->data;
-			Colorize(*focus->Data.tex, 255, 120, 120, 120);
-			if (focus_index != 0)
-				DeColorize(*button_list.At(focus_index)->prev->data->Data.tex);
-			focus_index++;
-		}
-		else
-		{
-			DeColorize(*button_list.At(focus_index-1)->data->Data.tex);
-			focus_index = 0;
-		}
+		App->scene->ONFocus();
 	}
 
 	p2List_item <j1Button*> * item = button_list.start;
