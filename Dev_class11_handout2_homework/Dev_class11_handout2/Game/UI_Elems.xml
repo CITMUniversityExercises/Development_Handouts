@@ -1,0 +1,38 @@
+<!--UI Elements -->
+
+<config> 
+
+  <Element> 0
+    <type id="1" />
+    <parent id="-1"/>
+    <position x="100" y="100"/>
+    <Texture path="gui/atlas.png"/>
+    <logic_rect w="229" h="69" />
+    <normal_rect x="642" y="169" w="229" h="69"/>
+    <hover_rect x="0" y="113" w="229" h="69"/>
+    <click_rect x="411" y="169" w="229" h="69"/>
+  </Element>
+
+  <Element> 1
+    <type id="1" />
+    <parent id="0"/>
+    <position x="0" y="75"/>
+    <Texture path="gui/atlas.png"/>
+    <logic_rect w="229" h="69" />
+    <normal_rect x="642" y="169" w="229" h="69"/>
+    <hover_rect x="0" y="113" w="229" h="69"/>
+    <click_rect x="411" y="169" w="229" h="69"/>
+  </Element>
+
+  <Element> 2
+    <type id="1" />
+    <parent id="1"/>
+    <position x="0" y="75"/>
+    <Texture path="gui/atlas.png"/>
+    <logic_rect w="229" h="69" />
+    <normal_rect x="642" y="169" w="229" h="69"/>
+    <hover_rect x="0" y="113" w="229" h="69"/>
+    <click_rect x="411" y="169" w="229" h="69"/>
+  </Element>
+
+</config>

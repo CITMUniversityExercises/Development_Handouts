@@ -7,6 +7,7 @@ struct SDL_Texture;
 class GuiImage;
 class GuiText;
 class j1Button;
+class j1UI_Element;
 
 
 class j1Scene : public j1Module
@@ -37,17 +38,17 @@ public:
 	bool CleanUp();
 
 	// --- UI ---
-	void ONhover_label(j1Button &button);
-	void OFFhover_label(j1Button &button);
-	void ONclick_label(j1Button &button);
-	void OFFclick_label(j1Button &button);
+	//void ONhover_label(j1Button &button);
+	//void OFFhover_label(j1Button &button);
+	//void ONclick_label(j1Button &button);
+	//void OFFclick_label(j1Button &button);
 
-	void ONhover(j1Button &button);
-	void OFFhover(j1Button &button);
-	void ONclick(j1Button &button);
-	void OFFclick(j1Button &button);
+	void ONhover(j1UI_Element & element);
+	void OFFhover(j1UI_Element & element);
+	void ONclick(j1UI_Element & element);
+	void OFFclick(j1UI_Element & element);
 
-	void ONFocus();
+	//void ONFocus();
 
 private:
 	SDL_Texture* debug_tex;

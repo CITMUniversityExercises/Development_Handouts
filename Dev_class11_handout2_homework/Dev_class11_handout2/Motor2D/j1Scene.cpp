@@ -46,44 +46,21 @@ bool j1Scene::Start()
 
 	debug_tex = App->tex->Load("maps/path2.png");
 
-	// TODO 3: Create the banner (rect {485, 829, 328, 103}) and the text "Hello World"
+	// --- Loading UI config file ---
+	pugi::xml_document	config_file;
+	pugi::xml_node		config;
 
-	//Text label = App->gui->CreateLabel("Hello World", { 120,0,120,255 });
-	//SDL_Rect temprect = { 485, 829, 328, 103 };
+	config=App->LoadConfig(config_file, "UI_Elems.xml");
+	App->gui->DeployUI(config);
 
-	//iPoint tempos = { App->render->camera.w / 2, 0 };
-	//App->gui->CreateButton(Button_Type::BUTTON, label, tempos,temprect);
+	// --- Creating UI structures ---
 
-	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ 0,0 }, App->gui->CreateLabel("", { 0,0,0,255 }), App->gui->background, SDL_Rect{ 0,0,1920,1080 });
-	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ -50,25 }, App->gui->CreateLabel("", { 0,0,0,255 }), App->gui->wowlogo, SDL_Rect{ 0,0,512,256 });
-	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{App->render->camera.w/2-64,App->render->camera.h-150}, App->gui->CreateLabel("", { 0,0,0,255 }), App->gui->blizzardlogo, SDL_Rect{ 0,0,128,128 });
-	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ 25,App->render->camera.h-200}, App->gui->CreateLabel("", { 0,0,0,255 }), App->gui->esrb, SDL_Rect{ 0,0,128,128 });
+	//App->gui->CreateButton(Button_Type::LABEL, iPoint{ App->render->camera.w/2-64,App->render->camera.h/2 }, App->gui->CreateLabel("Account Name", { 255,219,142,255 }, Text_Position::TOP,"IT WORKSssssssssss"), App->gui->atlas, App->gui->CreateRects(SDL_Rect{ 0,0,0,0 }, SDL_Rect{ 0,0,0,0 }, SDL_Rect{ 0,0,0,0 }));
+	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 +100 }, App->gui->CreateLabel("Account Password", { 255,219,142,255 }, Text_Position::TOP), App->gui->atlas, App->gui->CreateRects(SDL_Rect{ 642,169,229,69 }, SDL_Rect{ 0,113,229,69 }, SDL_Rect{ 411,169,229,69 }));
 
-	App->gui->CreateButton(Button_Type::LABEL, iPoint{ App->render->camera.w/2-64,App->render->camera.h/2 }, App->gui->CreateLabel("Account Name", { 255,219,142,255 }, Text_Position::TOP,"IT WORKSssssssssss"), App->gui->greyrect, App->gui->CreateRects(SDL_Rect{ 0,0,0,0 }, SDL_Rect{ 0,0,0,0 }, SDL_Rect{ 0,0,0,0 }));
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 +100 }, App->gui->CreateLabel("Account Password", { 255,219,142,255 }, Text_Position::TOP), App->gui->atlas, App->gui->CreateRects(SDL_Rect{ 642,169,229,69 }, SDL_Rect{ 0,113,229,69 }, SDL_Rect{ 411,169,229,69 }));
-
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 + 200 }, App->gui->CreateLabel("Account Password", { 255,219,142,255 }, Text_Position::TOP), App->gui->atlas2, App->gui->CreateRects(SDL_Rect{ 642,169,229,69 }, SDL_Rect{ 0,113,229,69 }, SDL_Rect{ 411,169,229,69 }));
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 + 300 }, App->gui->CreateLabel("Account Password", { 255,219,142,255 }, Text_Position::TOP), App->gui->atlas3, App->gui->CreateRects(SDL_Rect{ 642,169,229,69 }, SDL_Rect{ 0,113,229,69 }, SDL_Rect{ 411,169,229,69 }));
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 - 100 }, App->gui->CreateLabel("Account Password", { 255,219,142,255 }, Text_Position::TOP), App->gui->atlas4, App->gui->CreateRects(SDL_Rect{ 642,169,229,69 }, SDL_Rect{ 0,113,229,69 }, SDL_Rect{ 411,169,229,69 }));
-	
-	/*App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 +200 }, App->gui->CreateLabel("Login", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
-
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h / 2 + 180 }, App->gui->CreateLabel("Cinematics", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h / 2 + 230 }, App->gui->CreateLabel("Credits", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h / 2 + 280 }, App->gui->CreateLabel("Terms of Use", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
-	App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w - 150,App->render->camera.h - 75 }, App->gui->CreateLabel("Quit", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });*/
-
-	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{25,App->render->camera.h / 2 + 275 }, App->gui->CreateLabel("Manage Account", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
-	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{25,App->render->camera.h / 2 + 325 }, App->gui->CreateLabel("Community Site", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,128,32 });
-
-	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{25,App->render->camera.h / 2 + 375 }, App->gui->CreateLabel("Remember Account Name", { 255,219,142,255 },Text_Position::RIGHT), App->gui->tickbox, SDL_Rect{ 2,16,24,24 });
-
-	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{0,App->render->camera.h / 2 + 475 }, App->gui->CreateLabel("Version 2.0.12 (6546) (Release)", { 255,219,142,255 }, Text_Position::RIGHT), App->gui->redrect, SDL_Rect{ 0,0,0,0 });
-	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ 0,App->render->camera.h / 2 + 500 }, App->gui->CreateLabel("Mar 30 2007", { 255,219,142,255 }, Text_Position::RIGHT), App->gui->redrect, SDL_Rect{ 0,0,0,0 });
-	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w/2,App->render->camera.h / 2 + 500 }, App->gui->CreateLabel("Copyright 2004-2007 Blizzard Entertainment. All Rights Reserved.", { 255,219,142,255 }), App->gui->redrect, SDL_Rect{ 0,0,0,0 });
-
-	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w,App->render->camera.h / 2 + 325 }, App->gui->CreateLabel("WoWps.org TBC", { 0,0,0,255 }, Text_Position::LEFT), App->gui->redrect, SDL_Rect{ 0,0,0,0 });
-
+	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 + 200 }, App->gui->CreateLabel("Account Password", { 255,219,142,255 }, Text_Position::TOP), App->gui->atlas2, App->gui->CreateRects(SDL_Rect{ 642,169,229,69 }, SDL_Rect{ 0,113,229,69 }, SDL_Rect{ 411,169,229,69 }));
+	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 + 300 }, App->gui->CreateLabel("Account Password", { 255,219,142,255 }, Text_Position::TOP), App->gui->atlas3, App->gui->CreateRects(SDL_Rect{ 642,169,229,69 }, SDL_Rect{ 0,113,229,69 }, SDL_Rect{ 411,169,229,69 }));
+	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 - 100 }, App->gui->CreateLabel("Account Password", { 255,219,142,255 }, Text_Position::TOP), App->gui->atlas4, App->gui->CreateRects(SDL_Rect{ 642,169,229,69 }, SDL_Rect{ 0,113,229,69 }, SDL_Rect{ 411,169,229,69 }));
 
 	
 	return true;
@@ -195,132 +172,134 @@ bool j1Scene::CleanUp()
 	return true;
 }
 
-void j1Scene::ONhover_label(j1Button &button)
+//void j1Scene::ONhover_label(j1Button &button)
+//{
+//
+//	switch(button.Data.type)
+//	{
+//	case Button_Type::LABEL:
+//		button.Data.label = App->gui->CreateLabel(button.Data.label.text2, button.Data.label.color, Text_Position::TOP, button.Data.label.text);
+//		button.Data.label.logic_rect.x = button.Data.position.x;
+//		button.Data.label.logic_rect.y = button.Data.position.y;
+//		break;
+//	}
+//
+//	button.Data.label.hovering = true;
+//
+//}
+//
+//void j1Scene::OFFhover_label(j1Button &button)
+//{
+//
+//	switch (button.Data.type)
+//	{
+//	case Button_Type::LABEL:
+//		button.Data.label = App->gui->CreateLabel(button.Data.label.text2, button.Data.label.color, Text_Position::TOP, button.Data.label.text);
+//		button.Data.label.logic_rect.x = button.Data.position.x;
+//		button.Data.label.logic_rect.y = button.Data.position.y;
+//		break;
+//	}
+//
+//	button.Data.label.hovering = false;
+//}
+//
+//void j1Scene::ONclick_label(j1Button & button)
+//{
+//	switch (button.Data.type)
+//	{
+//	case Button_Type::LABEL:
+//		button.Data.label = App->gui->CreateLabel(button.Data.label.text2, button.Data.label.color, Text_Position::TOP, button.Data.label.text);
+//		button.Data.label.logic_rect.x = button.Data.position.x;
+//		button.Data.label.logic_rect.y = button.Data.position.y;
+//		break;
+//	}
+//
+//	button.Data.label.clicking = true;
+//}
+//
+//void j1Scene::OFFclick_label(j1Button & button)
+//{
+//	switch (button.Data.type)
+//	{
+//	case Button_Type::LABEL:
+//		button.Data.label = App->gui->CreateLabel(button.Data.label.text2, button.Data.label.color, Text_Position::TOP, button.Data.label.text);
+//		button.Data.label.logic_rect.x = button.Data.position.x;
+//		button.Data.label.logic_rect.y = button.Data.position.y;
+//		break;
+//	}
+//
+//	button.Data.label.clicking = false;
+//}
+//
+void j1Scene::ONhover(j1UI_Element & element)
 {
+	ELEMENTS TYPE = element.GetType();
 
-	switch(button.Data.type)
+	switch (TYPE)
 	{
-	case Button_Type::LABEL:
-		button.Data.label = App->gui->CreateLabel(button.Data.label.text2, button.Data.label.color, Text_Position::TOP, button.Data.label.text);
-		button.Data.label.logic_rect.x = button.Data.position.x;
-		button.Data.label.logic_rect.y = button.Data.position.y;
+	case ELEMENTS::BUTTON:
+		element.Getrects()->current_rect = element.Getrects()->rect_hover;
 		break;
 	}
 
-	button.Data.label.hovering = true;
-
+	element.GetBooleans()->hovering = true;
 }
 
-void j1Scene::OFFhover_label(j1Button &button)
+void j1Scene::OFFhover(j1UI_Element & element)
 {
+	ELEMENTS TYPE = element.GetType();
 
-	switch (button.Data.type)
+	switch (TYPE)
 	{
-	case Button_Type::LABEL:
-		button.Data.label = App->gui->CreateLabel(button.Data.label.text2, button.Data.label.color, Text_Position::TOP, button.Data.label.text);
-		button.Data.label.logic_rect.x = button.Data.position.x;
-		button.Data.label.logic_rect.y = button.Data.position.y;
+	case ELEMENTS::BUTTON:
+		element.Getrects()->current_rect = element.Getrects()->rect_normal;
 		break;
 	}
 
-	button.Data.label.hovering = false;
+	element.GetBooleans()->hovering = false;
 }
 
-void j1Scene::ONclick_label(j1Button & button)
+void j1Scene::ONclick(j1UI_Element & element)
 {
-	switch (button.Data.type)
+	ELEMENTS TYPE = element.GetType();
+
+	switch (TYPE)
 	{
-	case Button_Type::LABEL:
-		button.Data.label = App->gui->CreateLabel(button.Data.label.text2, button.Data.label.color, Text_Position::TOP, button.Data.label.text);
-		button.Data.label.logic_rect.x = button.Data.position.x;
-		button.Data.label.logic_rect.y = button.Data.position.y;
+	case ELEMENTS::BUTTON:
+		element.Getrects()->current_rect = element.Getrects()->rect_click;
 		break;
 	}
 
-	button.Data.label.clicking = true;
+	element.GetBooleans()->clicking = true;
 }
 
-void j1Scene::OFFclick_label(j1Button & button)
+void j1Scene::OFFclick(j1UI_Element & element)
 {
-	switch (button.Data.type)
+	ELEMENTS TYPE = element.GetType();
+
+	switch (TYPE)
 	{
-	case Button_Type::LABEL:
-		button.Data.label = App->gui->CreateLabel(button.Data.label.text2, button.Data.label.color, Text_Position::TOP, button.Data.label.text);
-		button.Data.label.logic_rect.x = button.Data.position.x;
-		button.Data.label.logic_rect.y = button.Data.position.y;
+	case ELEMENTS::BUTTON:
+		element.Getrects()->current_rect = element.Getrects()->rect_normal;
 		break;
 	}
 
-	button.Data.label.clicking = false;
+	element.GetBooleans()->clicking = false;
 }
-
-void j1Scene::ONhover(j1Button & button)
-{
-	switch (button.Data.type)
-	{
-	case Button_Type::BUTTON:
-		button.Data.rects.current_rect = button.Data.rects.rect_hover;
-		break;
-	}
-
-	button.Data.hovering = true;
-}
-
-void j1Scene::OFFhover(j1Button & button)
-{
-	switch (button.Data.type)
-	{
-	case Button_Type::LABEL:
-
-		break;
-	case Button_Type::BUTTON:
-		App->gui->DeColorize(*button.Data.tex);
-		button.Data.rects.current_rect = button.Data.rects.rect_normal;
-		break;
-	}
-
-	button.Data.hovering = false;
-}
-
-void j1Scene::ONclick(j1Button & button)
-{
-	switch (button.Data.type)
-	{
-	case Button_Type::BUTTON:
-		button.Data.rects.current_rect = button.Data.rects.rect_click;
-		App->gui->Colorize(*button.Data.tex, 255, 120, 120, 150);
-		break;
-	}
-
-	button.Data.clicking = true;
-}
-
-void j1Scene::OFFclick(j1Button & button)
-{
-	switch (button.Data.type)
-	{
-	case Button_Type::BUTTON:
-		button.Data.rects.current_rect = button.Data.rects.rect_normal;
-		App->gui->DeColorize(*button.Data.tex);
-		break;
-	}
-
-	button.Data.clicking = false;
-}
-
-void j1Scene::ONFocus()
-{
-	if (App->gui->focus_index < App->gui->button_list.count())
-	{
-		App->gui->focus = App->gui->button_list.At(App->gui->focus_index)->data;
-		App->gui->Colorize(*App->gui->focus->Data.tex, 255, 120, 120, 120);
-		if (App->gui->focus_index != 0)
-		App->gui->DeColorize(*App->gui->button_list.At(App->gui->focus_index)->prev->data->Data.tex);
-		App->gui->focus_index++;
-	}
-	else
-	{
-		App->gui->DeColorize(*App->gui->button_list.At(App->gui->focus_index - 1)->data->Data.tex);
-		App->gui->focus_index = 0;
-	}
-}
+//
+//void j1Scene::ONFocus()
+//{
+//	if (App->gui->focus_index < App->gui->UIelements.count())
+//	{
+//		App->gui->focus = App->gui->UIelements.At(App->gui->focus_index)->data;
+//		App->gui->Colorize(*App->gui->focus->Data.tex, 255, 120, 120, 120);
+//		if (App->gui->focus_index != 0)
+//		App->gui->DeColorize(*App->gui->UIelements.At(App->gui->focus_index)->prev->data->Data.tex);
+//		App->gui->focus_index++;
+//	}
+//	else
+//	{
+//		App->gui->DeColorize(*App->gui->UIelements.At(App->gui->focus_index - 1)->data->Data.tex);
+//		App->gui->focus_index = 0;
+//	}
+//}

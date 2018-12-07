@@ -3,39 +3,11 @@
 
 #include "SDL/include/SDL.h"
 #include "p2Point.h"
-
-enum class Button_Type
-{
-	BUTTON,
-	LABEL,
-
-	NONE
-};
-
-enum class Text_Position
-{
-	TOP,
-	BOTTOM,
-	LEFT,
-	RIGHT,
-	MIDDLE
-};
-
-struct Text
-{
-	const char* text;
-	const char* text2;
-	SDL_Color  color;
-	SDL_Rect font_Rect;
-	SDL_Rect logic_rect;
-	SDL_Texture* tex;
-	Text_Position location;
-	bool hovering = false;
-	bool clicking = false;
-};
+#include "j1UI_Element.h"
 
 struct Buttonrects
 {
+	SDL_Rect logic_rect = { 0,0,0,0 };
 	SDL_Rect current_rect = { 0,0,0,0 };
 	SDL_Rect rect_hover = { 0,0,0,0 };
 	SDL_Rect rect_click = { 0,0,0,0 };
@@ -44,34 +16,33 @@ struct Buttonrects
 
 struct ButtonInfo
 {
-	Button_Type type;
 	Buttonrects rects;
-	SDL_Rect logic_rect;
-	Text label;
 	iPoint position;
 	SDL_Texture* tex;
-	bool hovering = false;
-	bool clicking = false;
+	Booleans bools;
+	/*bool hovering = false;
+	bool clicking = false;*/
+	ELEMENTS type;
+
+	int parent_id = -1;
 };
 
-class j1Button
+class j1Button : public j1UI_Element
 {
-public:
-	friend class j1Scene;
 	friend class j1Gui;
+public:
 
-	j1Button(Button_Type type, iPoint position, Text label, SDL_Texture* tex, Buttonrects rects);
+	j1Button(ButtonInfo Data) : Data(Data)
+	{
+
+	}
 
 	~j1Button();
 
 	void FixedUpdate();
-
-	//--- Label placing functions ---
-	inline void PlaceAtTop(ButtonInfo &Data);
-	inline void PlaceAtBottom(ButtonInfo  &Data);
-	inline void PlaceAtLeft(ButtonInfo &Data);
-	inline void PlaceAtRight(ButtonInfo &Data);
-	inline void PlaceAtMiddle(ButtonInfo &Data);
+	ELEMENTS GetType() override;
+	Buttonrects* Getrects() override;
+	Booleans * GetBooleans() override;
 
 private:
 	ButtonInfo Data;

@@ -84,7 +84,7 @@ bool j1App::Awake()
 
 	bool ret = false;
 		
-	config = LoadConfig(config_file);
+	config = LoadConfig(config_file,"config.xml");
 
 	if(config.empty() == false)
 	{
@@ -162,11 +162,11 @@ bool j1App::Update()
 }
 
 // ---------------------------------------------
-pugi::xml_node j1App::LoadConfig(pugi::xml_document& config_file) const
+pugi::xml_node j1App::LoadConfig(pugi::xml_document& config_file, const char* path) const
 {
 	pugi::xml_node ret;
 
-	pugi::xml_parse_result result = config_file.load_file("config.xml");
+	pugi::xml_parse_result result = config_file.load_file(path);
 
 	if(result == NULL)
 		LOG("Could not load map xml file config.xml. pugi error: %s", result.description());

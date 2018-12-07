@@ -33,18 +33,11 @@ bool j1Gui::Awake(pugi::xml_node& conf)
 bool j1Gui::Start()
 {
 	atlas = CreateImage(atlas_file_name.GetString());
-	background = CreateImage("gui/login_background.png");
-	wowlogo = CreateImage("gui/Glues-Logo.png");
-	blizzardlogo = CreateImage("gui/Glues-BlizzardLogo.png");
-	esrb = CreateImage("gui/Glues-ESRBRating.png");
-	tickbox = CreateImage("gui/SquareButtonTextures.png");
-	redrect = CreateImage("gui/UI-Panel-Button-Up.png");
-	greyrect = CreateImage("gui/UI-Panel-Button-Disabled.png");
 
 	// --- Button test textures ---
-	atlas2 = CreateImage(atlas_file_name.GetString());
-	atlas3 = CreateImage(atlas_file_name.GetString());
-	atlas4 = CreateImage(atlas_file_name.GetString());
+	//atlas2 = CreateImage(atlas_file_name.GetString());
+	//atlas3 = CreateImage(atlas_file_name.GetString());
+	//atlas4 = CreateImage(atlas_file_name.GetString());
 
 
 	
@@ -66,82 +59,45 @@ bool j1Gui::PreUpdate()
 
 	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN)
 	{
-		App->scene->ONFocus();
+		/*App->scene->ONFocus();*/
 	}
 
-	p2List_item <j1Button*> * item = button_list.start;
+	p2List_item <j1UI_Element*> * item = UIelements.start;
 
 	while (item)
 	{
-		// --- Handling label ---
-		if (isInbound(item->data->Data.label.logic_rect))
+		if (isInbound(item->data->Getrects()->logic_rect))
 		{
-			if (!item->data->Data.label.hovering)
-			{
-				App->scene->ONhover_label(*item->data);
-			}
-			if (isClicked(item->data->Data.label.logic_rect))
-			{
-				if (!item->data->Data.label.clicking)
-				{
-					App->scene->ONclick_label(*item->data);
-				}
-			}
-			else
-			{
-				if (item->data->Data.label.clicking)
-				{
-					App->scene->OFFclick_label(*item->data);
-				}
-			}
-		}
-		else if (!isInbound(item->data->Data.label.logic_rect))
-		{
-			if (item->data->Data.label.hovering)
-			{
-				App->scene->OFFhover_label(*item->data);
-			}
-			if (isClicked(item->data->Data.label.logic_rect))
-			{
-				if (item->data->Data.label.clicking)
-				{
-					App->scene->OFFclick_label(*item->data);
-				}
-			}
-		}
-
-		//// --- Handling button ---
-		if (isInbound(item->data->Data.logic_rect))
-		{
-			if (!item->data->Data.hovering)
+			if (!item->data->GetBooleans()->hovering)
 			{
 				App->scene->ONhover(*item->data);
 			}
 
-			if (isClicked(item->data->Data.logic_rect))
+			if (isClicked(item->data->Getrects()->logic_rect))
 			{
-				if (!item->data->Data.clicking)
+				if (!item->data->GetBooleans()->clicking)
 				{
 					App->scene->ONclick(*item->data);
 				}
 			}
 			else
 			{
-				if (item->data->Data.clicking)
+				if (item->data->GetBooleans()->clicking)
 				{
 					App->scene->OFFclick(*item->data);
 				}
 			}
 		}
-		else if (!isInbound(item->data->Data.logic_rect))
+
+		else if (!isInbound(item->data->Getrects()->logic_rect))
 		{
-			if (item->data->Data.hovering)
+			if (item->data->GetBooleans()->hovering)
 			{
 				App->scene->OFFhover(*item->data);
 			}
-			if (isClicked(item->data->Data.logic_rect))
+			if (isClicked(item->data->Getrects()->logic_rect))
 			{
-				if (item->data->Data.clicking)
+				if (item->data->GetBooleans()->clicking)
 				{
 					App->scene->OFFclick(*item->data);
 				}
@@ -151,17 +107,20 @@ bool j1Gui::PreUpdate()
 		item = item->next;
 	}
 
+
+	
 	return true;
 }
 
 // Called after all Updates
 bool j1Gui::PostUpdate()
 {
-	p2List_item <j1Button*> * item = button_list.start;
+	p2List_item <j1UI_Element*> * item = UIelements.start;
 
 	while (item)
 	{
 		item->data->FixedUpdate();
+
 		item = item->next;
 	}
 
@@ -175,17 +134,17 @@ bool j1Gui::CleanUp()
 {
 	LOG("Freeing GUI");
 
-	p2List_item <j1Button*> * item = button_list.start;
+	p2List_item <j1UI_Element*> * item = UIelements.start;
 
 	while (item)
 	{
+		item->data->children.clear();
+
 		RELEASE(item->data);
 		item = item->next;
 	}
 
-	button_list.clear();
-
-	//images.clear();
+	UIelements.clear();
 
 	return true;
 }
@@ -199,54 +158,137 @@ SDL_Texture* j1Gui::GetAtlas() const
 SDL_Texture * j1Gui::CreateImage(const char * path)
 {
 	SDL_Texture * tex = App->tex->Load(path);
-
-	//images.add(tex);
-
 	return tex;
 }
 
-j1Button * j1Gui::CreateButton(Button_Type type, iPoint position, Text label, SDL_Texture* tex, Buttonrects rects)
+void j1Gui::DeployUI(pugi::xml_node &UIconfig)
 {
-	j1Button *button = new j1Button(type, position, label,tex,rects);
+	UIconfig = UIconfig.child("Element");
+	uint elem_type;
 
-	button_list.add(button);
+	while (UIconfig)
+	{
+		elem_type = UIconfig.child("type").attribute("id").as_uint();
+
+		if (elem_type == static_cast <uint> (ELEMENTS::PANEL))
+		{
+
+		}
+
+		if (elem_type == static_cast <uint> (ELEMENTS::BUTTON))
+		{
+			CreateButton(FillButton(UIconfig));
+		}
+
+		if (elem_type == static_cast <uint> (ELEMENTS::LABEL))
+		{
+
+		}
+
+		UIconfig = UIconfig.next_sibling();
+	}
+}
+
+ButtonInfo j1Gui::FillButton(pugi::xml_node & UIconfig)
+{
+	ButtonInfo Data;
+
+	// --- Parent ID ---
+	Data.parent_id= UIconfig.child("parent").attribute("id").as_int();
+
+	Data.type = (ELEMENTS) UIconfig.child("type").attribute("id").as_int();
+
+	// --- Position ---
+	Data.position.x = UIconfig.child("position").attribute("x").as_int();
+	Data.position.y = UIconfig.child("position").attribute("y").as_int();
+
+	// --- Texture ---
+	Data.tex = CreateImage(UIconfig.child("Texture").attribute("path").as_string());
+
+	// --- Rectangles ---
+	Data.rects.logic_rect.x = Data.position.x;
+	Data.rects.logic_rect.y = Data.position.y;
+	Data.rects.logic_rect.w = UIconfig.child("logic_rect").attribute("w").as_int();
+	Data.rects.logic_rect.h = UIconfig.child("logic_rect").attribute("h").as_int();
+
+	Data.rects.rect_normal.x = UIconfig.child("normal_rect").attribute("x").as_int();
+	Data.rects.rect_normal.y = UIconfig.child("normal_rect").attribute("y").as_int();
+	Data.rects.rect_normal.w = UIconfig.child("normal_rect").attribute("w").as_int();
+	Data.rects.rect_normal.h = UIconfig.child("normal_rect").attribute("h").as_int();
+	Data.rects.current_rect = Data.rects.rect_normal;
+
+	Data.rects.rect_hover.x = UIconfig.child("hover_rect").attribute("x").as_int();
+	Data.rects.rect_hover.y = UIconfig.child("hover_rect").attribute("y").as_int();
+	Data.rects.rect_hover.w = UIconfig.child("hover_rect").attribute("w").as_int();
+	Data.rects.rect_hover.h = UIconfig.child("hover_rect").attribute("h").as_int();
+
+	Data.rects.rect_click.x = UIconfig.child("click_rect").attribute("x").as_int();
+	Data.rects.rect_click.y = UIconfig.child("click_rect").attribute("y").as_int();
+	Data.rects.rect_click.w = UIconfig.child("click_rect").attribute("w").as_int();
+	Data.rects.rect_click.h = UIconfig.child("click_rect").attribute("h").as_int();
+
+	return Data;
+}
+
+j1UI_Element * j1Gui::CreateButton(ButtonInfo &Data)
+{
+	j1UI_Element *button = (j1UI_Element*) new j1Button(Data);
+
+	if (Data.parent_id != -1)
+	{
+		button->parent = UIelements.At(Data.parent_id)->data;
+		UIelements.At(Data.parent_id)->data->children.add(button);
+	}
+
+	UIelements.add(button);
+
+
+	// --- Positioning button ---
+	button->position = Data.position;
+
+	if (Data.parent_id != -1)
+	{
+		button->position.x = button->parent->position.x + Data.position.x;
+		button->position.y = button->parent->position.y + Data.position.y;
+	}
 
 	return button;
 }
 
-Text j1Gui::CreateLabel(const char * text, SDL_Color color, Text_Position location, const char* text2)
-{
-	Text label;
+//Text* j1Gui::CreateLabel(const char * text, SDL_Color color, const char* text2)
+//{
+//	Text label;
+//
+//	label.color = color;
+//	label.text = text;
+//	label.text2 = text2;
+//
+//	label.font_Rect = { 0,0,0,0 };
+//	label.tex = App->font->Print(label.text, label.color, App->font->default);
+//	App->font->CalcSize(label.text, label.font_Rect.w, label.font_Rect.h, App->font->default);
+//	label.logic_rect = { 0,0,label.font_Rect.w,label.font_Rect.h };
+//
+//	j1Label *label = new j1Label(label.);
+//
+//	return &label;
+//}
+//
+//Buttonrects j1Gui::CreateRects(SDL_Rect normal, SDL_Rect hover, SDL_Rect click)
+//{
+//	Buttonrects rects;
+//
+//	rects.rect_normal = normal;
+//	rects.rect_hover = hover;
+//	rects.rect_click = click;
+//	rects.current_rect = normal;
+//
+//	return rects;
+//}
 
-	label.color = color;
-	label.text = text;
-	label.text2 = text2;
-	label.location = location;
-
-	label.font_Rect = { 0,0,0,0 };
-	label.tex = App->font->Print(label.text, label.color, App->font->default);
-	App->font->CalcSize(label.text, label.font_Rect.w, label.font_Rect.h, App->font->default);
-	label.logic_rect = { 0,0,label.font_Rect.w,label.font_Rect.h };
-
-	return label;
-}
-
-Buttonrects j1Gui::CreateRects(SDL_Rect normal, SDL_Rect hover, SDL_Rect click)
-{
-	Buttonrects rects;
-
-	rects.rect_normal = normal;
-	rects.rect_hover = hover;
-	rects.rect_click = click;
-	rects.current_rect = normal;
-
-	return rects;
-}
-
-j1Button * j1Gui::DestroyButton(Button_Type type)
-{
-	return nullptr;
-}
+//j1Button * j1Gui::DestroyButton(Button_Type type)
+//{
+//	return nullptr;
+//}
 
 bool j1Gui::isInbound(SDL_Rect &rect)
 {
@@ -273,45 +315,42 @@ void j1Gui::DebugDraw()
 	if (debug == false)
 		return;
 
-	p2List_item <j1Button*> *item;
-	item = button_list.start;
-
 	Uint8 alpha = 80;
+
+	p2List_item <j1UI_Element*> * item = UIelements.start;
 
 	while (item != NULL)
 	{
 
-		switch (item->data->Data.type)
-		{
-		case Button_Type::LABEL: // white
-			App->render->DrawQuad(item->data->Data.label.logic_rect, 255, 255, 255, alpha);
-			/*Colorize(item->data->Data.label.font_Rect, 120, 120, 120, 150);*/
-			break;
-		case Button_Type::BUTTON: // white
-			App->render->DrawQuad(item->data->Data.logic_rect, 255, 255, 255, alpha);
-			/*Colorize(*item->data->Data.tex, 255, 120, 120, 150);*/
-			break;
+		//switch (item->data->Data.type)
+		//{
+		//case Button_Type::LABEL: // white
+		App->render->DrawQuad(item->data->Getrects()->logic_rect, 255, 255, 255, alpha);
+		//	break;
+		//case Button_Type::BUTTON: // white
+		//	App->render->DrawQuad(item->data->Data.logic_rect, 255, 255, 255, alpha);
+		//	break;
 
-		}
+		//}
 		item = item->next;
 	}
 
 }
 
-void j1Gui::DeColorize(SDL_Texture & tex) const
-{
-	SDL_SetTextureColorMod(&tex, 255, 255, 255);
-}
-
-bool j1Gui::Colorize(SDL_Texture& tex, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const
-{
-	bool ret = true;
-
-	SDL_SetTextureBlendMode(&tex, SDL_BLENDMODE_BLEND);
-	SDL_SetTextureColorMod(&tex, r, g, b);
-
-	return ret;
-}
+//void j1Gui::DeColorize(SDL_Texture & tex) const
+//{
+//	SDL_SetTextureColorMod(&tex, 255, 255, 255);
+//}
+//
+//bool j1Gui::Colorize(SDL_Texture& tex, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const
+//{
+//	bool ret = true;
+//
+//	SDL_SetTextureBlendMode(&tex, SDL_BLENDMODE_BLEND);
+//	SDL_SetTextureColorMod(&tex, r, g, b);
+//
+//	return ret;
+//}
 
 // class Gui ---------------------------------------------------
 

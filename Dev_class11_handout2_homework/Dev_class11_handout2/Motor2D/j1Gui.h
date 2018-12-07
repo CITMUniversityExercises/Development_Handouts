@@ -2,11 +2,10 @@
 #define __j1GUI_H__
 
 #include "j1Module.h"
+#include "j1UI_Element.h"
 #include "j1Button.h"
 
 #define CURSOR_WIDTH 2
-
-// TODO 1: Create your structure of classes
 
 
 // ---------------------------------------------------
@@ -14,7 +13,7 @@ class j1Gui : public j1Module
 {
 public:
 
-	friend class j1Button;
+	//friend class j1Button;
 	friend class j1Scene;
 
 	j1Gui();
@@ -37,54 +36,46 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	// TODO 2: Create the factory methods
-	// Gui creation functions
-
 	SDL_Texture* GetAtlas() const;
 
 	SDL_Texture* CreateImage(const char* path);
 
+	void DeployUI(pugi::xml_node &UIconfig);
+
 	// --- Create/Destroy ---
 
-	j1Button* CreateButton(Button_Type type, iPoint position, Text label, SDL_Texture* tex, Buttonrects rect);
+	// --- UI ELEMENT ---
 
-	Text CreateLabel(const char* text, SDL_Color  color, Text_Position location = Text_Position::MIDDLE , const char* text2="");
 
-	Buttonrects CreateRects(SDL_Rect normal, SDL_Rect hover, SDL_Rect click);
+	//// --- BUTTON ---
+	j1UI_Element* CreateButton(ButtonInfo &Data);
+	ButtonInfo FillButton(pugi::xml_node &UIconfig);
 
-	j1Button* DestroyButton(Button_Type type);
 
+
+	//Buttonrects CreateRects(SDL_Rect normal, SDL_Rect hover, SDL_Rect click);
+	//// --- LABEL ---
+	//Text* CreateLabel(const char* text, SDL_Color  color, const char* text2="");
+
+
+	// --- Utilities ---
 	bool isInbound(SDL_Rect &rect);
 	bool isClicked(SDL_Rect &rect);
 
 	void DebugDraw();
 
-	bool Colorize(SDL_Texture& tex, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const;
-	void DeColorize(SDL_Texture& tex) const;
+	//bool Colorize(SDL_Texture& tex, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const;
+	//void DeColorize(SDL_Texture& tex) const;
 
 
 private:
 
-	p2List <j1Button*> button_list;
-	//p2List <SDL_Texture*> images;
+	p2List <j1UI_Element*> UIelements;;
 	j1Button* focus = nullptr;
 	int focus_index = 0;
 
 	SDL_Texture* atlas = nullptr;
-	SDL_Texture* atlas2 = nullptr;
-	SDL_Texture* atlas3 = nullptr;
-	SDL_Texture* atlas4 = nullptr;
-	SDL_Texture* background = nullptr;
-	SDL_Texture* wowlogo = nullptr;
-	SDL_Texture* blizzardlogo = nullptr;
-	SDL_Texture* esrb = nullptr;
-	SDL_Texture* tickbox = nullptr;
-	SDL_Texture* redrect = nullptr;
-	SDL_Texture* greyrect = nullptr;
-
-	
-
-	p2SString atlas_file_name;
+    p2SString atlas_file_name;
 
 	iPoint mouse_pos = { 0,0 };
 	iPoint click_pos = { 0,0 };
