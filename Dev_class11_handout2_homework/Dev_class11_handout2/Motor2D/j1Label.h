@@ -3,6 +3,7 @@
 
 #include "SDL/include/SDL.h"
 #include "p2Point.h"
+#include "j1UI_Element.h"
 
 enum class Text_Position
 {
@@ -10,7 +11,9 @@ enum class Text_Position
 	BOTTOM,
 	LEFT,
 	RIGHT,
-	MIDDLE
+	MIDDLE,
+
+	NONE
 };
 
 struct Text
@@ -18,33 +21,38 @@ struct Text
 	const char* text;
 	const char* text2;
 	SDL_Color  color;
-	SDL_Rect font_Rect;
-	SDL_Rect logic_rect;
 	SDL_Texture* tex;
-	Text_Position location;
-	bool hovering = false;
-	bool clicking = false;
+	Text_Position Place;
+	Booleans bools;
+	ELEMENTS type;
+	Buttonrects rects;
+	iPoint position;
 
+	int parent_id = -1;
 };
 
-class j1Label
+class j1Label : public j1UI_Element
 {
 public:
 	friend class j1Scene;
 	friend class j1Gui;
 
-	j1Label(const char* text, SDL_Color  color, const char* text2 = "");
+	j1Label(Text Data) : Data(Data){}
 
-	~j1Label();
+	~j1Label(){}
 
 	void FixedUpdate();
 
+	ELEMENTS GetType() override;
+	Booleans * GetBooleans() override;
+    Buttonrects* Getrects() override;
+
 	//--- Label placing functions ---
-	//inline void PlaceAtTop(ButtonInfo &Data);
-	//inline void PlaceAtBottom(ButtonInfo  &Data);
-	//inline void PlaceAtLeft(ButtonInfo &Data);
-	//inline void PlaceAtRight(ButtonInfo &Data);
-	//inline void PlaceAtMiddle(ButtonInfo &Data);
+	inline void PlaceAtTop();
+	inline void PlaceAtBottom();
+	inline void PlaceAtLeft();
+	inline void PlaceAtRight();
+	inline void PlaceAtMiddle();
 
 private:
 	Text Data;

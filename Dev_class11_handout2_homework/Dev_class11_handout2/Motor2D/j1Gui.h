@@ -4,6 +4,7 @@
 #include "j1Module.h"
 #include "j1UI_Element.h"
 #include "j1Button.h"
+#include "j1Label.h"
 
 #define CURSOR_WIDTH 2
 
@@ -50,8 +51,9 @@ public:
 	//// --- BUTTON ---
 	j1UI_Element* CreateButton(ButtonInfo &Data);
 	ButtonInfo FillButton(pugi::xml_node &UIconfig);
-
-
+	//// --- LABEL ---
+	j1UI_Element* CreateLabel(Text &Data);
+	Text FillLabel(pugi::xml_node &UIconfig);
 
 	//Buttonrects CreateRects(SDL_Rect normal, SDL_Rect hover, SDL_Rect click);
 	//// --- LABEL ---
@@ -66,7 +68,6 @@ public:
 
 	//bool Colorize(SDL_Texture& tex, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const;
 	//void DeColorize(SDL_Texture& tex) const;
-
 
 private:
 

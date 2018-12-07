@@ -39,8 +39,6 @@ bool j1Gui::Start()
 	//atlas3 = CreateImage(atlas_file_name.GetString());
 	//atlas4 = CreateImage(atlas_file_name.GetString());
 
-
-	
 	if (atlas == nullptr)
 		return false;
 
@@ -107,8 +105,6 @@ bool j1Gui::PreUpdate()
 		item = item->next;
 	}
 
-
-	
 	return true;
 }
 
@@ -182,7 +178,7 @@ void j1Gui::DeployUI(pugi::xml_node &UIconfig)
 
 		if (elem_type == static_cast <uint> (ELEMENTS::LABEL))
 		{
-
+			CreateLabel(FillLabel(UIconfig));
 		}
 
 		UIconfig = UIconfig.next_sibling();
@@ -230,6 +226,57 @@ ButtonInfo j1Gui::FillButton(pugi::xml_node & UIconfig)
 	return Data;
 }
 
+Text j1Gui::FillLabel(pugi::xml_node & UIconfig)
+{
+	Text Data;
+
+	// --- Parent ID ---
+	Data.parent_id = UIconfig.child("parent").attribute("id").as_int();
+
+	Data.type = (ELEMENTS)UIconfig.child("type").attribute("id").as_int();
+
+	// --- Position ---
+	Data.position.x = UIconfig.child("position").attribute("x").as_int();
+	Data.position.y = UIconfig.child("position").attribute("y").as_int();
+	Data.Place = (Text_Position) UIconfig.child("place").attribute("id").as_uint();
+
+	// --- Colour ---
+	Data.color.r = UIconfig.child("color").attribute("r").as_uint();
+	Data.color.g = UIconfig.child("color").attribute("g").as_uint();
+	Data.color.b = UIconfig.child("color").attribute("b").as_uint();
+	Data.color.a = UIconfig.child("color").attribute("a").as_uint();
+
+	// --- Texts ---
+	Data.text = UIconfig.child("textA").attribute("value").as_string();
+	Data.text2 = UIconfig.child("textB").attribute("value").as_string();
+
+	// --- Rectangles ---
+	Data.tex = App->font->Print(Data.text, Data.color, App->font->default);
+	App->font->CalcSize(Data.text, Data.rects.rect_normal.w, Data.rects.rect_normal.h, App->font->default);
+	Data.rects.logic_rect = { 0 , 0 , Data.rects.rect_normal.w , Data.rects.rect_normal.h };
+
+
+	return Data;
+}
+
+j1UI_Element * j1Gui::CreateLabel(Text & Data)
+{
+	j1UI_Element *label = (j1UI_Element*) new j1Label(Data);
+
+	if (Data.parent_id != -1)
+	{
+		label->parent = UIelements.At(Data.parent_id)->data;
+		UIelements.At(Data.parent_id)->data->children.add(label);
+	}
+
+	UIelements.add(label);
+
+	// --- Positioning label ---
+	label->position = Data.position;
+
+	return label;
+}
+
 j1UI_Element * j1Gui::CreateButton(ButtonInfo &Data)
 {
 	j1UI_Element *button = (j1UI_Element*) new j1Button(Data);
@@ -242,48 +289,11 @@ j1UI_Element * j1Gui::CreateButton(ButtonInfo &Data)
 
 	UIelements.add(button);
 
-
 	// --- Positioning button ---
 	button->position = Data.position;
 
-	if (Data.parent_id != -1)
-	{
-		button->position.x = button->parent->position.x + Data.position.x;
-		button->position.y = button->parent->position.y + Data.position.y;
-	}
-
 	return button;
 }
-
-//Text* j1Gui::CreateLabel(const char * text, SDL_Color color, const char* text2)
-//{
-//	Text label;
-//
-//	label.color = color;
-//	label.text = text;
-//	label.text2 = text2;
-//
-//	label.font_Rect = { 0,0,0,0 };
-//	label.tex = App->font->Print(label.text, label.color, App->font->default);
-//	App->font->CalcSize(label.text, label.font_Rect.w, label.font_Rect.h, App->font->default);
-//	label.logic_rect = { 0,0,label.font_Rect.w,label.font_Rect.h };
-//
-//	j1Label *label = new j1Label(label.);
-//
-//	return &label;
-//}
-//
-//Buttonrects j1Gui::CreateRects(SDL_Rect normal, SDL_Rect hover, SDL_Rect click)
-//{
-//	Buttonrects rects;
-//
-//	rects.rect_normal = normal;
-//	rects.rect_hover = hover;
-//	rects.rect_click = click;
-//	rects.current_rect = normal;
-//
-//	return rects;
-//}
 
 //j1Button * j1Gui::DestroyButton(Button_Type type)
 //{
@@ -321,17 +331,16 @@ void j1Gui::DebugDraw()
 
 	while (item != NULL)
 	{
+		switch (item->data->GetType())
+		{
+		case ELEMENTS::LABEL: // white
+			App->render->DrawQuad(item->data->Getrects()->logic_rect, 255, 255, 255, alpha,true,false);
+			break;
+		case ELEMENTS::BUTTON: // white
+			App->render->DrawQuad(item->data->Getrects()->logic_rect, 255, 255, 255, alpha,true,false);
+			break;
 
-		//switch (item->data->Data.type)
-		//{
-		//case Button_Type::LABEL: // white
-		App->render->DrawQuad(item->data->Getrects()->logic_rect, 255, 255, 255, alpha);
-		//	break;
-		//case Button_Type::BUTTON: // white
-		//	App->render->DrawQuad(item->data->Data.logic_rect, 255, 255, 255, alpha);
-		//	break;
-
-		//}
+		}
 		item = item->next;
 	}
 

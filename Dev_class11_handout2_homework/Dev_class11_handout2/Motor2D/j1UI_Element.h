@@ -20,7 +20,14 @@ struct Booleans
 	bool clicking = false;
 };
 
-struct Buttonrects;
+struct Buttonrects
+{
+	SDL_Rect logic_rect = { 0,0,0,0 };
+	SDL_Rect current_rect = { 0,0,0,0 };
+	SDL_Rect rect_hover = { 0,0,0,0 };
+	SDL_Rect rect_click = { 0,0,0,0 };
+	SDL_Rect rect_normal = { 0,0,0,0 };
+};
 
 class j1UI_Element
 {
@@ -29,7 +36,7 @@ friend class j1Gui;
 public:
 	j1UI_Element();
 
-	~j1UI_Element();
+	virtual ~j1UI_Element();
 
 	virtual void FixedUpdate(){}
 
@@ -39,7 +46,6 @@ public:
 
 	virtual Booleans * GetBooleans();
 	
-
 public:
 	iPoint position;
 

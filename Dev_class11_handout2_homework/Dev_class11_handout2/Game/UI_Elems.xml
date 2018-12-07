@@ -2,7 +2,7 @@
 
 <config> 
 
-  <Element> 0
+  <Element> 0 - BUTTON
     <type id="1" />
     <parent id="-1"/>
     <position x="100" y="100"/>
@@ -13,7 +13,7 @@
     <click_rect x="411" y="169" w="229" h="69"/>
   </Element>
 
-  <Element> 1
+  <Element> 1 - BUTTON
     <type id="1" />
     <parent id="0"/>
     <position x="0" y="75"/>
@@ -24,7 +24,7 @@
     <click_rect x="411" y="169" w="229" h="69"/>
   </Element>
 
-  <Element> 2
+  <Element> 2 - BUTTON
     <type id="1" />
     <parent id="1"/>
     <position x="0" y="75"/>
@@ -35,4 +35,13 @@
     <click_rect x="411" y="169" w="229" h="69"/>
   </Element>
 
+  <Element> 3 - LABEL
+    <type id="2" />
+    <parent id="2"/>
+    <position x="0" y="0"/>
+    <place id="4"/>
+    <color r="255" g="0" b="0" a="255" />
+    <textA value="Welcome Back"/>
+    <textB value="SUCCESSFUL TRY"/>
+  </Element>
 </config>

@@ -1,13 +1,6 @@
 #include "j1Button.h"
 #include "j1Render.h"
 #include "j1App.h"
-#include "j1Gui.h"
-#include "j1Fonts.h"
-
-j1Button::~j1Button()
-{
-
-}
 
 void j1Button::FixedUpdate()
 {
@@ -15,10 +8,12 @@ void j1Button::FixedUpdate()
 	{
 		this->position.x = parent->position.x + Data.position.x;
 		this->position.y = parent->position.y + Data.position.y;
-		this->Data.rects.logic_rect.x = position.x;
-		this->Data.rects.logic_rect.y = position.y;
 	}
-	App->render->Blit(Data.tex, this->position.x, this->position.y, &Data.rects.current_rect);
+
+	this->Data.rects.logic_rect.x = position.x;
+	this->Data.rects.logic_rect.y = position.y;
+
+	App->render->Blit(Data.tex, this->position.x, this->position.y, &Data.rects.current_rect,false);
 }
 
 ELEMENTS j1Button::GetType()

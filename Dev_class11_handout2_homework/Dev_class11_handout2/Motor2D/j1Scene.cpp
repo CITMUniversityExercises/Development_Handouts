@@ -52,16 +52,6 @@ bool j1Scene::Start()
 
 	config=App->LoadConfig(config_file, "UI_Elems.xml");
 	App->gui->DeployUI(config);
-
-	// --- Creating UI structures ---
-
-	//App->gui->CreateButton(Button_Type::LABEL, iPoint{ App->render->camera.w/2-64,App->render->camera.h/2 }, App->gui->CreateLabel("Account Name", { 255,219,142,255 }, Text_Position::TOP,"IT WORKSssssssssss"), App->gui->atlas, App->gui->CreateRects(SDL_Rect{ 0,0,0,0 }, SDL_Rect{ 0,0,0,0 }, SDL_Rect{ 0,0,0,0 }));
-	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 +100 }, App->gui->CreateLabel("Account Password", { 255,219,142,255 }, Text_Position::TOP), App->gui->atlas, App->gui->CreateRects(SDL_Rect{ 642,169,229,69 }, SDL_Rect{ 0,113,229,69 }, SDL_Rect{ 411,169,229,69 }));
-
-	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 + 200 }, App->gui->CreateLabel("Account Password", { 255,219,142,255 }, Text_Position::TOP), App->gui->atlas2, App->gui->CreateRects(SDL_Rect{ 642,169,229,69 }, SDL_Rect{ 0,113,229,69 }, SDL_Rect{ 411,169,229,69 }));
-	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 + 300 }, App->gui->CreateLabel("Account Password", { 255,219,142,255 }, Text_Position::TOP), App->gui->atlas3, App->gui->CreateRects(SDL_Rect{ 642,169,229,69 }, SDL_Rect{ 0,113,229,69 }, SDL_Rect{ 411,169,229,69 }));
-	//App->gui->CreateButton(Button_Type::BUTTON, iPoint{ App->render->camera.w / 2 - 64,App->render->camera.h / 2 - 100 }, App->gui->CreateLabel("Account Password", { 255,219,142,255 }, Text_Position::TOP), App->gui->atlas4, App->gui->CreateRects(SDL_Rect{ 642,169,229,69 }, SDL_Rect{ 0,113,229,69 }, SDL_Rect{ 411,169,229,69 }));
-
 	
 	return true;
 }
@@ -237,8 +227,16 @@ void j1Scene::ONhover(j1UI_Element & element)
 
 	switch (TYPE)
 	{
-	case ELEMENTS::BUTTON:
-		element.Getrects()->current_rect = element.Getrects()->rect_hover;
+		case ELEMENTS::PANEL:
+
+		break;
+
+		case ELEMENTS::BUTTON:
+			element.Getrects()->current_rect = element.Getrects()->rect_hover;
+		break;
+
+		case ELEMENTS::LABEL:
+
 		break;
 	}
 
@@ -251,8 +249,16 @@ void j1Scene::OFFhover(j1UI_Element & element)
 
 	switch (TYPE)
 	{
-	case ELEMENTS::BUTTON:
-		element.Getrects()->current_rect = element.Getrects()->rect_normal;
+		case ELEMENTS::PANEL:
+
+		break;
+
+		case ELEMENTS::BUTTON:
+			element.Getrects()->current_rect = element.Getrects()->rect_normal;
+		break;
+
+		case ELEMENTS::LABEL:
+
 		break;
 	}
 
@@ -265,8 +271,16 @@ void j1Scene::ONclick(j1UI_Element & element)
 
 	switch (TYPE)
 	{
-	case ELEMENTS::BUTTON:
-		element.Getrects()->current_rect = element.Getrects()->rect_click;
+		case ELEMENTS::PANEL:
+
+		break;
+
+		case ELEMENTS::BUTTON:
+			element.Getrects()->current_rect = element.Getrects()->rect_click;
+		break;
+
+		case ELEMENTS::LABEL:
+
 		break;
 	}
 
@@ -279,8 +293,16 @@ void j1Scene::OFFclick(j1UI_Element & element)
 
 	switch (TYPE)
 	{
-	case ELEMENTS::BUTTON:
-		element.Getrects()->current_rect = element.Getrects()->rect_normal;
+		case ELEMENTS::PANEL:
+
+		break;
+
+		case ELEMENTS::BUTTON:
+			element.Getrects()->current_rect = element.Getrects()->rect_normal;
+		break;
+
+		case ELEMENTS::LABEL:
+
 		break;
 	}
 
