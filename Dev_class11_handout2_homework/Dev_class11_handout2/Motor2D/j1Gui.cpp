@@ -32,15 +32,15 @@ bool j1Gui::Awake(pugi::xml_node& conf)
 // Called before the first frame
 bool j1Gui::Start()
 {
-	atlas = CreateImage(atlas_file_name.GetString());
+	//atlas = CreateImage(atlas_file_name.GetString());
 
 	// --- Button test textures ---
 	//atlas2 = CreateImage(atlas_file_name.GetString());
 	//atlas3 = CreateImage(atlas_file_name.GetString());
 	//atlas4 = CreateImage(atlas_file_name.GetString());
 
-	if (atlas == nullptr)
-		return false;
+	/*if (atlas == nullptr)
+		return false;*/
 
 	return true;
 }
@@ -50,20 +50,29 @@ bool j1Gui::PreUpdate()
 {
 	App->input->GetMousePosition(mouse_pos.x,mouse_pos.y);
 
-	if (App->input->GetMouseButtonDown(1) == KEY_REPEAT)
+
+	if (App->input->GetMouseButtonDown(1) == KEY_DOWN)
+	{
 		click_pos = mouse_pos;
-	else
+	}
+	else if (App->input->GetMouseButtonDown(1) == KEY_UP)
+	{
 		click_pos = { -1,-1 };
+		skip_drag = false;
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN)
 	{
-		/*App->scene->ONFocus();*/
+		App->scene->ONFocus();
 	}
 
 	p2List_item <j1UI_Element*> * item = UIelements.start;
 
 	while (item)
 	{
+		if (App->input->GetMouseButtonDown(1) == KEY_UP)
+			item->data->GetBooleans()->dragging = false;
+
 		if (isInbound(item->data->Getrects()->logic_rect))
 		{
 			if (!item->data->GetBooleans()->hovering)
@@ -73,6 +82,9 @@ bool j1Gui::PreUpdate()
 
 			if (isClicked(item->data->Getrects()->logic_rect))
 			{
+				if(skip_drag == false)
+				skip_drag = RecursiveOnDrag(item);
+
 				if (!item->data->GetBooleans()->clicking)
 				{
 					App->scene->ONclick(*item->data);
@@ -80,10 +92,15 @@ bool j1Gui::PreUpdate()
 			}
 			else
 			{
-				if (item->data->GetBooleans()->clicking)
+				if (item->data->GetBooleans()->clicking && !item->data->GetBooleans()->dragging)
 				{
 					App->scene->OFFclick(*item->data);
 				}
+			}
+
+			if (item->data->GetBooleans()->dragging)
+			{
+				App->scene->ONdrag(*item->data);
 			}
 		}
 
@@ -168,7 +185,7 @@ void j1Gui::DeployUI(pugi::xml_node &UIconfig)
 
 		if (elem_type == static_cast <uint> (ELEMENTS::PANEL))
 		{
-
+			CreateButton(FillButton(UIconfig));
 		}
 
 		if (elem_type == static_cast <uint> (ELEMENTS::BUTTON))
@@ -247,16 +264,50 @@ Text j1Gui::FillLabel(pugi::xml_node & UIconfig)
 	Data.color.a = UIconfig.child("color").attribute("a").as_uint();
 
 	// --- Texts ---
-	Data.text = UIconfig.child("textA").attribute("value").as_string();
-	Data.text2 = UIconfig.child("textB").attribute("value").as_string();
-
+	Data.texts.text = UIconfig.child("textA").attribute("value").as_string();
+	Data.texts.text2 = UIconfig.child("textB").attribute("value").as_string();
+	Data.texts.current_text = Data.texts.text;
 	// --- Rectangles ---
-	Data.tex = App->font->Print(Data.text, Data.color, App->font->default);
-	App->font->CalcSize(Data.text, Data.rects.rect_normal.w, Data.rects.rect_normal.h, App->font->default);
+	Data.tex = App->font->Print(Data.texts.text, Data.color, App->font->default);
+	App->font->CalcSize(Data.texts.text, Data.rects.rect_normal.w, Data.rects.rect_normal.h, App->font->default);
 	Data.rects.logic_rect = { 0 , 0 , Data.rects.rect_normal.w , Data.rects.rect_normal.h };
-
+	Data.texts.current_text = Data.texts.text;
 
 	return Data;
+}
+
+bool j1Gui::RecursiveOnDrag(p2List_item<j1UI_Element*>* item)
+{
+	bool ret = false;
+
+		ret = true;
+
+		bool child_drag = false;
+
+		if (item->data->children.count() > 0)
+		{
+			p2List_item <j1UI_Element*> * item_child = item->data->children.start;
+
+			while (item_child)
+			{
+				child_drag = RecursiveOnDrag(item_child);
+				item_child = item_child->next;
+			}
+		}
+
+		if (child_drag == false && isClicked(item->data->Getrects()->logic_rect))
+		{
+			item->data->GetBooleans()->dragging = true;
+			drag_Ref.x = click_pos.x - item->data->position.x;
+			drag_Ref.y = click_pos.y - item->data->position.y;
+		}
+		else if (child_drag == false)
+		{
+			ret = false;
+		}
+
+
+	return ret;
 }
 
 j1UI_Element * j1Gui::CreateLabel(Text & Data)
@@ -294,11 +345,6 @@ j1UI_Element * j1Gui::CreateButton(ButtonInfo &Data)
 
 	return button;
 }
-
-//j1Button * j1Gui::DestroyButton(Button_Type type)
-//{
-//	return nullptr;
-//}
 
 bool j1Gui::isInbound(SDL_Rect &rect)
 {
@@ -339,6 +385,9 @@ void j1Gui::DebugDraw()
 		case ELEMENTS::BUTTON: // white
 			App->render->DrawQuad(item->data->Getrects()->logic_rect, 255, 255, 255, alpha,true,false);
 			break;
+		case ELEMENTS::PANEL: // white
+			App->render->DrawQuad(item->data->Getrects()->logic_rect, 255, 255, 255, alpha, true, false);
+			break;
 
 		}
 		item = item->next;
@@ -346,20 +395,20 @@ void j1Gui::DebugDraw()
 
 }
 
-//void j1Gui::DeColorize(SDL_Texture & tex) const
-//{
-//	SDL_SetTextureColorMod(&tex, 255, 255, 255);
-//}
-//
-//bool j1Gui::Colorize(SDL_Texture& tex, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const
-//{
-//	bool ret = true;
-//
-//	SDL_SetTextureBlendMode(&tex, SDL_BLENDMODE_BLEND);
-//	SDL_SetTextureColorMod(&tex, r, g, b);
-//
-//	return ret;
-//}
+void j1Gui::DeColorize(SDL_Texture & tex) const
+{
+	SDL_SetTextureColorMod(&tex, 255, 255, 255);
+}
+
+bool j1Gui::Colorize(SDL_Texture& tex, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const
+{
+	bool ret = true;
+
+	SDL_SetTextureBlendMode(&tex, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureColorMod(&tex, r, g, b);
+
+	return ret;
+}
 
 // class Gui ---------------------------------------------------
 

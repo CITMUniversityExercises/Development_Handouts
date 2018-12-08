@@ -2,21 +2,21 @@
 
 <config> 
 
-  <Element> 0 - BUTTON
-    <type id="1" />
+  <Element> 0 - PANEL
+    <type id="0" />
     <parent id="-1"/>
-    <position x="100" y="100"/>
+    <position x="50" y="100"/>
     <Texture path="gui/atlas.png"/>
-    <logic_rect w="229" h="69" />
-    <normal_rect x="642" y="169" w="229" h="69"/>
-    <hover_rect x="0" y="113" w="229" h="69"/>
-    <click_rect x="411" y="169" w="229" h="69"/>
+    <logic_rect w="420" h="454" />
+    <normal_rect x="32" y="540" w="420" h="454"/>
+    <hover_rect x="32" y="540"  w="420" h="454"/>
+    <click_rectx x="32" y="540"  w="420" h="454"/>
   </Element>
-
+  
   <Element> 1 - BUTTON
     <type id="1" />
     <parent id="0"/>
-    <position x="0" y="75"/>
+    <position x="100" y="100"/>
     <Texture path="gui/atlas.png"/>
     <logic_rect w="229" h="69" />
     <normal_rect x="642" y="169" w="229" h="69"/>
@@ -35,9 +35,20 @@
     <click_rect x="411" y="169" w="229" h="69"/>
   </Element>
 
-  <Element> 3 - LABEL
-    <type id="2" />
+  <Element> 3 - BUTTON
+    <type id="1" />
     <parent id="2"/>
+    <position x="0" y="75"/>
+    <Texture path="gui/atlas.png"/>
+    <logic_rect w="229" h="69" />
+    <normal_rect x="642" y="169" w="229" h="69"/>
+    <hover_rect x="0" y="113" w="229" h="69"/>
+    <click_rect x="411" y="169" w="229" h="69"/>
+  </Element>
+
+  <Element> 4 - LABEL
+    <type id="2" />
+    <parent id="3"/>
     <position x="0" y="0"/>
     <place id="4"/>
     <color r="255" g="0" b="0" a="255" />

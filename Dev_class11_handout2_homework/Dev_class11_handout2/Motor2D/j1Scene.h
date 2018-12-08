@@ -47,8 +47,9 @@ public:
 	void OFFhover(j1UI_Element & element);
 	void ONclick(j1UI_Element & element);
 	void OFFclick(j1UI_Element & element);
+	void ONdrag(j1UI_Element & element);
 
-	//void ONFocus();
+	void ONFocus();
 
 private:
 	SDL_Texture* debug_tex;

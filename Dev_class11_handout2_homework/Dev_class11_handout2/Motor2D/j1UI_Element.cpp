@@ -23,3 +23,13 @@ Booleans * j1UI_Element::GetBooleans()
 	return nullptr;
 }
 
+SDL_Texture * j1UI_Element::GetTexture()
+{
+	return nullptr;
+}
+
+textbox * j1UI_Element::GetTexts()
+{
+	return nullptr;
+}
+

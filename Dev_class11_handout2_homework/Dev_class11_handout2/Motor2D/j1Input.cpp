@@ -79,6 +79,8 @@ bool j1Input::PreUpdate()
 			mouse_buttons[i] = KEY_IDLE;
 	}
 
+	mouse_moving = false;
+
 	while(SDL_PollEvent(&event) != 0)
 	{
 		switch(event.type)
@@ -118,6 +120,7 @@ bool j1Input::PreUpdate()
 			break;
 
 			case SDL_MOUSEMOTION:
+				mouse_moving = true;
 				int scale = App->win->GetScale();
 				mouse_motion_x = event.motion.xrel / scale;
 				mouse_motion_y = event.motion.yrel / scale;
@@ -126,6 +129,11 @@ bool j1Input::PreUpdate()
 				//LOG("Mouse motion x %d y %d", mouse_motion_x, mouse_motion_y);
 			break;
 		}
+	}
+
+	if (mouse_moving == false)
+	{
+		mouse_motion_x = mouse_motion_y = 0;
 	}
 
 	return true;

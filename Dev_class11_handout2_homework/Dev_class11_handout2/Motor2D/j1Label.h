@@ -1,8 +1,6 @@
 #ifndef __j1Label_H__
 #define __j1Label_H__
 
-#include "SDL/include/SDL.h"
-#include "p2Point.h"
 #include "j1UI_Element.h"
 
 enum class Text_Position
@@ -18,10 +16,9 @@ enum class Text_Position
 
 struct Text
 {
-	const char* text;
-	const char* text2;
+	textbox texts;
 	SDL_Color  color;
-	SDL_Texture* tex;
+	SDL_Texture* tex = nullptr;
 	Text_Position Place;
 	Booleans bools;
 	ELEMENTS type;
@@ -34,8 +31,6 @@ struct Text
 class j1Label : public j1UI_Element
 {
 public:
-	friend class j1Scene;
-	friend class j1Gui;
 
 	j1Label(Text Data) : Data(Data){}
 
@@ -43,9 +38,12 @@ public:
 
 	void FixedUpdate();
 
+	// --- Data Getters ---
 	ELEMENTS GetType() override;
 	Booleans * GetBooleans() override;
     Buttonrects* Getrects() override;
+	textbox * GetTexts() override;
+	SDL_Texture* GetTexture();
 
 	//--- Label placing functions ---
 	inline void PlaceAtTop();
@@ -53,6 +51,9 @@ public:
 	inline void PlaceAtLeft();
 	inline void PlaceAtRight();
 	inline void PlaceAtMiddle();
+
+	// --- Utilities ---
+	void ShapeLabel(const char *text) override;
 
 private:
 	Text Data;

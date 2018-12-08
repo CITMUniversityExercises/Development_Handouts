@@ -43,36 +43,30 @@ public:
 
 	void DeployUI(pugi::xml_node &UIconfig);
 
-	// --- Create/Destroy ---
-
 	// --- UI ELEMENT ---
 
-
-	//// --- BUTTON ---
+	// --- BUTTON --- // --- PANEL ---
 	j1UI_Element* CreateButton(ButtonInfo &Data);
 	ButtonInfo FillButton(pugi::xml_node &UIconfig);
-	//// --- LABEL ---
+	// --- LABEL ---
 	j1UI_Element* CreateLabel(Text &Data);
 	Text FillLabel(pugi::xml_node &UIconfig);
+	
 
-	//Buttonrects CreateRects(SDL_Rect normal, SDL_Rect hover, SDL_Rect click);
-	//// --- LABEL ---
-	//Text* CreateLabel(const char* text, SDL_Color  color, const char* text2="");
-
+	bool RecursiveOnDrag(p2List_item <j1UI_Element*> * item);
 
 	// --- Utilities ---
 	bool isInbound(SDL_Rect &rect);
 	bool isClicked(SDL_Rect &rect);
-
 	void DebugDraw();
 
-	//bool Colorize(SDL_Texture& tex, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const;
-	//void DeColorize(SDL_Texture& tex) const;
+	bool Colorize(SDL_Texture& tex, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const;
+	void DeColorize(SDL_Texture& tex) const;
 
 private:
 
 	p2List <j1UI_Element*> UIelements;;
-	j1Button* focus = nullptr;
+	j1UI_Element* focus = nullptr;
 	int focus_index = 0;
 
 	SDL_Texture* atlas = nullptr;
@@ -80,8 +74,10 @@ private:
 
 	iPoint mouse_pos = { 0,0 };
 	iPoint click_pos = { 0,0 };
+	iPoint drag_Ref = { 0,0 };
 
 	bool debug = true;
+	bool skip_drag = false;
 };
 
 #endif // __j1GUI_H__

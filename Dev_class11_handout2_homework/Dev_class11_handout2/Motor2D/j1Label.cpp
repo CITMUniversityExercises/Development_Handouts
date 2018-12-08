@@ -1,38 +1,47 @@
 #include "j1Label.h"
 #include "j1Render.h"
 #include "j1App.h"
-#include "j1Map.h"
+#include "j1Fonts.h"
+#include "j1Textures.h"
 
 void j1Label::FixedUpdate()
 {
 	if (this->parent != nullptr)
 	{
-		switch (Data.Place)
+		if (!this->GetBooleans()->dragging)
 		{
+			switch (Data.Place)
+			{
 			case Text_Position::NONE:
 				this->position.x = parent->position.x + Data.position.x;
 				this->position.y = parent->position.y + Data.position.y;
-			break;
+				break;
 
 			case Text_Position::MIDDLE:
 				PlaceAtMiddle();
-			break;
+				break;
 
 			case Text_Position::TOP:
 				PlaceAtTop();
-			break;
+				break;
 
 			case Text_Position::BOTTOM:
 				PlaceAtBottom();
-			break;
+				break;
 
 			case Text_Position::RIGHT:
 				PlaceAtRight();
-			break;
+				break;
 
 			case Text_Position::LEFT:
 				PlaceAtLeft();
-			break;
+				break;
+			}
+		}
+		else
+		{
+			Data.position.x = this->position.x - parent->position.x;
+			Data.position.y = this->position.y - parent->position.y;
 		}
 	}
 
@@ -55,6 +64,16 @@ Booleans * j1Label::GetBooleans()
 Buttonrects * j1Label::Getrects()
 {
 	return &Data.rects;
+}
+
+textbox * j1Label::GetTexts()
+{
+	return &Data.texts;
+}
+
+SDL_Texture * j1Label::GetTexture()
+{
+	return Data.tex;
 }
 
 inline void j1Label::PlaceAtTop()
@@ -85,4 +104,13 @@ inline void j1Label::PlaceAtMiddle()
 {
 	position.x = parent->Getrects()->logic_rect.x + parent->Getrects()->current_rect.w / 2 - Data.rects.rect_normal.w / 2;
 	position.y = parent->position.y + parent->Getrects()->current_rect.h / 2 - Data.rects.rect_normal.h / 2;
+}
+
+void j1Label::ShapeLabel(const char * text)
+{
+	App->tex->UnLoad((SDL_Texture*)this->Data.tex);
+	this->Data.tex = App->font->Print(text, this->Data.color, App->font->default);
+	App->font->CalcSize(text, this->Data.rects.rect_normal.w, this->Data.rects.rect_normal.h, App->font->default);
+	this->Data.rects.logic_rect = { this->position.x , this->position.y , this->Data.rects.rect_normal.w , this->Data.rects.rect_normal.h };
+	this->Data.texts.current_text = text;
 }

@@ -4,6 +4,7 @@
 #include "SDL/include/SDL.h"
 #include "p2List.h"
 #include "p2Point.h"
+#include "p2SString.h"
 
 enum class ELEMENTS
 {
@@ -18,6 +19,7 @@ struct Booleans
 {
 	bool hovering = false;
 	bool clicking = false;
+	bool dragging = false;
 };
 
 struct Buttonrects
@@ -29,10 +31,16 @@ struct Buttonrects
 	SDL_Rect rect_normal = { 0,0,0,0 };
 };
 
+struct textbox
+{
+	const char* current_text = nullptr;
+	const char* text = nullptr;
+	const char* text2 = nullptr;
+};
+
 class j1UI_Element
 {
 friend class j1Gui;
-
 public:
 	j1UI_Element();
 
@@ -45,6 +53,14 @@ public:
 	virtual Buttonrects* Getrects();
 
 	virtual Booleans * GetBooleans();
+
+	virtual SDL_Texture* GetTexture();
+
+	// --- Label exclusive ---
+
+	virtual textbox * GetTexts();
+
+	virtual void ShapeLabel(const char *text){}
 	
 public:
 	iPoint position;

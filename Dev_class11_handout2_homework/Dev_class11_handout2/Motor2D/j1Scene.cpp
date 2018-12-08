@@ -162,65 +162,7 @@ bool j1Scene::CleanUp()
 	return true;
 }
 
-//void j1Scene::ONhover_label(j1Button &button)
-//{
-//
-//	switch(button.Data.type)
-//	{
-//	case Button_Type::LABEL:
-//		button.Data.label = App->gui->CreateLabel(button.Data.label.text2, button.Data.label.color, Text_Position::TOP, button.Data.label.text);
-//		button.Data.label.logic_rect.x = button.Data.position.x;
-//		button.Data.label.logic_rect.y = button.Data.position.y;
-//		break;
-//	}
-//
-//	button.Data.label.hovering = true;
-//
-//}
-//
-//void j1Scene::OFFhover_label(j1Button &button)
-//{
-//
-//	switch (button.Data.type)
-//	{
-//	case Button_Type::LABEL:
-//		button.Data.label = App->gui->CreateLabel(button.Data.label.text2, button.Data.label.color, Text_Position::TOP, button.Data.label.text);
-//		button.Data.label.logic_rect.x = button.Data.position.x;
-//		button.Data.label.logic_rect.y = button.Data.position.y;
-//		break;
-//	}
-//
-//	button.Data.label.hovering = false;
-//}
-//
-//void j1Scene::ONclick_label(j1Button & button)
-//{
-//	switch (button.Data.type)
-//	{
-//	case Button_Type::LABEL:
-//		button.Data.label = App->gui->CreateLabel(button.Data.label.text2, button.Data.label.color, Text_Position::TOP, button.Data.label.text);
-//		button.Data.label.logic_rect.x = button.Data.position.x;
-//		button.Data.label.logic_rect.y = button.Data.position.y;
-//		break;
-//	}
-//
-//	button.Data.label.clicking = true;
-//}
-//
-//void j1Scene::OFFclick_label(j1Button & button)
-//{
-//	switch (button.Data.type)
-//	{
-//	case Button_Type::LABEL:
-//		button.Data.label = App->gui->CreateLabel(button.Data.label.text2, button.Data.label.color, Text_Position::TOP, button.Data.label.text);
-//		button.Data.label.logic_rect.x = button.Data.position.x;
-//		button.Data.label.logic_rect.y = button.Data.position.y;
-//		break;
-//	}
-//
-//	button.Data.label.clicking = false;
-//}
-//
+
 void j1Scene::ONhover(j1UI_Element & element)
 {
 	ELEMENTS TYPE = element.GetType();
@@ -236,7 +178,7 @@ void j1Scene::ONhover(j1UI_Element & element)
 		break;
 
 		case ELEMENTS::LABEL:
-
+			//element.ShapeLabel(element.GetTexts()->text2);
 		break;
 	}
 
@@ -258,7 +200,7 @@ void j1Scene::OFFhover(j1UI_Element & element)
 		break;
 
 		case ELEMENTS::LABEL:
-
+			//element.ShapeLabel(element.GetTexts()->text);
 		break;
 	}
 
@@ -308,20 +250,42 @@ void j1Scene::OFFclick(j1UI_Element & element)
 
 	element.GetBooleans()->clicking = false;
 }
-//
-//void j1Scene::ONFocus()
-//{
-//	if (App->gui->focus_index < App->gui->UIelements.count())
-//	{
-//		App->gui->focus = App->gui->UIelements.At(App->gui->focus_index)->data;
-//		App->gui->Colorize(*App->gui->focus->Data.tex, 255, 120, 120, 120);
-//		if (App->gui->focus_index != 0)
-//		App->gui->DeColorize(*App->gui->UIelements.At(App->gui->focus_index)->prev->data->Data.tex);
-//		App->gui->focus_index++;
-//	}
-//	else
-//	{
-//		App->gui->DeColorize(*App->gui->UIelements.At(App->gui->focus_index - 1)->data->Data.tex);
-//		App->gui->focus_index = 0;
-//	}
-//}
+void j1Scene::ONdrag(j1UI_Element & element)
+{
+	ELEMENTS TYPE = element.GetType();
+
+	switch (TYPE)
+	{
+	case ELEMENTS::PANEL:
+		element.position.x = App->gui->mouse_pos.x - App->gui->drag_Ref.x;
+		element.position.y = App->gui->mouse_pos.y - App->gui->drag_Ref.y;
+		break;
+
+	case ELEMENTS::BUTTON:
+		element.position.x = App->gui->mouse_pos.x - App->gui->drag_Ref.x;
+		element.position.y = App->gui->mouse_pos.y - App->gui->drag_Ref.y;
+		break;
+
+	case ELEMENTS::LABEL:
+		element.position.x = App->gui->mouse_pos.x - App->gui->drag_Ref.x;
+		element.position.y = App->gui->mouse_pos.y - App->gui->drag_Ref.y;
+		break;
+	}
+}
+
+void j1Scene::ONFocus()
+{
+	if (App->gui->focus_index < App->gui->UIelements.count())
+	{
+		App->gui->focus = App->gui->UIelements.At(App->gui->focus_index)->data;
+		App->gui->Colorize(*App->gui->focus->GetTexture(), 255, 120, 120, 120);
+		if (App->gui->focus_index != 0)
+		App->gui->DeColorize(*App->gui->UIelements.At(App->gui->focus_index)->prev->data->GetTexture());
+		App->gui->focus_index++;
+	}
+	else
+	{
+		App->gui->DeColorize(*App->gui->UIelements.At(App->gui->focus_index - 1)->data->GetTexture());
+		App->gui->focus_index = 0;
+	}
+}
