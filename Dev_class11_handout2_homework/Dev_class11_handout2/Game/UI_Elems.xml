@@ -13,7 +13,18 @@
     <click_rectx x="32" y="540"  w="420" h="454"/>
   </Element>
   
-  <Element> 1 - BUTTON
+   <Element> 1 - PANEL
+    <type id="0" />
+    <parent id="-1"/>
+    <position x="50" y="100"/>
+    <Texture path="gui/atlas.png"/>
+    <logic_rect w="420" h="454" />
+    <normal_rect x="32" y="540" w="420" h="454"/>
+    <hover_rect x="32" y="540"  w="420" h="454"/>
+    <click_rectx x="32" y="540"  w="420" h="454"/>
+  </Element>
+  
+  <Element> 2 - BUTTON
     <type id="1" />
     <parent id="0"/>
     <position x="100" y="100"/>
@@ -24,7 +35,7 @@
     <click_rect x="411" y="169" w="229" h="69"/>
   </Element>
 
-  <Element> 2 - BUTTON
+  <Element> 3 - BUTTON
     <type id="1" />
     <parent id="1"/>
     <position x="0" y="75"/>
@@ -35,7 +46,7 @@
     <click_rect x="411" y="169" w="229" h="69"/>
   </Element>
 
-  <Element> 3 - BUTTON
+  <Element> 4 - BUTTON
     <type id="1" />
     <parent id="2"/>
     <position x="0" y="75"/>
@@ -46,7 +57,7 @@
     <click_rect x="411" y="169" w="229" h="69"/>
   </Element>
 
-  <Element> 4 - LABEL
+  <Element> 5 - LABEL
     <type id="2" />
     <parent id="3"/>
     <position x="0" y="0"/>
@@ -55,4 +66,5 @@
     <textA value="Welcome Back"/>
     <textB value="SUCCESSFUL TRY"/>
   </Element>
+  
 </config>

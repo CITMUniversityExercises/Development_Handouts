@@ -7,8 +7,6 @@
 #include "j1Label.h"
 
 #define CURSOR_WIDTH 2
-
-
 // ---------------------------------------------------
 class j1Gui : public j1Module
 {
@@ -54,6 +52,9 @@ public:
 	
 
 	bool RecursiveOnDrag(p2List_item <j1UI_Element*> * item);
+	bool RecursiveOnHover(p2List_item <j1UI_Element*> * item);
+	bool RecursiveOnClick(p2List_item <j1UI_Element*> * item);
+
 
 	// --- Utilities ---
 	bool isInbound(SDL_Rect &rect);
@@ -75,6 +76,7 @@ private:
 	iPoint mouse_pos = { 0,0 };
 	iPoint click_pos = { 0,0 };
 	iPoint drag_Ref = { 0,0 };
+	uint first_children = 0;
 
 	bool debug = true;
 	bool skip_drag = false;

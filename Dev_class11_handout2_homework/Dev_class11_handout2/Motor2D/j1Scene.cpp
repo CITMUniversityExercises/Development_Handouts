@@ -181,8 +181,6 @@ void j1Scene::ONhover(j1UI_Element & element)
 			//element.ShapeLabel(element.GetTexts()->text2);
 		break;
 	}
-
-	element.GetBooleans()->hovering = true;
 }
 
 void j1Scene::OFFhover(j1UI_Element & element)
@@ -203,8 +201,6 @@ void j1Scene::OFFhover(j1UI_Element & element)
 			//element.ShapeLabel(element.GetTexts()->text);
 		break;
 	}
-
-	element.GetBooleans()->hovering = false;
 }
 
 void j1Scene::ONclick(j1UI_Element & element)
@@ -225,8 +221,6 @@ void j1Scene::ONclick(j1UI_Element & element)
 
 		break;
 	}
-
-	element.GetBooleans()->clicking = true;
 }
 
 void j1Scene::OFFclick(j1UI_Element & element)
@@ -247,9 +241,8 @@ void j1Scene::OFFclick(j1UI_Element & element)
 
 		break;
 	}
-
-	element.GetBooleans()->clicking = false;
 }
+
 void j1Scene::ONdrag(j1UI_Element & element)
 {
 	ELEMENTS TYPE = element.GetType();

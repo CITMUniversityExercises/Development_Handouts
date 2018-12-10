@@ -50,7 +50,6 @@ bool j1Gui::PreUpdate()
 {
 	App->input->GetMousePosition(mouse_pos.x,mouse_pos.y);
 
-
 	if (App->input->GetMouseButtonDown(1) == KEY_DOWN)
 	{
 		click_pos = mouse_pos;
@@ -66,60 +65,43 @@ bool j1Gui::PreUpdate()
 		App->scene->ONFocus();
 	}
 
-	p2List_item <j1UI_Element*> * item = UIelements.start;
+	p2List_item <j1UI_Element*> * item = UIelements.At(first_children-1);
+
+	bool ret = false;
+
+	while (item)
+	{
+		ret = false;
+
+			ret = RecursiveOnClick(item);
+
+			if (App->input->GetMouseButtonDown(1) == KEY_DOWN)
+			ret = RecursiveOnDrag(item);
+		
+			if (ret)
+				break;
+		if(!ret)
+		RecursiveOnHover(item);
+
+		item = item->prev;
+	}
+
+	item = UIelements.end;
 
 	while (item)
 	{
 		if (App->input->GetMouseButtonDown(1) == KEY_UP)
 			item->data->GetBooleans()->dragging = false;
 
-		if (isInbound(item->data->Getrects()->logic_rect))
+		else
 		{
-			if (!item->data->GetBooleans()->hovering)
-			{
-				App->scene->ONhover(*item->data);
-			}
-
-			if (isClicked(item->data->Getrects()->logic_rect))
-			{
-				if(skip_drag == false)
-				skip_drag = RecursiveOnDrag(item);
-
-				if (!item->data->GetBooleans()->clicking)
-				{
-					App->scene->ONclick(*item->data);
-				}
-			}
-			else
-			{
-				if (item->data->GetBooleans()->clicking && !item->data->GetBooleans()->dragging)
-				{
-					App->scene->OFFclick(*item->data);
-				}
-			}
-
 			if (item->data->GetBooleans()->dragging)
 			{
 				App->scene->ONdrag(*item->data);
 			}
 		}
 
-		else if (!isInbound(item->data->Getrects()->logic_rect))
-		{
-			if (item->data->GetBooleans()->hovering)
-			{
-				App->scene->OFFhover(*item->data);
-			}
-			if (isClicked(item->data->Getrects()->logic_rect))
-			{
-				if (item->data->GetBooleans()->clicking)
-				{
-					App->scene->OFFclick(*item->data);
-				}
-			}
-		}
-
-		item = item->next;
+		item = item->prev;
 	}
 
 	return true;
@@ -200,6 +182,8 @@ void j1Gui::DeployUI(pugi::xml_node &UIconfig)
 
 		UIconfig = UIconfig.next_sibling();
 	}
+
+	LOG("first children: %u", first_children);
 }
 
 ButtonInfo j1Gui::FillButton(pugi::xml_node & UIconfig)
@@ -208,6 +192,9 @@ ButtonInfo j1Gui::FillButton(pugi::xml_node & UIconfig)
 
 	// --- Parent ID ---
 	Data.parent_id= UIconfig.child("parent").attribute("id").as_int();
+
+	if (Data.parent_id == -1)
+		first_children++;
 
 	Data.type = (ELEMENTS) UIconfig.child("type").attribute("id").as_int();
 
@@ -250,6 +237,9 @@ Text j1Gui::FillLabel(pugi::xml_node & UIconfig)
 	// --- Parent ID ---
 	Data.parent_id = UIconfig.child("parent").attribute("id").as_int();
 
+	if (Data.parent_id == -1)
+		first_children++;
+
 	Data.type = (ELEMENTS)UIconfig.child("type").attribute("id").as_int();
 
 	// --- Position ---
@@ -286,12 +276,16 @@ bool j1Gui::RecursiveOnDrag(p2List_item<j1UI_Element*>* item)
 
 		if (item->data->children.count() > 0)
 		{
-			p2List_item <j1UI_Element*> * item_child = item->data->children.start;
+			p2List_item <j1UI_Element*> * item_child = item->data->children.end;
 
 			while (item_child)
 			{
 				child_drag = RecursiveOnDrag(item_child);
-				item_child = item_child->next;
+
+				if (child_drag == true)
+					break;
+
+				item_child = item_child->prev;
 			}
 		}
 
@@ -304,7 +298,101 @@ bool j1Gui::RecursiveOnDrag(p2List_item<j1UI_Element*>* item)
 		else if (child_drag == false)
 		{
 			ret = false;
+
+			if (item->data->GetBooleans()->dragging = true)
+			{
+				item->data->GetBooleans()->dragging = false;
+			}
 		}
+
+
+	return ret;
+}
+
+bool j1Gui::RecursiveOnHover(p2List_item<j1UI_Element*>* item)
+{
+	bool ret = false;
+
+	ret = true;
+
+	bool child_hover = false;
+
+	if (item->data->children.count() > 0)
+	{
+		p2List_item <j1UI_Element*> * item_child = item->data->children.end;
+
+		while (item_child)
+		{
+			child_hover = RecursiveOnHover(item_child);
+
+			if (child_hover == true)
+				break;
+
+			item_child = item_child->prev;
+		}
+	}
+
+	if (isInbound(item->data->Getrects()->logic_rect))
+	{
+		if (child_hover == false)
+		{
+			item->data->GetBooleans()->hovering = true;
+			App->scene->ONhover(*item->data);
+		}
+	}
+	else 
+	{
+		ret = false;
+
+		if (item->data->GetBooleans()->hovering = true)
+		{
+			item->data->GetBooleans()->hovering = false;
+			App->scene->OFFhover(*item->data);
+		}
+	}
+
+
+	return ret;
+}
+
+bool j1Gui::RecursiveOnClick(p2List_item<j1UI_Element*>* item)
+{
+	bool ret = false;
+
+	ret = true;
+
+	bool child_click = false;
+
+	if (item->data->children.count() > 0)
+	{
+		p2List_item <j1UI_Element*> * item_child = item->data->children.end;
+
+		while (item_child)
+		{
+			child_click = RecursiveOnClick(item_child);
+
+			if (child_click == true)
+				break;
+
+			item_child = item_child->prev;
+		}
+	}
+
+	if (child_click == false && isClicked(item->data->Getrects()->logic_rect))
+	{
+		item->data->GetBooleans()->clicking = true;
+		App->scene->ONclick(*item->data);
+	}
+	else if (child_click == false)
+	{
+		ret = false;
+
+		if (item->data->GetBooleans()->clicking == true)
+		{
+			item->data->GetBooleans()->clicking = false;
+			App->scene->OFFclick(*item->data);
+		}
+	}
 
 
 	return ret;
@@ -373,7 +461,7 @@ void j1Gui::DebugDraw()
 
 	Uint8 alpha = 80;
 
-	p2List_item <j1UI_Element*> * item = UIelements.start;
+	p2List_item <j1UI_Element*> * item = UIelements.end;
 
 	while (item != NULL)
 	{
@@ -390,7 +478,7 @@ void j1Gui::DebugDraw()
 			break;
 
 		}
-		item = item->next;
+		item = item->prev;
 	}
 
 }
