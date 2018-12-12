@@ -50,6 +50,8 @@ bool j1Input::PreUpdate()
 {
 	static SDL_Event event;
 	
+	inputtext.Clear();
+
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
 	for(int i = 0; i < MAX_KEYS; ++i)
@@ -119,6 +121,11 @@ bool j1Input::PreUpdate()
 				//LOG("Mouse button %d up", event.button.button-1);
 			break;
 
+			case SDL_TEXTINPUT:
+				inputtext += event.text.text;
+				LOG("event text %s", inputtext.GetString());
+				break;
+
 			case SDL_MOUSEMOTION:
 				mouse_moving = true;
 				int scale = App->win->GetScale();
@@ -163,4 +170,14 @@ void j1Input::GetMouseMotion(int& x, int& y)
 {
 	x = mouse_motion_x;
 	y = mouse_motion_y;
+}
+
+void j1Input::StartTextInput()
+{
+	SDL_StartTextInput();
+}
+
+void j1Input::StopTextInput()
+{
+	SDL_StopTextInput();
 }

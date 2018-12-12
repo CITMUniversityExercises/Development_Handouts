@@ -23,8 +23,19 @@
     <hover_rect x="32" y="540"  w="420" h="454"/>
     <click_rectx x="32" y="540"  w="420" h="454"/>
   </Element>
+
+  <Element> 2 - INPUT
+    <type id="3" />
+    <parent id="-1"/>
+    <position x="500" y="75"/>
+    <Texture path="gui/atlas.png"/>
+    <logic_rect w="229" h="69" />
+    <normal_rect x="642" y="169" w="229" h="69"/>
+    <hover_rect x="0" y="113" w="229" h="69"/>
+    <click_rect x="411" y="169" w="229" h="69"/>
+  </Element>
   
-  <Element> 2 - BUTTON
+  <Element> 3 - BUTTON
     <type id="1" />
     <parent id="0"/>
     <position x="100" y="100"/>
@@ -35,7 +46,7 @@
     <click_rect x="411" y="169" w="229" h="69"/>
   </Element>
 
-  <Element> 3 - BUTTON
+  <Element> 4 - BUTTON
     <type id="1" />
     <parent id="1"/>
     <position x="0" y="75"/>
@@ -46,9 +57,9 @@
     <click_rect x="411" y="169" w="229" h="69"/>
   </Element>
 
-  <Element> 4 - BUTTON
+  <Element> 5 - BUTTON
     <type id="1" />
-    <parent id="2"/>
+    <parent id="3"/>
     <position x="0" y="75"/>
     <Texture path="gui/atlas.png"/>
     <logic_rect w="229" h="69" />
@@ -57,14 +68,24 @@
     <click_rect x="411" y="169" w="229" h="69"/>
   </Element>
 
-  <Element> 5 - LABEL
+  <Element> 6 - LABEL
     <type id="2" />
-    <parent id="3"/>
+    <parent id="4"/>
     <position x="0" y="0"/>
     <place id="4"/>
     <color r="255" g="0" b="0" a="255" />
     <textA value="Welcome Back"/>
     <textB value="SUCCESSFUL TRY"/>
+  </Element>
+
+  <Element> 7 - LABEL
+    <type id="2" />
+    <parent id="2"/>
+    <position x="0" y="0"/>
+    <place id="4"/>
+    <color r="255" g="0" b="0" a="255" />
+    <textA value="Introduce text"/>
+    <textB value=""/>
   </Element>
   
 </config>

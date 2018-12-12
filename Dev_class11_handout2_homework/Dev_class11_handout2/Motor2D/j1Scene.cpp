@@ -178,7 +178,22 @@ void j1Scene::ONhover(j1UI_Element & element)
 		break;
 
 		case ELEMENTS::LABEL:
+			switch (element.Getparent()->GetType())
+			{
+			case ELEMENTS::BUTTON:
+
+				break;
+
+			case ELEMENTS::INPUT:
+
+				break;
+
+			}
 			//element.ShapeLabel(element.GetTexts()->text2);
+		break;
+
+		case ELEMENTS::INPUT:
+
 		break;
 	}
 }
@@ -198,7 +213,22 @@ void j1Scene::OFFhover(j1UI_Element & element)
 		break;
 
 		case ELEMENTS::LABEL:
+			switch (element.Getparent()->GetType())
+			{
+				case ELEMENTS::BUTTON:
+					
+				break;
+
+				case ELEMENTS::INPUT:
+
+				break;
+
+			}
 			//element.ShapeLabel(element.GetTexts()->text);
+		break;
+
+		case ELEMENTS::INPUT:
+
 		break;
 	}
 }
@@ -210,15 +240,30 @@ void j1Scene::ONclick(j1UI_Element & element)
 	switch (TYPE)
 	{
 		case ELEMENTS::PANEL:
-
+			App->gui->focus = &element;
 		break;
 
 		case ELEMENTS::BUTTON:
 			element.Getrects()->current_rect = element.Getrects()->rect_click;
-		break;
+			App->gui->focus = &element;
+			break;
 
 		case ELEMENTS::LABEL:
+			switch (element.Getparent()->GetType())
+			{
+			case ELEMENTS::BUTTON:
+				App->gui->focus = &element;
+				break;
 
+			case ELEMENTS::INPUT:
+				App->gui->focus = element.Getparent();
+				break;
+
+			}
+		break;
+
+		case ELEMENTS::INPUT:
+		//App->gui->focus = &element;
 		break;
 	}
 }
@@ -238,6 +283,20 @@ void j1Scene::OFFclick(j1UI_Element & element)
 		break;
 
 		case ELEMENTS::LABEL:
+			switch (element.Getparent()->GetType())
+			{
+			case ELEMENTS::BUTTON:
+
+				break;
+
+			case ELEMENTS::INPUT:
+
+				break;
+
+			}
+		break;
+
+		case ELEMENTS::INPUT:
 
 		break;
 	}
@@ -249,19 +308,35 @@ void j1Scene::ONdrag(j1UI_Element & element)
 
 	switch (TYPE)
 	{
-	case ELEMENTS::PANEL:
-		element.position.x = App->gui->mouse_pos.x - App->gui->drag_Ref.x;
-		element.position.y = App->gui->mouse_pos.y - App->gui->drag_Ref.y;
+		case ELEMENTS::PANEL:
+			element.position.x = App->gui->mouse_pos.x - App->gui->drag_Ref.x;
+			element.position.y = App->gui->mouse_pos.y - App->gui->drag_Ref.y;
 		break;
 
-	case ELEMENTS::BUTTON:
-		element.position.x = App->gui->mouse_pos.x - App->gui->drag_Ref.x;
-		element.position.y = App->gui->mouse_pos.y - App->gui->drag_Ref.y;
+		case ELEMENTS::BUTTON:
+			element.position.x = App->gui->mouse_pos.x - App->gui->drag_Ref.x;
+			element.position.y = App->gui->mouse_pos.y - App->gui->drag_Ref.y;
 		break;
 
-	case ELEMENTS::LABEL:
-		element.position.x = App->gui->mouse_pos.x - App->gui->drag_Ref.x;
-		element.position.y = App->gui->mouse_pos.y - App->gui->drag_Ref.y;
+		case ELEMENTS::LABEL:
+			element.position.x = App->gui->mouse_pos.x - App->gui->drag_Ref.x;
+			element.position.y = App->gui->mouse_pos.y - App->gui->drag_Ref.y;
+
+			switch (element.Getparent()->GetType())
+			{
+			case ELEMENTS::BUTTON:
+
+				break;
+
+			case ELEMENTS::INPUT:
+
+				break;
+
+			}
+		break;
+
+		case ELEMENTS::INPUT:
+
 		break;
 	}
 }

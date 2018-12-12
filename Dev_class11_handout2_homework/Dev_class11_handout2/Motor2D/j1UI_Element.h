@@ -11,6 +11,7 @@ enum class ELEMENTS
 	PANEL,
 	BUTTON,
 	LABEL,
+	INPUT,
 
 	NONE
 };
@@ -33,7 +34,7 @@ struct Buttonrects
 
 struct textbox
 {
-	const char* current_text = nullptr;
+	p2SString current_text = nullptr;
 	const char* text = nullptr;
 	const char* text2 = nullptr;
 };
@@ -61,6 +62,8 @@ public:
 	virtual textbox * GetTexts();
 
 	virtual void ShapeLabel(const char *text){}
+
+	j1UI_Element* Getparent() const { return parent; }
 	
 public:
 	iPoint position;
