@@ -12,6 +12,7 @@ enum class ELEMENTS
 	BUTTON,
 	LABEL,
 	INPUT,
+	SLIDER,
 
 	NONE
 };
@@ -64,6 +65,10 @@ public:
 	virtual void ShapeLabel(const char *text){}
 
 	j1UI_Element* Getparent() const { return parent; }
+
+	int Getchildrencount() const { return children.count(); }
+
+	j1UI_Element* Getchild(int index) { return children.At(index)->data; }
 	
 public:
 	iPoint position;

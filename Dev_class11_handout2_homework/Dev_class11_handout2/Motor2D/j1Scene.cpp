@@ -52,6 +52,8 @@ bool j1Scene::Start()
 
 	config=App->LoadConfig(config_file, "UI_Elems.xml");
 	App->gui->DeployUI(config);
+
+	App->audio->PlayMusic("audio/music/music_sadpiano.ogg");
 	
 	return true;
 }
@@ -314,14 +316,46 @@ void j1Scene::ONdrag(j1UI_Element & element)
 		break;
 
 		case ELEMENTS::BUTTON:
-			element.position.x = App->gui->mouse_pos.x - App->gui->drag_Ref.x;
+	/*		element.position.x = App->gui->mouse_pos.x - App->gui->drag_Ref.x;
+			element.position.y = App->gui->mouse_pos.y - App->gui->drag_Ref.y;*/
+		break;
+
+		case ELEMENTS::SLIDER:	
+
+			parentindex = element.Getchildrencount();
+
 			element.position.y = App->gui->mouse_pos.y - App->gui->drag_Ref.y;
+
+			if (element.position.y > element.Getparent()->position.y + element.Getparent()->Getrects()->current_rect.h - element.Getrects()->current_rect.h/2)
+			{
+				element.position.y = element.Getparent()->position.y + element.Getparent()->Getrects()->current_rect.h - element.Getrects()->current_rect.h/2;
+			}
+
+			else if (element.position.y < element.Getparent()->position.y - element.Getrects()->current_rect.h/2)
+			{
+				element.position.y = element.Getparent()->position.y - element.Getrects()->current_rect.h / 2;
+			}
+
+			if (parentindex == 0)
+			{
+				Volume_changer = float(float(element.position.y + (float)element.Getrects()->current_rect.h / 2 - element.Getparent()->position.y) / element.Getparent()->Getrects()->current_rect.h);
+				if (Volume_changer > 1)
+					Volume_changer = 1;
+				else if (Volume_changer < 0.1)
+					Volume_changer = 0;
+				LOG("Volume_changer: %f", Volume_changer);
+			}
+			else if (parentindex == 1)
+			{
+				element.Getchild(0)->position.y = element.Getparent()->position.y - ( element.position.y + element.Getrects()->current_rect.h/2 - element.Getparent()->position.y) 
+				+ element.Getrects()->current_rect.h - element.Getchild(0)->Getrects()->rect_normal.h/2;
+			}
 		break;
 
 		case ELEMENTS::LABEL:
-			element.position.x = App->gui->mouse_pos.x - App->gui->drag_Ref.x;
+	/*		element.position.x = App->gui->mouse_pos.x - App->gui->drag_Ref.x;
 			element.position.y = App->gui->mouse_pos.y - App->gui->drag_Ref.y;
-
+*/
 			switch (element.Getparent()->GetType())
 			{
 			case ELEMENTS::BUTTON:

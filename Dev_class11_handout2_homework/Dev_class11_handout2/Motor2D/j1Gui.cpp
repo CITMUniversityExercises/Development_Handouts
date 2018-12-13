@@ -207,6 +207,11 @@ void j1Gui::DeployUI(pugi::xml_node &UIconfig)
 			CreateButton(FillButton(UIconfig));
 		}
 
+		if (elem_type == static_cast <uint> (ELEMENTS::SLIDER))
+		{
+			CreateButton(FillButton(UIconfig));
+		}
+
 		UIconfig = UIconfig.next_sibling();
 	}
 

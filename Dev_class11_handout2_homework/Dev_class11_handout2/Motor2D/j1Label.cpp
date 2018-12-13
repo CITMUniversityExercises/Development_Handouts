@@ -6,49 +6,77 @@
 
 void j1Label::FixedUpdate()
 {
-	if (this->parent != nullptr)
-	{
+	
 		if (!this->GetBooleans()->dragging)
 		{
-			switch (Data.Place)
+			if (parent->GetType() != ELEMENTS::SLIDER || start==0)
 			{
-			case Text_Position::NONE:
-				this->position.x = parent->position.x + Data.position.x;
-				this->position.y = parent->position.y + Data.position.y;
-				break;
+				switch (Data.Place)
+				{
+				case Text_Position::NONE:
+					this->position.x = parent->position.x + Data.position.x;
+					this->position.y = parent->position.y + Data.position.y;
+					break;
 
-			case Text_Position::MIDDLE:
-				PlaceAtMiddle();
-				break;
+				case Text_Position::MIDDLE:
+					PlaceAtMiddle();
+					break;
 
-			case Text_Position::TOP:
-				PlaceAtTop();
-				break;
+				case Text_Position::TOP:
+					PlaceAtTop();
+					break;
 
-			case Text_Position::BOTTOM:
-				PlaceAtBottom();
-				break;
+				case Text_Position::BOTTOM:
+					PlaceAtBottom();
+					break;
 
-			case Text_Position::RIGHT:
-				PlaceAtRight();
-				break;
+				case Text_Position::RIGHT:
+					PlaceAtRight();
+					break;
 
-			case Text_Position::LEFT:
-				PlaceAtLeft();
-				break;
+				case Text_Position::LEFT:
+					PlaceAtLeft();
+					break;
+				}
+
 			}
+
+			
 		}
 		else
 		{
-			Data.position.x = this->position.x - parent->position.x;
-			Data.position.y = this->position.y - parent->position.y;
+			if (parent->GetType() != ELEMENTS::SLIDER)
+			{
+				Data.position.x = this->position.x - parent->position.x;
+				Data.position.y = this->position.y - parent->position.y;
+			}
+			
 		}
-	}
+	
 
 	this->Data.rects.logic_rect.x = position.x;
 	this->Data.rects.logic_rect.y = position.y;
 
-	App->render->Blit(Data.tex, this->position.x, this->position.y, &Data.rects.rect_normal,false);
+
+	if (start == 0 && parent->GetType() == ELEMENTS::SLIDER)
+	{
+		blittext = this->Data.rects.logic_rect;
+		start = 1;
+	}
+
+	/*iPoint blit_pos;
+	int scale = App->win->GetScale();
+	blit_pos.x = (Data.position.x - App->render->camera.x) / scale;
+	blit_pos.y = (Data.position.y - App->render->camera.y) / scale;*/
+
+	App->render->SetViewPort(blittext);
+
+	//SDL_RenderSetClipRect(App->render->renderer, &Data.rects.logic_rect);
+
+	App->render->Blit(Data.tex,blittext.x - Data.rects.logic_rect.x, blittext.y - Data.rects.logic_rect.y);
+
+	//SDL_RenderSetClipRect(App->render->renderer, NULL);
+	App->render->ResetViewPort();
 }
 
 ELEMENTS j1Label::GetType()

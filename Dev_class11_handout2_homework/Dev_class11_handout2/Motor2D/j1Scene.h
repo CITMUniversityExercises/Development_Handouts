@@ -55,6 +55,8 @@ private:
 	SDL_Texture* debug_tex;
 	GuiImage* banner;
 	GuiText* text;
+	float Volume_changer = 0.5f;
+	int parentindex = 0;
 };
 
 #endif // __j1SCENE_H__

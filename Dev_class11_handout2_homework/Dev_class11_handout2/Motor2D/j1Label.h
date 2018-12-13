@@ -57,6 +57,8 @@ public:
 
 private:
 	Text Data;
+	uint start = 0;
+	SDL_Rect blittext = { 0,0,0,0 };
 };
 
 
