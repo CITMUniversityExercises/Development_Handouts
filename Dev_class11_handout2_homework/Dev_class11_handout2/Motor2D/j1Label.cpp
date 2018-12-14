@@ -53,29 +53,27 @@ void j1Label::FixedUpdate()
 			
 		}
 	
-
-	this->Data.rects.logic_rect.x = position.x;
-	this->Data.rects.logic_rect.y = position.y;
+		if (parent->GetType() != ELEMENTS::SLIDER)
+		{
+			this->Data.rects.logic_rect.x = position.x;
+			this->Data.rects.logic_rect.y = position.y;
+		}
 
 
 	if (start == 0 && parent->GetType() == ELEMENTS::SLIDER)
 	{
+		position.y = parent->position.y;
+		Data.rects.logic_rect.y = position.y;
+		Data.rects.logic_rect.x = position.x;
 		blittext = this->Data.rects.logic_rect;
 		start = 1;
 	}
 
-	/*iPoint blit_pos;
-	int scale = App->win->GetScale();
-	blit_pos.x = (Data.position.x - App->render->camera.x) / scale;
-	blit_pos.y = (Data.position.y - App->render->camera.y) / scale;*/
 
 	App->render->SetViewPort(blittext);
 
-	//SDL_RenderSetClipRect(App->render->renderer, &Data.rects.logic_rect);
+	App->render->Blit(Data.tex,blittext.x - position.x, blittext.y - position.y);
 
-	App->render->Blit(Data.tex,blittext.x - Data.rects.logic_rect.x, blittext.y - Data.rects.logic_rect.y);
-
-	//SDL_RenderSetClipRect(App->render->renderer, NULL);
 	App->render->ResetViewPort();
 }
 

@@ -288,6 +288,14 @@ Text j1Gui::FillLabel(pugi::xml_node & UIconfig)
 	// --- Rectangles ---
 	Data.tex = App->font->Print(Data.texts.text, Data.color, App->font->default);
 	App->font->CalcSize(Data.texts.text, Data.rects.rect_normal.w, Data.rects.rect_normal.h, App->font->default);
+
+	if (Data.rects.rect_normal.w > 150)
+	{
+		Data.rects.rect_normal.h *= Data.rects.rect_normal.w / 200;
+		
+		Data.rects.rect_normal.w = 150;
+	}
+
 	Data.rects.logic_rect = { 0 , 0 , Data.rects.rect_normal.w , Data.rects.rect_normal.h };
 	Data.texts.current_text = Data.texts.text;
 

@@ -347,8 +347,7 @@ void j1Scene::ONdrag(j1UI_Element & element)
 			}
 			else if (parentindex == 1)
 			{
-				element.Getchild(0)->position.y = element.Getparent()->position.y - ( element.position.y + element.Getrects()->current_rect.h/2 - element.Getparent()->position.y) 
-				+ element.Getrects()->current_rect.h - element.Getchild(0)->Getrects()->rect_normal.h/2;
+				element.Getchild(0)->position.y = element.Getparent()->Getrects()->logic_rect.y + (element.Getrects()->logic_rect.y + element.Getrects()->logic_rect.h / 2 - element.Getparent()->Getrects()->logic_rect.y);
 			}
 		break;
 
