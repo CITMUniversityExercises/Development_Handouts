@@ -53,7 +53,7 @@ bool j1Scene::Start()
 	config=App->LoadConfig(config_file, "UI_Elems.xml");
 	App->gui->DeployUI(config);
 
-	App->audio->PlayMusic("audio/music/music_sadpiano.ogg");
+	//App->audio->PlayMusic("audio/music/music_sadpiano.ogg");
 	
 	return true;
 }

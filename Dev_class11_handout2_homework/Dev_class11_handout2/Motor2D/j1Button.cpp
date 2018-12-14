@@ -23,7 +23,17 @@ void j1Button::FixedUpdate()
 	this->Data.rects.logic_rect.x = position.x;
 	this->Data.rects.logic_rect.y = position.y;
 
+	if (this == App->gui->focus)
+	{
+		App->gui->Colorize(*Data.tex,255,0,255,150);
+	}
+
 	App->render->Blit(Data.tex, this->position.x, this->position.y, &Data.rects.current_rect,false);
+
+	if (this == App->gui->focus)
+	{
+		App->gui->DeColorize(*Data.tex);
+	}
 }
 
 ELEMENTS j1Button::GetType()

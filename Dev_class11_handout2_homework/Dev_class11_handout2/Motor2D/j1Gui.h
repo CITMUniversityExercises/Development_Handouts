@@ -12,7 +12,7 @@ class j1Gui : public j1Module
 {
 public:
 
-	//friend class j1Button;
+	friend class j1Button;
 	friend class j1Scene;
 
 	j1Gui();

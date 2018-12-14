@@ -32,15 +32,10 @@ bool j1Gui::Awake(pugi::xml_node& conf)
 // Called before the first frame
 bool j1Gui::Start()
 {
-	//atlas = CreateImage(atlas_file_name.GetString());
+	atlas = CreateImage(atlas_file_name.GetString());
 
-	// --- Button test textures ---
-	//atlas2 = CreateImage(atlas_file_name.GetString());
-	//atlas3 = CreateImage(atlas_file_name.GetString());
-	//atlas4 = CreateImage(atlas_file_name.GetString());
-
-	/*if (atlas == nullptr)
-		return false;*/
+	if (atlas == nullptr)
+		return false;
 
 	return true;
 }
@@ -235,7 +230,8 @@ ButtonInfo j1Gui::FillButton(pugi::xml_node & UIconfig)
 	Data.position.y = UIconfig.child("position").attribute("y").as_int();
 
 	// --- Texture ---
-	Data.tex = CreateImage(UIconfig.child("Texture").attribute("path").as_string());
+	//Data.tex = CreateImage(UIconfig.child("Texture").attribute("path").as_string());
+	Data.tex = atlas;
 
 	// --- Rectangles ---
 	Data.rects.logic_rect.x = Data.position.x;
