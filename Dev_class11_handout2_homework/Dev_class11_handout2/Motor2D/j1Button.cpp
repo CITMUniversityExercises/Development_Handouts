@@ -3,7 +3,6 @@
 #include "j1App.h"
 #include "j1Map.h"
 #include "j1Gui.h"
-#include "j1Window.h"
 
 void j1Button::FixedUpdate()
 {
