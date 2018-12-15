@@ -72,7 +72,7 @@ void j1Label::FixedUpdate()
 
 	App->render->SetViewPort(blittext);
 
-	App->render->Blit(Data.tex,blittext.x - position.x, blittext.y - position.y);
+	App->render->Blit(Data.tex,blittext.x - position.x, blittext.y - position.y, NULL, false);
 
 	App->render->ResetViewPort();
 }
