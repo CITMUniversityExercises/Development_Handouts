@@ -311,8 +311,8 @@ void j1Scene::ONdrag(j1UI_Element & element)
 	switch (TYPE)
 	{
 		case ELEMENTS::PANEL:
-			element.position.x = App->gui->mouse_pos.x - App->gui->drag_Ref.x;
-			element.position.y = App->gui->mouse_pos.y - App->gui->drag_Ref.y;
+			/*element.position.x = App->gui->mouse_pos.x - App->gui->drag_Ref.x;
+			element.position.y = App->gui->mouse_pos.y - App->gui->drag_Ref.y;*/
 		break;
 
 		case ELEMENTS::BUTTON:

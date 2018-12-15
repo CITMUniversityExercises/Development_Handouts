@@ -162,8 +162,8 @@ bool j1Input::GetWindowEvent(j1EventWindow ev)
 
 void j1Input::GetMousePosition(int& x, int& y)
 {
-	x = mouse_x;
-	y = mouse_y;
+	x = mouse_x * App->win->GetScale();
+	y = mouse_y * App->win->GetScale();
 }
 
 void j1Input::GetMouseMotion(int& x, int& y)
